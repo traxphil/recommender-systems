@@ -52,6 +52,38 @@ def pipeline(reg, catID, dataTrain, dataValid, dataTest, includeCat=True, includ
 
     return mod, vBER, tBER
 
+# Jaccard Similarity = |intersection| / |union| for two sets
+def Jaccard(s1, s2):
+    union_size = len(s1 | s2)
+    # avoid division by zero - can happen if both sets are empty
+    if union_size == 0:
+        return 0
+    return len(s1 & s2) / union_size
+
+def MSE(y, ypred):
+    differences = numpy.array(y) - numpy.array(ypred)
+    return float(numpy.mean(differences ** 2))
+
+# return mean rating across all of the training data
+def getMeanRating(dataTrain):
+    return sum(d['star_rating'] for d in dataTrain) / len(dataTrain)
+
+# return the average rating each user has given across all training reviews
+# dict user ID -> average rating
+def getUserAverages(itemsPerUser, ratingDict):
+    userAverages = {}
+    for user, items in itemsPerUser.items():
+        userAverages[user] = sum(ratingDict[(user, item)] for item in items) / len(items)
+    return userAverages
+
+# return the average item rating in the training set
+# dict item ID -> average rating
+def getItemAverages(usersPerItem, ratingDict):
+    itemAverages = {}
+    for item, users in usersPerItem.items():
+        itemAverages[item] = sum(ratingDict[(user, item)] for user in users) / len(users)
+    return itemAverages
+
 
 #### - - - - - - - - - - - - - - - - - - - - - - - - - - -
 # Feature Definitions
@@ -145,3 +177,88 @@ def Q4(C, catID, dataTrain, dataValid, dataTest):
     print(f"Q4 - without length:       testBER = {testBER_noLength:.5f}  ({testBER_noLength - testBER_full:+.5f})")
 
     return testBER_noCat, testBER_noReview, testBER_noLength
+
+
+# Q5: i = ID of reference (query) item / N = count of similar items to return /
+# usersPerItem = mapping from item ID to user IDs who rated the product in the training data
+def mostSimilar(i, N, usersPerItem):
+    users_of_query = usersPerItem[i]
+    similarities = []
+
+    # compare query item with all ofhter items seen in training - add jaccard score to the similarity vector
+    for other_item in usersPerItem:
+        if other_item == i:
+            continue
+        similarities.append((Jaccard(users_of_query, usersPerItem[other_item]), other_item))
+
+    # (similarity, itemID) tuples sorted by similarity first (highest similarity first)
+    similarities.sort(reverse=True)
+    return similarities[:N]
+
+# Q6: using the similarity function for predictions
+# The Formula from the Assignment decomposed:
+# r(u,i) = the predicted rating / u = the user we predict for / i = the item for which we want to get the prediction
+# R̄_i = average of training rating for item i
+# R̄_j = average of training ratings over another item j (not i) what as also ranked by user u / one average for each other item
+# R_uj = rating of user u for item j (remember we want to predict R_ui -> written r(u,i))
+# I_u = all items user u has a rating for in the training set
+# I_u\{i} = all items except i the user has a rating for -> basically the set of possible j
+# Sim(i,j) = Jaccard similarity between two items
+#
+# Function Inputs:
+# - user = str - customer_id for which we do the prediction
+# - item = str - product_id for which we are trying to predict the rating
+# - ratingMean = float - mean star rating across ALL training reviews
+# - reviewsPerUser = dict(list) - [customer_id -> list of that users training reviews] 
+#       each review is a dict with the columns: ('customer_id', 'product_id', 'product_title', 'star_rating', 'review_body', 'review_date', ...).
+#       'star_rating', 'helpful_votes', 'total_votes' are int type / the rest is str 
+# - usersPerItem = dict(set) - [product_id -> set of customer_ids]
+# - itemsPerUser = dict(set) - [customer_id -> set or rated product_ids]
+# - userAverages = dict [customer_id -> float]
+# - itemAverages = dict [product_id -> float]
+def predictRating(user, item, ratingMean, reviewsPerUser, usersPerItem, itemsPerUser, userAverages, itemAverages):
+    # item never seen in training -> no R̄_i exists, use the global mean
+    if item not in itemAverages:
+        return ratingMean
+
+    target_item_average = itemAverages[item]      # R̄_i
+    target_item_users = usersPerItem[item]        # U_i
+
+    # Numerator and denominator of the fraction, built up as running sums
+    numerator = 0.0                               # sum (R_uj − R̄_j) · Sim(i,j)
+    denominator = 0.0                             # sum Sim(i,j)
+
+    # Loop over every other item j that this user rated in training
+    for review in reviewsPerUser[user]:
+        other_item = review['product_id']         # j
+        if other_item == item:                    # exclude i 
+            continue
+
+        user_rating = review['star_rating']                                  # R_uj
+        other_item_average = itemAverages[other_item]                        # R̄_j
+        similarity = Jaccard(target_item_users, usersPerItem[other_item])    # Sim(i,j)
+
+        # How much more/less u liked j than everyone else, weighted by how related j is to i
+        deviation = user_rating - other_item_average
+        numerator += deviation * similarity
+        denominator += similarity
+
+    # none of the user's items shares a customer with i -> just R̄_i
+    if denominator == 0:
+        return target_item_average
+
+    return target_item_average + numerator / denominator
+
+# Q7:
+def predictRatingQ7(user, item, ratingMean, reviewsPerUser, usersPerItem, itemsPerUser, userAverages, itemAverages):
+    reg_lambda = 5
+    prediction = ratingMean
+    # Regularized item offset b_i (eq. 3.33 with one parameter)
+    if item in itemAverages:
+        item_count = len(usersPerItem[item])
+        prediction += item_count * (itemAverages[item] - ratingMean) / (item_count + reg_lambda)
+    # Regularized user offset b_u, same derivation over the user's ratings
+    if user in userAverages:
+        user_count = len(itemsPerUser[user])
+        prediction += user_count * (userAverages[user] - ratingMean) / (user_count + reg_lambda)
+    return prediction
