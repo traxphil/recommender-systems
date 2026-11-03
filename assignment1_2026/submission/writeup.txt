@@ -1,0 +1,19 @@
+Submission Information:
+
+github repo link: https://github.com/traxphil/recommender-systems
+name: Philipp Traxler
+student ID: 201249797
+
+used E-mail addresses
+student mail: philipp.traxler@t-online.de 
+ucsd mail: ptraxler@ucsd.edu
+
+
+### Chapter 1: Repository Structure
+- running baseline & submission from the checkpoint folder
+- baseline_output contains the generated files form the baseline
+- data contains the training and test files
+- submission contains the generated files under /output + the code + the writeup
+
+
+### Chapter 2: Task
