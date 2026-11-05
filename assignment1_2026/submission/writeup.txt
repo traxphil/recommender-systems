@@ -1,12 +1,13 @@
 Submission Information:
 
 github repo link: https://github.com/traxphil/recommender-systems
-name: Philipp Traxler
-student ID: 201249797
 
-used E-mail addresses
-student mail: philipp.traxler@t-online.de 
-ucsd mail: ptraxler@ucsd.edu
+
+### Sources:
+
+- Netflix Prize Winner Model: https://www2.seas.gwu.edu/~simhaweb/champalg/cf/papers/KorenBellKor2009.pdf
+
+
 
 
 ### Chapter 1: Repository Structure
@@ -16,4 +17,9 @@ ucsd mail: ptraxler@ucsd.edu
 - submission contains the generated files under /output + the code + the writeup
 
 
-### Chapter 2: Task
+### Chapter 2: Core Ideas of my Approach
+I want to try and use ensemble models to combine multiple 
+
+
+### Chapter 3: Helper Functions in Sbmission files
+
