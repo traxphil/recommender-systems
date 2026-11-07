@@ -1,5 +1,5 @@
-import csv
 import numpy as np
+import pandas as pd
 
 from lib.custom_types import RatingData, RatingTask
 from lib.helper_functioins import ids_to_rows, number_by_first_appearance
@@ -9,28 +9,22 @@ from lib.helper_functioins import ids_to_rows, number_by_first_appearance
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 # read the CSV file into columns as trings
-def read_csv_columns(csv_path) -> dict[str, tuple[str, ...]]:
+def read_csv_columns(csv_path) -> pd.DataFrame:
 
-    with open(csv_path, newline="") as csv_file:
-        reader = csv.reader(csv_file)
-        column_names = next(reader)
-        rows = [row for row in reader if row]  # skip blank lines
-
-    # zip(*rows) turns rows into columns
-    return dict(zip(column_names, zip(*rows)))
+    # every column as str, empty fields stay "" instead of NaN / blank lines are skipped
+    return pd.read_csv(csv_path, dtype=str, keep_default_na=False)
 
 # write prediction results into the file
 def write_prediction_file(test_csv_path, output_csv_path, predictions_in_test_order):
 
-    with open(test_csv_path) as test_file, open(output_csv_path, "w") as output_file:
-        output_file.write(test_file.readline())  # header 
-        test_lines = [line.strip() for line in test_file.read().splitlines() if line.strip()]
+    test_columns = read_csv_columns(test_csv_path)
 
-        assert len(test_lines) == len(predictions_in_test_order), \
-            f"{len(test_lines)} test rows vs {len(predictions_in_test_order)} predictions"
-        
-        for test_line, prediction in zip(test_lines, predictions_in_test_order):
-            output_file.write(f"{test_line},{prediction}\n")
+    assert len(test_columns) == len(predictions_in_test_order), \
+        f"{len(test_columns)} test rows vs {len(predictions_in_test_order)} predictions"
+
+    # the prediction always goes into the last column of the test file / header and all other fields stay as they are
+    test_columns[test_columns.columns[-1]] = predictions_in_test_order
+    test_columns.to_csv(output_csv_path, index=False)
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 # Data loading Task 1
@@ -50,7 +44,7 @@ def load_rating_prediction_task(training_csv_path, test_csv_path, validation_fra
     # populating the embeddings
     user_rows = ids_to_rows(training_columns["user"], row_of_user)
     item_rows = ids_to_rows(training_columns["item"], row_of_item)
-    ratings = np.array(training_columns["rating"], dtype=np.float32)
+    ratings = training_columns["rating"].astype(np.float32).to_numpy()
     test_user_rows = ids_to_rows(test_columns["user"], row_of_user)
     test_item_rows = ids_to_rows(test_columns["item"], row_of_item)
     n_user_rows = len(row_of_user) + 1  # U users + row 0

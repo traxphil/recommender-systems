@@ -25,13 +25,13 @@ OUTPUT_DIR = SUBMISSION_DIR / "output"
 # SVD if use_implicit_feedback=False / SVD++ for True
 def train_latent_factor_model(task: RatingTask,
                               use_implicit_feedback: bool = True,
-                              n_factors: int = 10,
-                              learning_rate: float = 0.01,
+                              n_factors: int = 500,
+                              learning_rate: float = 2.5e-4,
                               bias_regularization: float = 3.0,     # best closed-form bias model on the Task 1 split
-                              factor_regularization: float = 50.0,
-                              ratings_per_batch: int = 4096,
-                              max_epochs: int = 100,
-                              early_stopping_patience: int = 6,
+                              factor_regularization: float = 8,
+                              ratings_per_batch: int = 512,
+                              max_epochs: int = 1000,
+                              early_stopping_patience: int = 20,
                               refit_on_train_and_valid: bool = True,
                               seed: int = 0) -> ModelResult:
 

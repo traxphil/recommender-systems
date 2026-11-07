@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import math
 import time
 
@@ -8,14 +9,14 @@ import time
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 # build the embedding IDs based on the order the IDs of the entries appear in the data
-# DICT: mapping from str id (csv) tp embedding id
-def number_by_first_appearance(ids_in_file_order) -> dict[str, int]:
-    distinct_ids = dict.fromkeys(ids_in_file_order)
-    return {user_or_item_id: row for row, user_or_item_id in enumerate(distinct_ids, start=1)}
+# INDEX: distinct str ids (csv) in order of first appearance -> position + 1 = embedding id
+def number_by_first_appearance(ids_in_file_order) -> pd.Index:
+    return pd.Index(pd.unique(pd.Series(ids_in_file_order)))
 
 # mapping from str id to embedding rows
-def ids_to_rows(ids, row_of_id: dict[str, int]) -> np.ndarray:
-    return np.array([row_of_id.get(user_or_item_id, 0) for user_or_item_id in ids], dtype=np.int64)
+def ids_to_rows(ids, row_of_id: pd.Index) -> np.ndarray:
+    # get_indexer gives -1 for ids that are not in the index -> + 1 = row 0 (unknowns to 0!)
+    return (row_of_id.get_indexer(ids) + 1).astype(np.int64)
 
 # obtain all entries belonging to a user
 def group_by_user(user_rows: np.ndarray, values: np.ndarray, n_user_rows: int) -> list[np.ndarray]:
