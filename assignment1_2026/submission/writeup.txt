@@ -6,8 +6,7 @@ github repo link: https://github.com/traxphil/recommender-systems
 ### Sources:
 
 - Netflix Prize Winner Model: https://www2.seas.gwu.edu/~simhaweb/champalg/cf/papers/KorenBellKor2009.pdf
-
-
+Source: Koren 2008 (KDD), SVD++; also Koren, Bell & Volinsky 2009, "Additional input sources"
 
 
 ### Chapter 1: Repository Structure
@@ -18,7 +17,9 @@ github repo link: https://github.com/traxphil/recommender-systems
 
 
 ### Chapter 2: Core Ideas of my Approach
-I want to try and use ensemble models to combine multiple 
+Early on, I realized that I struggled with overfitting my models and Surprise has no real way of doing early stopping. This is why I
+wanted to use Pytorch. This would also allow me to be apply adaptive learning rates and have more control overall when it comes to
+fine-tuning my code.
 
 
 ### Chapter 3: Helper Functions in Sbmission files

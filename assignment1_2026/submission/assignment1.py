@@ -1,122 +1,161 @@
-import gzip
-import random
-import scipy as sp
-import numpy as np
-import implicit
-import surprise
-import time
-import math
-import io
 from pathlib import Path
 
-from collections import defaultdict
-# from implicit import bpr
-from surprise import SVDpp, SVD, Reader, Dataset, accuracy
-from surprise.model_selection import train_test_split
-from tqdm import tqdm as tqdm
+import torch
 
-# #########################################################################################
-# Helper Functions for the Assignment
-# #########################################################################################
+from lib.config import DEVICE
+from lib.custom_types import ModelResult, RatingData, RatingTask
+from lib.data_loading import load_rating_prediction_task, write_prediction_file
+from lib.helper_functioins import fit_closed_form_biases, group_by_user
+from lib.SVDpp import LatentFactorModel
+from lib.torch_trainer import fit_with_early_stopping, predict_ratings, train_for_epochs
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-# Infrastructure & Data Fetching
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Path Definition for the Assignment
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# time-stamped log print
-def log(message: str):
-    print(f"[{time.strftime('%H:%M:%S')}] {message}", flush=True)
-
-
-# the column mask is an array specifying which columns can be used - e.g. [1, 0, 1, 0]
-def read_csv(path: Path, column_mask):
-
-    reader = open(path, 'r')
-    header = reader.readline().strip().split(',')
-    mask = np.asarray(column_mask, dtype=bool)
-
-    # store the data / remove letters so we can directly store the IDs as numeric values
-    # runs on the assumption that all IDs have 10 digits
-    # recover value with: f"u{NUMBER:010d}"
-    body = reader.read().replace('u', '').replace('i', '')
-    data = np.loadtxt(io.StringIO(body), delimiter=',', dtype=np.int64, usecols=np.flatnonzero(mask), ndmin=2)
-    reader.close()
-
-    # returns header names, data
-    # only keeps the columns where the mask is set to True
-    kept_header = np.array(header)[mask].tolist() 
-    return kept_header, data
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-# Errors, Constants, Math Operations
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
-# intersection over union
-def jaccard_sim(set_a: set, set_b: set) -> float:
-    intersection = len(set_a & set_b)
-    union = len(set_a) + len(set_b) - intersection
-    return intersection / union
-
-def cosine_sim_set(set_a: set, set_b: set) -> float:
-    pass
-
-# np.ndarray
-def cosine_sim(vec_a: dict, vec_b: dict) -> float:
-    pass
-
-def pearson_sim(set_a: set, set_b: set) -> float:
-    pass
-
-# mean squared error
-def mse(predictions: np.ndarray, targets: np.ndarray) -> float:
-    return float(np.mean((np.asarray(predictions) - np.asarray(targets)) ** 2))
-
-# root mean squared error
-def rmse(predictions: np.ndarray, targets: np.ndarray) -> float:
-    return math.sqrt(mse(predictions, targets))
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-# Logic Helpers
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-# Constants
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
-
+SUBMISSION_DIR = Path(__file__).resolve().parent
+DATA_DIR = SUBMISSION_DIR.parent / "data"
+OUTPUT_DIR = SUBMISSION_DIR / "output"
 
 
 # #########################################################################################
-# Task 1
+# Main Pipeline Handlers for the Models
 # #########################################################################################
 
-def svdppModel(trainFile):
-    # Copy the training file without its header (Surprise can't skip it)
-    a = open(trainFile, 'r')
-    b = open("temp.csv", 'w')
-    a.readline()
-    for l in a.readlines():
-        b.write(l)
-    a.close()
-    b.close()
+# SVD if use_implicit_feedback=False / SVD++ for True
+def train_latent_factor_model(task: RatingTask,
+                              use_implicit_feedback: bool = True,
+                              n_factors: int = 10,
+                              learning_rate: float = 0.01,
+                              bias_regularization: float = 3.0,     # best closed-form bias model on the Task 1 split
+                              factor_regularization: float = 50.0,
+                              ratings_per_batch: int = 4096,
+                              max_epochs: int = 100,
+                              early_stopping_patience: int = 6,
+                              refit_on_train_and_valid: bool = True,
+                              seed: int = 0) -> ModelResult:
 
-    # Load the ratings; rating_scale=(0, 5) because the data contains 0-star ratings
-    reader = Reader(line_format='user item timestamp rating', sep=',', rating_scale=(0, 5))
-    data = Dataset.load_from_file("temp.csv", reader=reader)
+    # options shared by the fit and the refit / keyword form, so they can be passed on with **
+    training_options = dict(learning_rate=learning_rate,
+                            bias_regularization=bias_regularization,
+                            factor_regularization=factor_regularization,
+                            ratings_per_batch=ratings_per_batch,
+                            seed=seed)
 
-    # SVD++ = SVD plus an implicit term built from all items each user has rated
-    # model = SVDpp(n_factors=20, n_epochs=100, reg_bu=0.005, reg_bi=0.005, reg_pu=0.15, reg_qi=0.15, reg_yj=0.15, cache_ratings=True, random_state=0, verbose=True)
-    # GridSearchCV
-    model = SVD(n_factors=20, n_epochs=100, random_state=0, verbose=True, reg_bu=0.5, reg_bi=0.5, reg_pu=0.5, reg_qi=0.5)
-    trainset, testset = train_test_split(data, test_size=.25, random_state=0)
-    model.fit(trainset)
+    def build_model(training_ratings: RatingData) -> LatentFactorModel:
+        torch.manual_seed(seed)  # identical initial factors for the fit and the refit
+        global_mean_rating = float(training_ratings.ratings.mean())
 
-    # MSE on the held-out 25%
-    predictions = model.test(testset)
-    sse = 0
-    for p in predictions:
-        sse += (p.r_ui - p.est)**2
-    print("Error on own test set = ", str(sse / len(predictions)))
+        # biases start at the closed-form bias model of these ratings (same regularization as in training)
+        # -> epoch 0 already equals the bias baseline, the factors only have to improve on top of it
+        initial_user_biases, initial_item_biases = fit_closed_form_biases(
+            training_ratings.user_rows, training_ratings.item_rows, training_ratings.ratings,
+            task.n_user_rows, task.n_item_rows, global_mean_rating, bias_regularization)
 
-    return trainset, model
+        # SVD++ only: N(u) = items of the ratings this model trains on
+        # -> fit: training split only (validation pairs stay unseen), refit: whole training file; never test pairs
+        interacted_items_by_user = (group_by_user(training_ratings.user_rows, training_ratings.item_rows, task.n_user_rows)
+                                    if use_implicit_feedback else None)
+
+        return LatentFactorModel(
+            task.n_user_rows, task.n_item_rows, n_factors,
+            global_mean_rating=global_mean_rating,
+            interacted_items_by_user=interacted_items_by_user,
+            initial_user_biases=initial_user_biases,
+            initial_item_biases=initial_item_biases,
+        ).to(DEVICE)
+
+    # 1) fit on the training data, early-stop on the validation data
+    model = build_model(task.training_data)
+    epoch_history = fit_with_early_stopping(model, task.training_data, task.validation_data,
+                                            max_epochs=max_epochs,
+                                            early_stopping_patience=early_stopping_patience,
+                                            **training_options)
+    valid_predictions = predict_ratings(model, task.validation_data.user_rows, task.validation_data.item_rows)
+
+    # 2) optional: retrain from scratch on 100 % for the best number of epochs (uses the extra 10 % of data)
+    #    best epoch 0 = the factors never helped -> the refit keeps the closed-form biases of all data
+    if refit_on_train_and_valid:
+        best_epoch = min(epoch_history, key=lambda epoch_entry: epoch_entry["valid_mse"])["epoch"]
+        model = build_model(task.training_and_validation_data)
+        train_for_epochs(model, task.training_and_validation_data, n_epochs=best_epoch, **training_options)
+
+    test_predictions = predict_ratings(model, task.test_user_rows, task.test_item_rows)
+    return ModelResult(model, epoch_history, valid_predictions, test_predictions)
+
+
+# #########################################################################################
+# Task 1 - rating prediction from (user, item) only
+# #########################################################################################
+
+TASK1_TRAINING_FILE = DATA_DIR / "tasks_1_2_train.csv"
+TASK1_TEST_FILE = DATA_DIR / "task_1_test.csv"
+TASK1_PREDICTION_FILE = OUTPUT_DIR / "task_1_predictions.csv"
+
+
+def load_task1() -> RatingTask:
+    return load_rating_prediction_task(TASK1_TRAINING_FILE, TASK1_TEST_FILE)
+
+
+# final hyperparameters live here, so this file reproduces the submitted predictions
+def train_task1_models(task: RatingTask) -> dict[str, ModelResult]:
+    return {
+        "svd": train_latent_factor_model(task, use_implicit_feedback=False),
+        # SVD++ rebuilds N(u) sums for every user in a batch -> bigger batches keep an epoch affordable
+        "svdpp": train_latent_factor_model(task, use_implicit_feedback=True, ratings_per_batch=16384, learning_rate=2e-3),
+    }
+
+
+def write_task1_predictions(test_predictions) -> None:
+    write_prediction_file(TASK1_TEST_FILE, TASK1_PREDICTION_FILE, test_predictions)
+
+
+def run_task1():
+    task = load_task1()
+    model_results = train_task1_models(task)
+    # later: replace with the blended ensemble prediction
+    write_task1_predictions(model_results["svdpp"].test_predictions)
+    return task, model_results
+
+
+# #########################################################################################
+# Task 3 - rating prediction, timestamp available
+# for now: same models as Task 1, timestamps ignored (like the baseline)
+# #########################################################################################
+
+TASK3_TRAINING_FILE = DATA_DIR / "tasks_3_4_train.csv"
+TASK3_TEST_FILE = DATA_DIR / "task_3_test.csv"
+TASK3_PREDICTION_FILE = OUTPUT_DIR / "task_3_predictions.csv"
+
+
+def load_task3() -> RatingTask:
+    return load_rating_prediction_task(TASK3_TRAINING_FILE, TASK3_TEST_FILE)
+
+
+def train_task3_models(task: RatingTask) -> dict[str, ModelResult]:
+    return {
+        "svd": train_latent_factor_model(task, use_implicit_feedback=False),
+        # SVD++ rebuilds N(u) sums for every user in a batch -> bigger batches keep an epoch affordable
+        "svdpp": train_latent_factor_model(task, use_implicit_feedback=True, ratings_per_batch=16384, learning_rate=2e-3),
+    }
+
+
+def write_task3_predictions(test_predictions) -> None:
+    write_prediction_file(TASK3_TEST_FILE, TASK3_PREDICTION_FILE, test_predictions)
+
+
+def run_task3():
+    task = load_task3()
+    model_results = train_task3_models(task)
+    write_task3_predictions(model_results["svdpp"].test_predictions)
+    return task, model_results
+
+
+# #########################################################################################
+# Tasks 2, 4, 5, 6: to do (baselines still run from the notebook)
+# #########################################################################################
+
+
+if __name__ == "__main__":
+    run_task1()
+    run_task3()
