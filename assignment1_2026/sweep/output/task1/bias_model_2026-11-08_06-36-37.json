@@ -1,0 +1,127 @@
+{
+  "task": "task1",
+  "model": "bias_model",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-08 06:36:37",
+  "last_update": "2026-11-08 06:36:41",
+  "runs_finished": "12 / 12",
+  "device": "cuda",
+  "best": {
+    "score": 0.76284,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": null,
+    "swept_values": {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0
+    },
+    "parameters": {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 10
+    }
+  },
+  "swept_parameters": {
+    "user_bias_regularization": [
+      0.5,
+      1.0,
+      2.0,
+      3.0
+    ],
+    "item_bias_regularization": [
+      3.0,
+      5.0,
+      8.0
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK1_BIAS_MODEL",
+  "runs": [
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 3.0,
+      "score": 0.763208,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 5.0,
+      "score": 0.762911,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 8.0,
+      "score": 0.763648,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 3.0,
+      "score": 0.763145,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0,
+      "score": 0.76284,
+      "best_epoch": null,
+      "seconds": 0.2
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 8.0,
+      "score": 0.763564,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 3.0,
+      "score": 0.763653,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 5.0,
+      "score": 0.763334,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 8.0,
+      "score": 0.764031,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 3.0,
+      "score": 0.764711,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 5.0,
+      "score": 0.764377,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 8.0,
+      "score": 0.765045,
+      "best_epoch": null,
+      "seconds": 0.1
+    }
+  ]
+}

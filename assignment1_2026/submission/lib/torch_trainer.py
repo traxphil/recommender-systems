@@ -5,7 +5,7 @@ import numpy as np
 import torch
 
 from lib.config import DEVICE, RATING_MAX, RATING_MIN
-from lib.custom_types import RatingData
+from lib.custom_types import ModelResult, RatingData, RatingTask
 from lib.helper_functioins import mse, log
 
 
@@ -15,6 +15,16 @@ class MiniBatch(NamedTuple):
     ratings: torch.Tensor               # (B,) true stars
     user_penalty_weights: torch.Tensor  # (B,) 1 / #training ratings of that rating's user
     item_penalty_weights: torch.Tensor  # (B,) 1 / #training ratings of that rating's item
+    days: torch.Tensor | None           # (B,) day of each rating / None if the data has no days
+
+
+# every model gets (user_rows, item_rows); temporal models (uses_days = True) also the day of every rating
+def model_inputs(model, user_rows, item_rows, days) -> tuple:
+    if not model.uses_days:
+        return user_rows, item_rows
+    if days is None:
+        raise ValueError(f"{type(model).__name__} needs the day of every rating -> RatingData.days / RatingTask.test_days")
+    return user_rows, item_rows, days
 
 
 # Mini-batches of individual ratings in random order (standard SGD sampling):
@@ -26,6 +36,7 @@ class RatingMiniBatches:
         self.user_rows = torch.as_tensor(rating_data.user_rows)
         self.item_rows = torch.as_tensor(rating_data.item_rows)
         self.ratings = torch.as_tensor(rating_data.ratings)
+        self.days = None if rating_data.days is None else torch.as_tensor(rating_data.days)
 
         # 1 / count spreads each user's / item's L2 penalty over its ratings (see LatentFactorModel.l2_penalty)
         ratings_per_user = np.bincount(rating_data.user_rows)
@@ -49,17 +60,21 @@ class RatingMiniBatches:
                             item_rows.to(DEVICE),
                             self.ratings[batch_positions].to(DEVICE),
                             self.user_penalty_weights[user_rows].to(DEVICE),
-                            self.item_penalty_weights[item_rows].to(DEVICE))
+                            self.item_penalty_weights[item_rows].to(DEVICE),
+                            None if self.days is None else self.days[batch_positions].to(DEVICE))
 
 
-def train_one_epoch(model, optimizer, mini_batches: RatingMiniBatches, bias_regularization, factor_regularization) -> float:
+def train_one_epoch(model, optimizer, mini_batches: RatingMiniBatches,
+                    user_bias_regularization, item_bias_regularization, factor_regularization) -> float:
     squared_error_sum, n_ratings = 0.0, 0
 
     for batch in mini_batches:
 
         # loss = mean squared error + L2 penalty (regularization)
-        squared_errors = (model(batch.user_rows, batch.item_rows) - batch.ratings) ** 2
-        penalty = model.l2_penalty(batch.user_rows, batch.item_rows, batch.user_penalty_weights, batch.item_penalty_weights, bias_regularization, factor_regularization)
+        inputs = model_inputs(model, batch.user_rows, batch.item_rows, batch.days)
+        squared_errors = (model(*inputs) - batch.ratings) ** 2
+        penalty = model.l2_penalty(*inputs, batch.user_penalty_weights, batch.item_penalty_weights,
+                                   user_bias_regularization, item_bias_regularization, factor_regularization)
         loss = squared_errors.mean() + penalty
 
         # gradient step
@@ -73,17 +88,21 @@ def train_one_epoch(model, optimizer, mini_batches: RatingMiniBatches, bias_regu
     return squared_error_sum / n_ratings
 
 
-# predicted stars for every pair (user_rows[k], item_rows[k]) -> clipped to rating range to make sure it makes sense
+# predicted stars for every pair (user_rows[k], item_rows[k]) (on day days[k]) -> clipped to rating range to make sure it makes sense
 # in chunks, so predicting all ~1.7M training ratings does not need several GB of memory at once
-def predict_ratings(model, user_rows: np.ndarray, item_rows: np.ndarray, chunk_size: int = 200_000) -> np.ndarray:
+def predict_ratings(model, user_rows: np.ndarray, item_rows: np.ndarray, days: np.ndarray | None = None,
+                    chunk_size: int = 200_000) -> np.ndarray:
 
     model.eval()
     prediction_chunks = []
     with torch.no_grad():
         for chunk_start in range(0, len(user_rows), chunk_size):
-            chunk_user_rows = torch.as_tensor(user_rows[chunk_start:chunk_start + chunk_size], device=DEVICE)
-            chunk_item_rows = torch.as_tensor(item_rows[chunk_start:chunk_start + chunk_size], device=DEVICE)
-            prediction_chunks.append(model(chunk_user_rows, chunk_item_rows).clamp(RATING_MIN, RATING_MAX).cpu().numpy())
+            chunk = slice(chunk_start, chunk_start + chunk_size)
+            chunk_user_rows = torch.as_tensor(user_rows[chunk], device=DEVICE)
+            chunk_item_rows = torch.as_tensor(item_rows[chunk], device=DEVICE)
+            chunk_days = None if days is None else torch.as_tensor(days[chunk], device=DEVICE)
+            inputs = model_inputs(model, chunk_user_rows, chunk_item_rows, chunk_days)
+            prediction_chunks.append(model(*inputs).clamp(RATING_MIN, RATING_MAX).cpu().numpy())
 
     model.train()
     return np.concatenate(prediction_chunks)
@@ -91,8 +110,8 @@ def predict_ratings(model, user_rows: np.ndarray, item_rows: np.ndarray, chunk_s
 
 # train MSE and valid MSE of the current weights
 def evaluate(model, train_ratings: RatingData, valid_ratings: RatingData) -> tuple[float, float]:
-    train_mse = mse(predict_ratings(model, train_ratings.user_rows, train_ratings.item_rows), train_ratings.ratings)
-    valid_mse = mse(predict_ratings(model, valid_ratings.user_rows, valid_ratings.item_rows), valid_ratings.ratings)
+    train_mse = mse(predict_ratings(model, train_ratings.user_rows, train_ratings.item_rows, train_ratings.days), train_ratings.ratings)
+    valid_mse = mse(predict_ratings(model, valid_ratings.user_rows, valid_ratings.item_rows, valid_ratings.days), valid_ratings.ratings)
     return train_mse, valid_mse
 
 
@@ -101,7 +120,8 @@ def fit_with_early_stopping(model,
                             train_ratings: RatingData,
                             valid_ratings: RatingData,
                             learning_rate,
-                            bias_regularization,
+                            user_bias_regularization,
+                            item_bias_regularization,
                             factor_regularization,
                             ratings_per_batch,
                             max_epochs,
@@ -120,7 +140,7 @@ def fit_with_early_stopping(model,
     # one training pass + validation score
     for epoch in range(1, max_epochs + 1):
 
-        train_one_epoch(model, optimizer, mini_batches, bias_regularization, factor_regularization)
+        train_one_epoch(model, optimizer, mini_batches, user_bias_regularization, item_bias_regularization, factor_regularization)
         # both MSEs measured with the weights at the END of the epoch -> directly comparable
         train_mse, valid_mse = evaluate(model, train_ratings, valid_ratings)
 
@@ -144,11 +164,38 @@ def fit_with_early_stopping(model,
 
 
 # main training handler (fixed number of epochs) -> used for the final refit on training + validation data
-def train_for_epochs(model, rating_data: RatingData, n_epochs, learning_rate, bias_regularization, factor_regularization, ratings_per_batch, seed):
+def train_for_epochs(model, rating_data: RatingData, n_epochs, learning_rate,
+                     user_bias_regularization, item_bias_regularization, factor_regularization, ratings_per_batch, seed):
 
     mini_batches = RatingMiniBatches(rating_data, ratings_per_batch, seed)
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
     for epoch in range(1, n_epochs + 1):
-        train_mse = train_one_epoch(model, optimizer, mini_batches, bias_regularization, factor_regularization)
+        train_mse = train_one_epoch(model, optimizer, mini_batches, user_bias_regularization, item_bias_regularization, factor_regularization)
         log(f"refit epoch {epoch:3d} | train MSE {train_mse:.4f}")
+
+
+# the whole pipeline of a PyTorch sub-model: fit with early stopping -> validation predictions (blender input)
+# -> optional refit on 100 % for the best number of epochs -> test predictions
+# build_model(rating_data) creates a fresh model from the ratings it will train on (biases, N(u), time tables, ...)
+def fit_refit_and_predict(task: RatingTask, build_model, max_epochs, early_stopping_patience, refit_on_train_and_valid,
+                          **training_options) -> ModelResult:
+
+    # 1) fit on the training data, early-stop on the validation data
+    model = build_model(task.training_data)
+    epoch_history = fit_with_early_stopping(model, task.training_data, task.validation_data,
+                                            max_epochs=max_epochs,
+                                            early_stopping_patience=early_stopping_patience,
+                                            **training_options)
+    validation = task.validation_data
+    valid_predictions = predict_ratings(model, validation.user_rows, validation.item_rows, validation.days)
+
+    # 2) optional: retrain from scratch on 100 % for the best number of epochs
+    #    best epoch 0 = training never helped -> the refit keeps the starting point built from all data
+    if refit_on_train_and_valid:
+        best_epoch = min(epoch_history, key=lambda epoch_entry: epoch_entry["valid_mse"])["epoch"]
+        model = build_model(task.training_and_validation_data)
+        train_for_epochs(model, task.training_and_validation_data, n_epochs=best_epoch, **training_options)
+
+    test_predictions = predict_ratings(model, task.test_user_rows, task.test_item_rows, task.test_days)
+    return ModelResult(model, epoch_history, valid_predictions, test_predictions)

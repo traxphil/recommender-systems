@@ -2,10 +2,16 @@
 import torch
 import torch.nn as nn
 
+from lib.custom_types import ModelResult
+from lib.model_storage import load_model_result, save_model_result
+
 # SVD   : r(u,i) = mu + b_u + b_i + q_i . p_u
 # SVD++ : r(u,i) = mu + b_u + b_i + q_i . (p_u + |N(u)|^-1/2 * sum_{j in N(u)} y_j)
 
 class LatentFactorModel(nn.Module):
+
+    # no time terms -> lib/torch_trainer.py only passes (user_rows, item_rows); timeSVD++ (time_svdpp.py) sets True
+    uses_days = False
 
     # Parameters:
     # user_biases               b_u     (U+1, 1)
@@ -81,7 +87,10 @@ class LatentFactorModel(nn.Module):
         return self.global_mean_rating + biases + user_item_affinity
 
 
-    def l2_penalty(self, user_rows, item_rows, user_penalty_weights, item_penalty_weights, bias_regularization, factor_regularization):
+    # lambda_bu * sum b_u^2 + lambda_bi * sum b_i^2 + lambda_f * (sum ||p_u||^2 + sum ||q_i||^2 [+ sum ||y_j||^2])
+    # (PML Eq. 5.12 with the bias lambda split into a user and an item part)
+    def l2_penalty(self, user_rows, item_rows, user_penalty_weights, item_penalty_weights,
+                   user_bias_regularization, item_bias_regularization, factor_regularization):
 
         # squared norms of the parameters used by each rating
         user_bias_squared = self.user_biases(user_rows).squeeze(1) ** 2
@@ -94,7 +103,25 @@ class LatentFactorModel(nn.Module):
             item_factor_squared = item_factor_squared + (self.implicit_item_factors.weight[item_rows] ** 2).sum(dim=1)
 
         # weight per rating, then average over the batch
-        bias_penalty = user_penalty_weights * user_bias_squared + item_penalty_weights * item_bias_squared
+        bias_penalty = (user_bias_regularization * user_penalty_weights * user_bias_squared
+                        + item_bias_regularization * item_penalty_weights * item_bias_squared)
         factor_penalty = user_penalty_weights * user_factor_squared + item_penalty_weights * item_factor_squared
-        
-        return (bias_regularization * bias_penalty + factor_regularization * factor_penalty).mean()
+
+        return (bias_penalty + factor_regularization * factor_penalty).mean()
+
+
+# SVD and SVD++ are the same class -> stored under their own names, so both can be part of the ensemble
+def store_svd(model_result: ModelResult, task_name: str):
+    return save_model_result(model_result, task_name, "svd")
+
+
+def load_svd(task_name: str) -> ModelResult:
+    return load_model_result(task_name, "svd")
+
+
+def store_svdpp(model_result: ModelResult, task_name: str):
+    return save_model_result(model_result, task_name, "svdpp")
+
+
+def load_svdpp(task_name: str) -> ModelResult:
+    return load_model_result(task_name, "svdpp")

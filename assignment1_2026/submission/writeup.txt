@@ -2,25 +2,102 @@ Submission Information:
 
 github repo link: https://github.com/traxphil/recommender-systems
 
+Machine Specs:
+64 GB RAM (some methods use a lot of it)
+CUDA available
 
 ### Sources:
 
+# Pytorch Workflow Doucmentation: https://www.learnpytorch.io/01_pytorch_workflow/
+# Pytorch Tutorial Video: https://www.youtube.com/watch?v=V_xro1bcAuA (at ~ 4:20:00 / Chapter 34+)
+
+
 - Netflix Prize Winner Model: https://www2.seas.gwu.edu/~simhaweb/champalg/cf/papers/KorenBellKor2009.pdf
 Source: Koren 2008 (KDD), SVD++; also Koren, Bell & Volinsky 2009, "Additional input sources"
+https://datajobs.com/data-science-repo/Collaborative-Filtering-%5BKoren-and-Bell%5D.pdf
+https://surprise.readthedocs.io/en/stable/prediction_algorithms.html
+https://surprise.readthedocs.io/en/stable/matrix_factorization.html
+https://www.cs.columbia.edu/~blei/fogm/2023F/readings/KorenBellVolinsky2009.pdf
+https://en.wikipedia.org/wiki/Matrix_factorization_(recommender_systems)
+https://surprise.readthedocs.io/en/stable/knn_inspired.html
+https://archives.iw3c2.org/www10/cdrom/papers/519/sdm2.html
+https://d2l.ai/chapter_recommender-systems/fm.html
+https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingRegressor.html
+https://scikit-learn.org/stable/api/sklearn.linear_model.html
+https://xgboost.readthedocs.io/en/stable/tutorials/model.html
+https://lightgbm.readthedocs.io/en/latest/Features.html
+https://docs.pytorch.org/docs/2.0/generated/torch.optim.Adam.html
 
 
-### Chapter 1: Repository Structure
-- running baseline & submission from the checkpoint folder
-- baseline_output contains the generated files form the baseline
-- data contains the training and test files
-- submission contains the generated files under /output + the code + the writeup
 
 
-### Chapter 2: Core Ideas of my Approach
+
+
+### Core Ideas of my Approach - - - - - - - - - - - - - - - - - - - - - - - -
+
 Early on, I realized that I struggled with overfitting my models and Surprise has no real way of doing early stopping. This is why I
-wanted to use Pytorch. This would also allow me to be apply adaptive learning rates and have more control overall when it comes to
-fine-tuning my code.
+wanted to use Pytorch, with the motivation to have more overall control and insignt into what is happening. This would also allow me to 
+apply adaptive learning rates and have more control overall when it comes to fine-tuning my code. But this came with significantly more
+work than I initially expected. The main difficulty came with setting up the whole infrastructure, handlers, and architecture of my
+solution approach, because I quickly realized that I would lose any sense of overview, if I just wrote everything into a single file.
+
+This is why this whole project repository has grown to the size that it currently has. I have followed a strict approach of modularization
+for my individual responsibilities in my code (I'm also taking CSE 210 at the moment and this class also really teaches the importance of
+modularization and separation of concerns. I have applied these ideas in this project extensively).
+
+I also want to put a large emphasis on mathematical understanding of the models and ideas I apply in this project. Using pytorch also makes
+it significantly more important to have a closer look at the actual math behind the models. This level of insight would have been almost 
+entirely obstructed if I stuck with the SciKit Surprise models, even though it might have been significantly easier. In all of the notebooks
+I have included the mathematical descriptions of the models. This whole project quickly grew larger than I initially expected and I want to
+be able to use the code I developed here in the future as well. I hope this repository will be able to serve me as a reference for future
+use of pytorch and other machine learning projects. Therefore, this project is more or less also an investment into my future knowledge base
+going beyond just the scope of the class. 
+
+This writeup will also reference the sources of where I found my ideas and how I have included them into the implementations for the 
+individual tasks. For all of the implementations, I opted to use ensemble models as this generally seems to be a good approach for building
+competitive recommender systems that generalize well. I would have probably preferred to keep the implementation a bit simpler and smaller
+but the pressure of the leaderboard made it almost necessary, to pursue more advanced solutions. 
+
+I have also discussed my ideas with Claude to come up with better ideas, improve existing approaches, or identify shortcomings in my ideas. 
+But this primarily served the purpose of guiding me through the material and helping me out when I was stuck. I have no intention of just
+letting an LLM write my code as I personally also see absolutely no benefit in doing that. But I have to admit dhat it definitely was an amazing 
+help, especially when I went for the more complex models or repetitive notation tasks (e.g. for the formulas).
 
 
-### Chapter 3: Helper Functions in Sbmission files
+
+### Repository Structure - - - - - - - - - - - - - - - - - - - - - - - -
+
+All of the files related to the assignment can be found under the /assignment1_2026 folder. The core components of my submission are all
+included in /submission. 
+
+-   /lib contains all of the additional helber functions (e.g. data processing, pytorch training, custom data types, etc.)
+
+-   /lib/models contains all the models that were used by the tasks
+
+-   /lib/config contains the model settings and their hyperparameters
+
+-   /output contains the written prediction files (given that the repo is public and the scoring is competitive, I have excluded them from the repo)
+
+-   assignment1.py contains the main functions for the training of the model
+
+-   the taskX_ensemble.ipynb notebooks handle the entire pipeline for each task -> so to reproduce the results one only has to run the notebooks
+
+
+
+### Running the Tasks
+
+
+
+### Library & Helper Functions
+
+
+### Loading and Processing of data
+
+Why I didn't use one super large matrix
+
+
+### Sweeping for Hyperparameter Identification
+
+### 
+
 

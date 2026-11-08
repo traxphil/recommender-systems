@@ -47,9 +47,13 @@ LOG_FILE = SWEEP_DIR / "sweep_log.txt"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # keyword arguments of train_latent_factor_model a config may override
-SWEEPABLE_PARAMETER_NAMES = ("use_implicit_feedback", "n_factors", "learning_rate", "bias_regularization",
-                             "factor_regularization", "ratings_per_batch", "max_epochs",
+SWEEPABLE_PARAMETER_NAMES = ("use_implicit_feedback", "n_factors", "learning_rate", "user_bias_regularization",
+                             "item_bias_regularization", "factor_regularization", "ratings_per_batch", "max_epochs",
                              "early_stopping_patience", "seed")
+
+# before the bias lambda was split into a user and an item part, configs and result rows had one "bias_regularization"
+# -> a config may still use it (sets both sides), old result rows are converted when the results file is read
+SHARED_BIAS_REGULARIZATION_NAME = "bias_regularization"
 
 # defaults are read from the function signature -> a config that leaves a value out gets exactly assignment1's default
 _signature_parameters = inspect.signature(assignment1.train_latent_factor_model).parameters
@@ -88,6 +92,29 @@ def read_result_rows() -> list[dict]:
         return []
     with open(RESULTS_FILE, newline="", encoding="utf-8") as csv_file:
         return list(csv.DictReader(csv_file))
+
+
+# results file written before the bias lambda was split: one bias_regularization column
+# -> rewritten once with user_bias_regularization = item_bias_regularization = that value (same runs, same scores),
+#    so new rows (written with RESULT_COLUMNS) and old rows share one header
+def convert_results_file_to_split_bias_regularization():
+    if not RESULTS_FILE.exists():
+        return
+    with open(RESULTS_FILE, newline="", encoding="utf-8") as csv_file:
+        reader = csv.DictReader(csv_file)
+        if SHARED_BIAS_REGULARIZATION_NAME not in reader.fieldnames:
+            return
+        result_rows = list(reader)
+
+    for row in result_rows:
+        shared_bias_regularization = row.pop(SHARED_BIAS_REGULARIZATION_NAME)
+        row["user_bias_regularization"] = row["item_bias_regularization"] = shared_bias_regularization
+
+    with open(RESULTS_FILE, "w", newline="", encoding="utf-8") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=RESULT_COLUMNS, extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(result_rows)
+    announce(f"converted {len(result_rows)} result rows to user / item bias regularization columns")
 
 
 # the queue file can be replaced while we read it -> retry a few times before giving up for this poll
@@ -130,13 +157,18 @@ def task_for_split_seed(split_seed: int):
 
 # config from the queue -> the full set of keyword arguments for train_latent_factor_model
 def parameters_of_config(config: dict) -> dict:
-    return {**DEFAULT_PARAMETERS, **{name: config[name] for name in SWEEPABLE_PARAMETER_NAMES if name in config}}
+    parameters = dict(DEFAULT_PARAMETERS)
+    if SHARED_BIAS_REGULARIZATION_NAME in config:
+        parameters["user_bias_regularization"] = parameters["item_bias_regularization"] = config[SHARED_BIAS_REGULARIZATION_NAME]
+    parameters.update({name: config[name] for name in SWEEPABLE_PARAMETER_NAMES if name in config})
+    return parameters
 
 
 def describe_parameters(parameters: dict) -> str:
     model_name = "SVD++" if parameters["use_implicit_feedback"] else "SVD"
     return (f"{model_name} k={parameters['n_factors']} lr={parameters['learning_rate']:g} "
-            f"reg_factors={parameters['factor_regularization']:g} reg_biases={parameters['bias_regularization']:g} "
+            f"reg_factors={parameters['factor_regularization']:g} "
+            f"reg_user_biases={parameters['user_bias_regularization']:g} reg_item_biases={parameters['item_bias_regularization']:g} "
             f"batch={parameters['ratings_per_batch']} seed={parameters['seed']}")
 
 
@@ -208,6 +240,7 @@ def failed_result_row(config: dict, error: Exception) -> dict:
 def run_sweep_queue(poll_seconds: int = 30, max_idle_hours: float = 2.0):
     gpu_name = torch.cuda.get_device_name(0) if torch.cuda.is_available() else "no GPU"
     announce(f"sweep worker started | device {DEVICE} ({gpu_name}) | torch {torch.__version__}")
+    convert_results_file_to_split_bias_regularization()
     keep_computer_awake(True)
     idle_since = None
 
@@ -261,14 +294,16 @@ def run_sweep_queue(poll_seconds: int = 30, max_idle_hours: float = 2.0):
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 def print_best_results(top_n: int = 20, model: str | None = None):
+    convert_results_file_to_split_bias_regularization()
     finished_rows = [row for row in read_result_rows()
                      if row["status"] == "ok" and (model is None or row["model"] == model)]
     finished_rows.sort(key=lambda row: float(row["best_valid_mse"]))
 
     print(f"{len(finished_rows)} finished runs" + (f" ({model})" if model else ""))
-    print(f"{'config_id':<14}{'model':<7}{'k':>5}{'lr':>9}{'reg_f':>8}{'reg_b':>7}{'batch':>7}{'split':>6}"
+    print(f"{'config_id':<14}{'model':<7}{'k':>5}{'lr':>9}{'reg_f':>8}{'reg_bu':>7}{'reg_bi':>7}{'batch':>7}{'split':>6}"
           f"{'valid MSE':>11}{'epoch':>7}{'s':>8}")
     for row in finished_rows[:top_n]:
         print(f"{row['config_id']:<14}{row['model']:<7}{row['n_factors']:>5}{float(row['learning_rate']):>9g}"
-              f"{float(row['factor_regularization']):>8g}{float(row['bias_regularization']):>7g}{row['ratings_per_batch']:>7}"
+              f"{float(row['factor_regularization']):>8g}{float(row['user_bias_regularization']):>7g}"
+              f"{float(row['item_bias_regularization']):>7g}{row['ratings_per_batch']:>7}"
               f"{row['split_seed']:>6}{row['best_valid_mse']:>11}{row['best_epoch']:>7}{float(row['seconds_total']):>8.0f}")

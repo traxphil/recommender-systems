@@ -1,0 +1,78 @@
+{
+  "task": "task1",
+  "model": "svd",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-08 06:37:31",
+  "last_update": "2026-11-08 06:43:02",
+  "runs_finished": "4 / 4",
+  "device": "cuda",
+  "best": {
+    "score": 0.74856,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": 7,
+    "swept_values": {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0
+    },
+    "parameters": {
+      "use_implicit_feedback": false,
+      "n_factors": 120,
+      "learning_rate": 0.00025,
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0,
+      "factor_regularization": 8.0,
+      "ratings_per_batch": 512,
+      "max_epochs": 1000,
+      "early_stopping_patience": 6,
+      "refit_on_train_and_valid": true,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "user_bias_regularization": [
+      1.0,
+      3.0
+    ],
+    "item_bias_regularization": [
+      3.0,
+      5.0
+    ]
+  },
+  "constant_parameters": {
+    "n_factors": 120
+  },
+  "base_config": "TASK1_SVD",
+  "runs": [
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 3.0,
+      "score": 0.748955,
+      "best_epoch": 7,
+      "seconds": 83.5
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0,
+      "score": 0.74856,
+      "best_epoch": 7,
+      "seconds": 82.0
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 3.0,
+      "score": 0.750214,
+      "best_epoch": 7,
+      "seconds": 82.2
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 5.0,
+      "score": 0.749754,
+      "best_epoch": 7,
+      "seconds": 82.5
+    }
+  ]
+}

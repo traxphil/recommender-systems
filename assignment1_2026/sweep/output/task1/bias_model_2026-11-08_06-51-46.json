@@ -1,0 +1,749 @@
+{
+  "task": "task1",
+  "model": "bias_model",
+  "metric": "validation MSE (lower is better)",
+  "status": "failed: PermissionError: [WinError 5] Zugriff verweigert: 'C:\\\\Dateien\\\\Workspace\\\\UCSD\\\\Recommender_Systems\\\\recommender-systems\\\\assignment1_2026\\\\sweep\\\\output\\\\task1\\\\bias_model_2026-11-08_06-51-46.tmp' -> 'C:\\\\Dateien\\\\Workspace\\\\UCSD\\\\Recommender_Systems\\\\recommender-systems\\\\assignment1_2026\\",
+  "started": "2026-11-08 06:51:46",
+  "last_update": "2026-11-08 06:52:47",
+  "runs_finished": "87 / 100",
+  "device": "cuda",
+  "best": {
+    "score": 0.762654,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": null,
+    "swept_values": {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 100
+    },
+    "parameters": {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 100
+    }
+  },
+  "swept_parameters": {
+    "user_bias_regularization": [
+      0.5,
+      1.0,
+      2.0,
+      3.0
+    ],
+    "item_bias_regularization": [
+      3.0,
+      5.0,
+      8.0,
+      16.0,
+      24.0
+    ],
+    "n_iterations": [
+      10,
+      20,
+      30,
+      50,
+      100
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK1_BIAS_MODEL",
+  "runs": [
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 10,
+      "score": 0.763208,
+      "best_epoch": null,
+      "seconds": 0.2
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 20,
+      "score": 0.763062,
+      "best_epoch": null,
+      "seconds": 0.3
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 30,
+      "score": 0.763026,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 50,
+      "score": 0.763007,
+      "best_epoch": null,
+      "seconds": 0.7
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 100,
+      "score": 0.763003,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 10,
+      "score": 0.762911,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 20,
+      "score": 0.76273,
+      "best_epoch": null,
+      "seconds": 0.3
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 30,
+      "score": 0.762693,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 50,
+      "score": 0.762681,
+      "best_epoch": null,
+      "seconds": 0.7
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 100,
+      "score": 0.76268,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 8.0,
+      "n_iterations": 10,
+      "score": 0.763648,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 8.0,
+      "n_iterations": 20,
+      "score": 0.763459,
+      "best_epoch": null,
+      "seconds": 0.3
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 8.0,
+      "n_iterations": 30,
+      "score": 0.763432,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 8.0,
+      "n_iterations": 50,
+      "score": 0.763427,
+      "best_epoch": null,
+      "seconds": 0.7
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 8.0,
+      "n_iterations": 100,
+      "score": 0.763427,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 16.0,
+      "n_iterations": 10,
+      "score": 0.767628,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 16.0,
+      "n_iterations": 20,
+      "score": 0.767489,
+      "best_epoch": null,
+      "seconds": 0.3
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 16.0,
+      "n_iterations": 30,
+      "score": 0.767482,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 16.0,
+      "n_iterations": 50,
+      "score": 0.767481,
+      "best_epoch": null,
+      "seconds": 0.7
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 16.0,
+      "n_iterations": 100,
+      "score": 0.767481,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 24.0,
+      "n_iterations": 10,
+      "score": 0.771833,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 24.0,
+      "n_iterations": 20,
+      "score": 0.771741,
+      "best_epoch": null,
+      "seconds": 0.3
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 24.0,
+      "n_iterations": 30,
+      "score": 0.771739,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 24.0,
+      "n_iterations": 50,
+      "score": 0.771738,
+      "best_epoch": null,
+      "seconds": 0.7
+    },
+    {
+      "user_bias_regularization": 0.5,
+      "item_bias_regularization": 24.0,
+      "n_iterations": 100,
+      "score": 0.771738,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 10,
+      "score": 0.763145,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 20,
+      "score": 0.763025,
+      "best_epoch": null,
+      "seconds": 0.3
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 30,
+      "score": 0.763001,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 50,
+      "score": 0.762989,
+      "best_epoch": null,
+      "seconds": 0.7
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 100,
+      "score": 0.762987,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 10,
+      "score": 0.76284,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 20,
+      "score": 0.762691,
+      "best_epoch": null,
+      "seconds": 0.3
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 30,
+      "score": 0.762663,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 50,
+      "score": 0.762655,
+      "best_epoch": null,
+      "seconds": 0.7
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 100,
+      "score": 0.762654,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 8.0,
+      "n_iterations": 10,
+      "score": 0.763564,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 8.0,
+      "n_iterations": 20,
+      "score": 0.763404,
+      "best_epoch": null,
+      "seconds": 0.3
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 8.0,
+      "n_iterations": 30,
+      "score": 0.763384,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 8.0,
+      "n_iterations": 50,
+      "score": 0.763381,
+      "best_epoch": null,
+      "seconds": 0.7
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 8.0,
+      "n_iterations": 100,
+      "score": 0.763381,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 16.0,
+      "n_iterations": 10,
+      "score": 0.767504,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 16.0,
+      "n_iterations": 20,
+      "score": 0.767385,
+      "best_epoch": null,
+      "seconds": 0.3
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 16.0,
+      "n_iterations": 30,
+      "score": 0.767379,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 16.0,
+      "n_iterations": 50,
+      "score": 0.767379,
+      "best_epoch": null,
+      "seconds": 0.7
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 16.0,
+      "n_iterations": 100,
+      "score": 0.767379,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 24.0,
+      "n_iterations": 10,
+      "score": 0.771676,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 24.0,
+      "n_iterations": 20,
+      "score": 0.771596,
+      "best_epoch": null,
+      "seconds": 0.3
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 24.0,
+      "n_iterations": 30,
+      "score": 0.771594,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 24.0,
+      "n_iterations": 50,
+      "score": 0.771594,
+      "best_epoch": null,
+      "seconds": 0.7
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 24.0,
+      "n_iterations": 100,
+      "score": 0.771594,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 10,
+      "score": 0.763653,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 20,
+      "score": 0.763577,
+      "best_epoch": null,
+      "seconds": 0.3
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 30,
+      "score": 0.763569,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 50,
+      "score": 0.763565,
+      "best_epoch": null,
+      "seconds": 0.7
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 100,
+      "score": 0.763565,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 10,
+      "score": 0.763334,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 20,
+      "score": 0.763238,
+      "best_epoch": null,
+      "seconds": 0.3
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 30,
+      "score": 0.763225,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 50,
+      "score": 0.763222,
+      "best_epoch": null,
+      "seconds": 0.7
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 100,
+      "score": 0.763222,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 8.0,
+      "n_iterations": 10,
+      "score": 0.764031,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 8.0,
+      "n_iterations": 20,
+      "score": 0.763923,
+      "best_epoch": null,
+      "seconds": 0.3
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 8.0,
+      "n_iterations": 30,
+      "score": 0.763912,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 8.0,
+      "n_iterations": 50,
+      "score": 0.76391,
+      "best_epoch": null,
+      "seconds": 0.7
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 8.0,
+      "n_iterations": 100,
+      "score": 0.76391,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 16.0,
+      "n_iterations": 10,
+      "score": 0.76789,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 16.0,
+      "n_iterations": 20,
+      "score": 0.767804,
+      "best_epoch": null,
+      "seconds": 0.3
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 16.0,
+      "n_iterations": 30,
+      "score": 0.7678,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 16.0,
+      "n_iterations": 50,
+      "score": 0.7678,
+      "best_epoch": null,
+      "seconds": 0.7
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 16.0,
+      "n_iterations": 100,
+      "score": 0.7678,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 24.0,
+      "n_iterations": 10,
+      "score": 0.771998,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 24.0,
+      "n_iterations": 20,
+      "score": 0.771939,
+      "best_epoch": null,
+      "seconds": 0.3
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 24.0,
+      "n_iterations": 30,
+      "score": 0.771938,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 24.0,
+      "n_iterations": 50,
+      "score": 0.771938,
+      "best_epoch": null,
+      "seconds": 0.7
+    },
+    {
+      "user_bias_regularization": 2.0,
+      "item_bias_regularization": 24.0,
+      "n_iterations": 100,
+      "score": 0.771938,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 10,
+      "score": 0.764711,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 20,
+      "score": 0.76466,
+      "best_epoch": null,
+      "seconds": 0.3
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 30,
+      "score": 0.764659,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 50,
+      "score": 0.764658,
+      "best_epoch": null,
+      "seconds": 0.7
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 3.0,
+      "n_iterations": 100,
+      "score": 0.764658,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 10,
+      "score": 0.764377,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 20,
+      "score": 0.764319,
+      "best_epoch": null,
+      "seconds": 0.3
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 30,
+      "score": 0.764313,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 50,
+      "score": 0.764312,
+      "best_epoch": null,
+      "seconds": 0.7
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 5.0,
+      "n_iterations": 100,
+      "score": 0.764312,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 8.0,
+      "n_iterations": 10,
+      "score": 0.765045,
+      "best_epoch": null,
+      "seconds": 0.1
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 8.0,
+      "n_iterations": 20,
+      "score": 0.764975,
+      "best_epoch": null,
+      "seconds": 0.3
+    }
+  ]
+}

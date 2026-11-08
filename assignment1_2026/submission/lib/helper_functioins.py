@@ -29,12 +29,15 @@ def group_by_user(user_rows: np.ndarray, values: np.ndarray, n_user_rows: int) -
 # Closed-form Bias Model
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# best b_u, b_i for r = mu + b_u + b_i under sum(errors^2) + regularization * (sum b_u^2 + sum b_i^2)
-# -> alternating exact updates: b = sum of residuals / (number of ratings + regularization)
+# best b_u, b_i for r = mu + b_u + b_i under
+#   sum(errors^2) + user_bias_regularization * sum b_u^2 + item_bias_regularization * sum b_i^2
+# -> alternating exact updates: b = sum of residuals / (number of ratings + regularization of that side)
+# one lambda per side: Koren's baseline estimates shrink b_i and b_u with different lambdas
 # Source: Koren 2008, "Factorization Meets the Neighborhood" (KDD), Sec. 2.1 baseline estimates; PML Ch. 5
 def fit_closed_form_biases(user_rows: np.ndarray, item_rows: np.ndarray, ratings: np.ndarray,
                            n_user_rows: int, n_item_rows: int, global_mean_rating: float,
-                           regularization: float, n_iterations: int = 10) -> tuple[np.ndarray, np.ndarray]:
+                           user_bias_regularization: float, item_bias_regularization: float,
+                           n_iterations: int = 10) -> tuple[np.ndarray, np.ndarray]:
 
     ratings_per_user = np.bincount(user_rows, minlength=n_user_rows)
     ratings_per_item = np.bincount(item_rows, minlength=n_item_rows)
@@ -43,11 +46,11 @@ def fit_closed_form_biases(user_rows: np.ndarray, item_rows: np.ndarray, ratings
     for _ in range(n_iterations):
         # item bias = shrunken mean of what is left after mu and the user bias
         item_residual_sums = np.bincount(item_rows, weights=ratings - global_mean_rating - user_biases[user_rows], minlength=n_item_rows)
-        item_biases = item_residual_sums / (ratings_per_item + regularization)
+        item_biases = item_residual_sums / (ratings_per_item + item_bias_regularization)
 
         # user bias = shrunken mean of what is left after mu and the item bias
         user_residual_sums = np.bincount(user_rows, weights=ratings - global_mean_rating - item_biases[item_rows], minlength=n_user_rows)
-        user_biases = user_residual_sums / (ratings_per_user + regularization)
+        user_biases = user_residual_sums / (ratings_per_user + user_bias_regularization)
 
     # rows without ratings (row 0 = unknown) get 0 / regularization = 0
     return user_biases, item_biases

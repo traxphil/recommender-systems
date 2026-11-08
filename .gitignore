@@ -1,2 +1,5 @@
 datasets/
 __pycache__/
+trained_models/
+assignment1_2026/submission/output/
+assignment1_2026/temp/

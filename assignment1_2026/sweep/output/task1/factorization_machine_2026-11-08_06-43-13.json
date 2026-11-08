@@ -1,0 +1,63 @@
+{
+  "task": "task1",
+  "model": "factorization_machine",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-08 06:43:13",
+  "last_update": "2026-11-08 06:47:26",
+  "runs_finished": "3 / 3",
+  "device": "cuda",
+  "best": {
+    "score": 0.755202,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": 8,
+    "swept_values": {
+      "factor_regularization": 16.0
+    },
+    "parameters": {
+      "n_factors": 120,
+      "n_activity_buckets": 10,
+      "learning_rate": 0.00025,
+      "bias_regularization": 3.0,
+      "factor_regularization": 16.0,
+      "ratings_per_batch": 512,
+      "max_epochs": 1000,
+      "early_stopping_patience": 6,
+      "refit_on_train_and_valid": true,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "factor_regularization": [
+      4.0,
+      8.0,
+      16.0
+    ]
+  },
+  "constant_parameters": {
+    "n_activity_buckets": 10
+  },
+  "base_config": "TASK1_FACTORIZATION_MACHINE",
+  "runs": [
+    {
+      "factor_regularization": 4.0,
+      "score": 0.756742,
+      "best_epoch": 4,
+      "seconds": 72.2
+    },
+    {
+      "factor_regularization": 8.0,
+      "score": 0.755269,
+      "best_epoch": 5,
+      "seconds": 79.2
+    },
+    {
+      "factor_regularization": 16.0,
+      "score": 0.755202,
+      "best_epoch": 8,
+      "seconds": 100.2
+    }
+  ]
+}
