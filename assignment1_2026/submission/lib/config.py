@@ -2,8 +2,9 @@ from pathlib import Path
 
 import torch
 
-from lib.custom_types import (BiasModelConfig, BlenderConfig, EaseConfig, FactorizationMachineConfig, GapRegressorConfig,
-                              ItemCosineConfig, ItemKnnConfig, LatentFactorConfig, MultVaeConfig, PairBlenderConfig,
+from lib.custom_types import (AutoRecConfig, BayesianFactorizationMachineConfig, BiasModelConfig, BlenderConfig, EaseConfig,
+                              FactorizationMachineConfig, GapRegressorConfig, IntegratedModelConfig, ItemCosineConfig,
+                              ItemKnnConfig, LatentFactorConfig, MultVaeConfig, PairBlenderConfig, RatingTransformerConfig,
                               SasRecConfig, TemporalBiasConfig, TimeBiasModelConfig, TimeFactorizationMachineConfig,
                               TimeItemKnnConfig, TimeSVDppConfig, TimeZeroModelConfig, TransitionConfig, ZeroModelConfig)
 
@@ -60,6 +61,7 @@ TASK1_BIAS_MODEL = TASK1_SHARED_BASELINE_BIASES
 # bias lambdas, sweep 8 Nov (split seed 0): 1 / 5 -> 0.74856, 1 / 3 -> 0.74896, 3 / 5 -> 0.74975, 3 / 3 -> 0.75021
 TASK1_SVD = LatentFactorConfig(
     use_implicit_feedback=False,
+    use_test_pairs_as_implicit_feedback=False,
     n_factors=120,
     learning_rate=2.5e-4,
     user_bias_regularization=1.0,           # own lambdas (independent of TASK1_SHARED_BASELINE_BIASES)
@@ -76,6 +78,7 @@ TASK1_SVD = LatentFactorConfig(
 # best SVD++ of the sweep: mean valid MSE 0.7432 over validation splits 0 / 1 / 2
 TASK1_SVDPP = LatentFactorConfig(
     use_implicit_feedback=True,
+    use_test_pairs_as_implicit_feedback=False,    # True: N(u) + the test pairs; CPU check 14 Nov (k = 32): 0.7508 vs 0.7506 -> no gain
     n_factors=500,
     learning_rate=2.5e-4,
     user_bias_regularization=1.0,           # own lambdas (independent of TASK1_SHARED_BASELINE_BIASES)
@@ -110,12 +113,90 @@ TASK1_ZERO_MODEL = ZeroModelConfig(
 
 # ---- factorization machine (user, item, activity buckets) -------------------------------
 # starting point = the SVD settings above; no time data (the Task 1 test file has no timestamps -> load_task1 keeps none)
+# sweep 14 Nov, learning rate x batch: 5e-4 / 256 -> 0.75149 (2.5e-4 / 256 0.75275, 1e-3 / 256 0.75495;
+# batch 512: 2.5e-4 0.75527, 5e-4 0.75209, 1e-3 0.75462)
 TASK1_FACTORIZATION_MACHINE = FactorizationMachineConfig(
     n_factors=120,
     n_activity_buckets=10,
-    learning_rate=2.5e-4,
+    learning_rate=5e-4,
     bias_regularization=3.0,
     factor_regularization=8.0,
+    ratings_per_batch=256,
+    max_epochs=1000,
+    early_stopping_patience=6,
+    refit_on_train_and_valid=True,
+    seed=0,
+)
+
+# ---- Bayesian factorization machine (Gibbs sampling, CPU, needs `pip install myfm`) -------
+# no learning rate / lambda / early stopping to tune; more kept draws = a smoother posterior mean (never overfits)
+# CPU check 14 Nov (rank 32, 20 + 80 draws, no refit): valid MSE 0.7255 (SVD++ k = 32 in the same check: 0.7506)
+# time per draw (CPU check): rank 32 ~6 s, rank 64 ~12 s -> rank 32 to start, the sweep tries larger ranks
+TASK1_BAYESIAN_FACTORIZATION_MACHINE = BayesianFactorizationMachineConfig(
+    rank=32,
+    n_burn_in_iterations=20,
+    n_kept_samples=180,
+    use_implicit_feedback=True,
+    use_test_pairs_as_implicit_feedback=False,
+    refit_on_train_and_valid=True,
+    seed=0,
+)
+
+# ---- rating transformer (attention over the user's rated books) --------------------------
+# starting point (not tuned): d = 64, 2 blocks, at most 200 books per user history
+# CPU check 14 Nov (d 32, 1 block, L 50, no refit): 0.7647 (epoch 0 = bias model) -> 0.7595 at epoch 3, still falling slowly
+TASK1_RATING_TRANSFORMER = RatingTransformerConfig(
+    embedding_dimension=64,
+    n_blocks=2,
+    n_heads=2,
+    dropout=0.1,
+    max_history_length=200,
+    use_test_pairs_in_history=False,
+    learning_rate=1e-3,
+    bias_regularization=3.0,
+    factor_regularization=1.0,
+    ratings_per_batch=1024,
+    max_epochs=1000,
+    early_stopping_patience=3,
+    refit_on_train_and_valid=True,
+    seed=0,
+)
+
+# ---- I-AutoRec (item-based autoencoder) ----------------------------------------------------
+# hidden 500 as in Sedhain et al. 2015; models the residuals of the closed-form bias model, masked training
+# CPU checks 14 Nov (hidden 200, no refit): learning rate 1e-3 -> worse than the bias model from epoch 1 on (lambda 1 and 100);
+# 1e-4 with lambda 16 (~ the factor penalty of SVD) -> valid MSE 0.7506 at epoch 15 (SVD++ k = 32 in the same check: 0.7506)
+TASK1_AUTOREC = AutoRecConfig(
+    hidden_dimension=500,
+    regularization=16.0,
+    user_bias_regularization=1.0,           # own lambdas (independent of TASK1_SHARED_BASELINE_BIASES)
+    item_bias_regularization=5.0,
+    masked_fraction=0.25,
+    learning_rate=1e-4,
+    books_per_batch=256,
+    max_epochs=1000,
+    early_stopping_patience=5,
+    refit_on_train_and_valid=True,
+    seed=0,
+)
+
+# ---- integrated model (SVD++ + learned neighbour weights, Koren 2008) ----------------------
+# starting point = the tuned TASK1_SVDPP (k, learning rate, lambdas, batch) + the neighbourhoods of TASK1_ITEM_KNN
+# CPU check 14 Nov (k = 32, lr 2e-3, batch 16384, 50 neighbours, no refit): valid MSE 0.7366 at epoch 3
+# (SVD++ with the same k / learning rate / batch: 0.7506)
+# neighbour lookups (CPU, 100 neighbours, measured 14 Nov): ~6 ms per batch of 512 -> ~20 s per epoch
+TASK1_INTEGRATED_MODEL = IntegratedModelConfig(
+    n_factors=500,
+    use_test_pairs_as_implicit_feedback=False,
+    n_neighbors=100,
+    similarity_shrinkage=100.0,
+    max_ratings_per_user_for_similarity=300,
+    items_per_similarity_block=2000,
+    learning_rate=2.5e-4,
+    user_bias_regularization=1.0,
+    item_bias_regularization=5.0,
+    factor_regularization=8.0,
+    neighbour_regularization=1.0,
     ratings_per_batch=512,
     max_epochs=1000,
     early_stopping_patience=6,
@@ -124,7 +205,10 @@ TASK1_FACTORIZATION_MACHINE = FactorizationMachineConfig(
 )
 
 # ---- blenders ----------------------------------------------------------------------------
-TASK1_BLENDED_MODELS = ("bias_model", "svd", "svdpp", "item_knn", "zero_model", "factorization_machine")
+# check 14 Nov, 5-fold cross-validated ridge on the validation predictions of the CPU versions above (k / rank 32):
+# SVD++ alone 0.7503 | + Bayesian FM 0.7245 | + integrated model 0.7147 | + AutoRec 0.7147 (adds nothing on top of those two)
+TASK1_BLENDED_MODELS = ("bias_model", "svd", "svdpp", "item_knn", "zero_model", "factorization_machine",
+                        "bayesian_factorization_machine", "rating_transformer", "autorec", "integrated_model")
 
 # learned weighted average of the sub-model predictions
 TASK1_RIDGE_BLENDER = BlenderConfig(
@@ -241,6 +325,7 @@ TASK3_BIAS_MODEL = TASK3_SHARED_BASELINE_BIASES
 # ---- SVD -------------------------------------------------------------------------------
 TASK3_SVD = LatentFactorConfig(
     use_implicit_feedback=False,
+    use_test_pairs_as_implicit_feedback=False,
     n_factors=500,
     learning_rate=2.5e-4,
     user_bias_regularization=3.0,           # own lambdas (independent of TASK3_SHARED_BASELINE_BIASES)
@@ -257,6 +342,7 @@ TASK3_SVD = LatentFactorConfig(
 # SVD++ rebuilds N(u) sums for every user in a batch -> bigger batches keep an epoch affordable
 TASK3_SVDPP = LatentFactorConfig(
     use_implicit_feedback=True,
+    use_test_pairs_as_implicit_feedback=False,
     n_factors=500,
     learning_rate=2e-3,
     user_bias_regularization=3.0,           # own lambdas (independent of TASK3_SHARED_BASELINE_BIASES)
@@ -310,6 +396,7 @@ TASK3_TIME_BIAS_MODEL = TimeBiasModelConfig(
 # = TASK3_SVDPP on top of the closed-form time-aware bias model (epoch 0 = TASK3_TIME_BIAS_MODEL)
 TASK3_TIME_SVDPP = TimeSVDppConfig(
     use_implicit_feedback=True,
+    use_test_pairs_as_implicit_feedback=False,
     n_factors=500,
     use_factor_drift=False,                 # PML Sec. 7.2.3: biases first; True adds drifting user factors p_u(t)
     time_biases=TASK3_TIME_BIAS_MODEL,

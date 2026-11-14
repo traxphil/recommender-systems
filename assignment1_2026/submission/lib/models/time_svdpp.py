@@ -3,6 +3,7 @@ import torch.nn as nn
 
 from lib.config import DEVICE
 from lib.custom_types import ModelResult, RatingData, RatingTask, TimeSVDppConfig
+from lib.data_loading import known_interaction_pairs
 from lib.model_storage import load_model_result, save_model_result
 from lib.models.SVDpp import LatentFactorModel
 from lib.models.time_bias_model import TemporalBiases, TimeBiasModel
@@ -83,11 +84,13 @@ def train_time_svdpp(task: RatingTask, config: TimeSVDppConfig) -> ModelResult:
         # all biases start at the closed-form time-aware bias model of these ratings
         time_bias_model = TimeBiasModel(training_ratings, task.n_user_rows, task.n_item_rows, config.time_biases)
 
-        # SVD++ only: N(u) = items of the ratings this model trains on (never test pairs)
+        # SVD++ only: N(u) = items of the ratings this model trains on, or with config.use_test_pairs_as_implicit_feedback
+        # every known pair of the training + test file (only which pairs exist, never their ratings)
+        implicit_feedback_ratings = known_interaction_pairs(task) if config.use_test_pairs_as_implicit_feedback else training_ratings
         return TimeSVDpp(time_bias_model, task.n_user_rows, task.n_item_rows, config.n_factors,
                          use_factor_drift=config.use_factor_drift,
                          train_temporal_biases=config.train_temporal_biases,
-                         implicit_feedback_ratings=training_ratings if config.use_implicit_feedback else None).to(DEVICE)
+                         implicit_feedback_ratings=implicit_feedback_ratings if config.use_implicit_feedback else None).to(DEVICE)
 
     return fit_refit_and_predict(task, build_model,
                                  max_epochs=config.max_epochs,

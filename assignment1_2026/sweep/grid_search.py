@@ -53,13 +53,17 @@ from lib.config import DEVICE, SPLIT_SEED, VALIDATION_FRACTION  # noqa: E402
 from lib.data_loading import (load_next_item_task, load_pair_choice_task,  # noqa: E402
                               load_rating_prediction_task, load_time_gap_task)
 from lib.helper_functioins import mse                          # noqa: E402
+from lib.models.autorec import train_autorec                   # noqa: E402
+from lib.models.bayesian_factorization_machine import train_bayesian_factorization_machine  # noqa: E402
 from lib.models.bias_model import BiasModel                    # noqa: E402
 from lib.models.ease_model import EaseModel                    # noqa: E402
 from lib.models.factorization_machine import train_factorization_machine  # noqa: E402
 from lib.models.gap_regressor import train_gap_regressor       # noqa: E402
+from lib.models.integrated_model import train_integrated_model  # noqa: E402
 from lib.models.item_cosine_model import ItemCosineModel       # noqa: E402
 from lib.models.item_knn import ItemKnnModel                   # noqa: E402
 from lib.models.mult_vae import train_mult_vae                 # noqa: E402
+from lib.models.rating_transformer import train_rating_transformer  # noqa: E402
 from lib.models.sasrec import train_sasrec                     # noqa: E402
 from lib.models.time_bias_model import TimeBiasModel           # noqa: E402
 from lib.models.time_factorization_machine import train_time_factorization_machine  # noqa: E402
@@ -104,6 +108,26 @@ def validate_latent_factor_model(task, config) -> ValidationRun:
 
 def validate_factorization_machine(task, config) -> ValidationRun:
     model_result = train_factorization_machine(task, config)
+    return ValidationRun(model_result.valid_predictions, best_epoch_of(model_result.history))
+
+
+# Gibbs sampling: no epochs -> no best epoch
+def validate_bayesian_factorization_machine(task, config) -> ValidationRun:
+    return ValidationRun(train_bayesian_factorization_machine(task, config).valid_predictions, None)
+
+
+def validate_rating_transformer(task, config) -> ValidationRun:
+    model_result = train_rating_transformer(task, config)
+    return ValidationRun(model_result.valid_predictions, best_epoch_of(model_result.history))
+
+
+def validate_autorec(task, config) -> ValidationRun:
+    model_result = train_autorec(task, config)
+    return ValidationRun(model_result.valid_predictions, best_epoch_of(model_result.history))
+
+
+def validate_integrated_model(task, config) -> ValidationRun:
+    model_result = train_integrated_model(task, config)
     return ValidationRun(model_result.valid_predictions, best_epoch_of(model_result.history))
 
 
@@ -241,6 +265,11 @@ SWEEP_TASKS = {
             "svd": SweepableModel("TASK1_SVD", validate_latent_factor_model),
             "svdpp": SweepableModel("TASK1_SVDPP", validate_latent_factor_model),
             "factorization_machine": SweepableModel("TASK1_FACTORIZATION_MACHINE", validate_factorization_machine),
+            "bayesian_factorization_machine": SweepableModel("TASK1_BAYESIAN_FACTORIZATION_MACHINE",
+                                                             validate_bayesian_factorization_machine),
+            "rating_transformer": SweepableModel("TASK1_RATING_TRANSFORMER", validate_rating_transformer),
+            "autorec": SweepableModel("TASK1_AUTOREC", validate_autorec),
+            "integrated_model": SweepableModel("TASK1_INTEGRATED_MODEL", validate_integrated_model),
             "item_knn": SweepableModel("TASK1_ITEM_KNN", validate_item_knn),
             "zero_model": SweepableModel("TASK1_ZERO_MODEL", validate_zero_model, ZERO_LOG_LOSS),
         },
@@ -594,6 +623,12 @@ def run_grid_search(task_name: str, model_name: str, parameter_grid: dict,
           + (" (mean over split seeds " + ", ".join(map(str, report["best"]["split_seeds"])) + ")" if "scores_by_split_seed" in report["best"] else ""),
           flush=True)
     return report
+
+
+# the swept values of a sweep's best combination ({} if no run finished) -> the constants of the next stage of a staged sweep,
+# so "Run All" runs every stage on top of the best values of the stages before
+def best_values_of(sweep_report: dict) -> dict:
+    return dict(sweep_report["best"]["swept_values"]) if sweep_report["best"] else {}
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

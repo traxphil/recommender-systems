@@ -107,6 +107,7 @@ class BiasModelConfig:
 @dataclass(frozen=True)
 class LatentFactorConfig:
     use_implicit_feedback: bool             # False = SVD, True = SVD++
+    use_test_pairs_as_implicit_feedback: bool  # SVD++: N(u) = every known pair of the training + test file (lib/data_loading.py)
     n_factors: int
     learning_rate: float
     user_bias_regularization: float         # lambda of b_u (also for the closed-form starting biases)
@@ -149,6 +150,74 @@ class FactorizationMachineConfig:
     learning_rate: float
     bias_regularization: float              # one lambda for b_u and b_i (not split, unlike LatentFactorConfig)
     factor_regularization: float
+    ratings_per_batch: int
+    max_epochs: int
+    early_stopping_patience: int
+    refit_on_train_and_valid: bool
+    seed: int
+
+
+# Bayesian factorization machine (Gibbs sampling with myFM): no learning rate / lambda / early stopping to tune
+@dataclass(frozen=True)
+class BayesianFactorizationMachineConfig:
+    rank: int                               # number of factors
+    n_burn_in_iterations: int               # first Gibbs draws, thrown away (the sampler has not reached the posterior yet)
+    n_kept_samples: int                     # the draws after the burn-in, averaged for the predictions
+    use_implicit_feedback: bool             # also N(u) / N(i) as features (SVD++-style, normalised)
+    use_test_pairs_as_implicit_feedback: bool  # N(u) / N(i) = every known pair of the training + test file
+    refit_on_train_and_valid: bool
+    seed: int
+
+
+# set transformer over the user's rated books, asked about one more book
+@dataclass(frozen=True)
+class RatingTransformerConfig:
+    embedding_dimension: int                # d of the book / rating-token embeddings and the encoder
+    n_blocks: int                           # transformer encoder blocks
+    n_heads: int
+    dropout: float
+    max_history_length: int                 # books per user history (a random subset of longer histories)
+    use_test_pairs_in_history: bool         # also the known pairs without a visible rating (validation / test pairs)
+    learning_rate: float
+    bias_regularization: float              # one lambda for b_u and b_i
+    factor_regularization: float            # on the asked book's embedding
+    ratings_per_batch: int
+    max_epochs: int
+    early_stopping_patience: int
+    refit_on_train_and_valid: bool
+    seed: int
+
+
+# I-AutoRec: item-based autoencoder over the users' ratings of every book
+@dataclass(frozen=True)
+class AutoRecConfig:
+    hidden_dimension: int                   # Sedhain et al. 2015: 500
+    regularization: float                   # lambda of lambda / 2 (||W||^2 + ||V||^2) on the scale of the sum loss
+    user_bias_regularization: float         # closed-form baseline mu + b_u + b_i, the autoencoder models its residuals
+    item_bias_regularization: float
+    masked_fraction: float                  # share of a book's ratings hidden from its input in every batch (the ones predicted)
+    learning_rate: float
+    books_per_batch: int
+    max_epochs: int
+    early_stopping_patience: int
+    refit_on_train_and_valid: bool
+    seed: int
+
+
+# integrated model: SVD++ + learned weights over every book's k neighbours (Koren 2008)
+@dataclass(frozen=True)
+class IntegratedModelConfig:
+    n_factors: int
+    use_test_pairs_as_implicit_feedback: bool  # N(u) = every known pair of the training + test file
+    n_neighbors: int                        # k neighbours per book (shrunk residual cosine, as the item kNN)
+    similarity_shrinkage: float
+    max_ratings_per_user_for_similarity: int
+    items_per_similarity_block: int
+    learning_rate: float
+    user_bias_regularization: float         # also the closed-form baseline of the residuals
+    item_bias_regularization: float
+    factor_regularization: float
+    neighbour_regularization: float         # lambda on the squared w_ij, c_ij
     ratings_per_batch: int
     max_epochs: int
     early_stopping_patience: int
@@ -202,6 +271,7 @@ class TimeBiasModelConfig:
 @dataclass(frozen=True)
 class TimeSVDppConfig:
     use_implicit_feedback: bool             # False = timeSVD, True = timeSVD++
+    use_test_pairs_as_implicit_feedback: bool  # N(u) = every known pair of the training + test file (lib/data_loading.py)
     n_factors: int
     use_factor_drift: bool                  # PML Eq. 7.13 without the per-day factor term
     time_biases: TimeBiasModelConfig        # closed-form time-aware bias model = starting point (epoch 0)

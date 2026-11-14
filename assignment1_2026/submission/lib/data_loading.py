@@ -5,7 +5,7 @@ import pandas as pd
 
 from lib.config import FIRST_PLAUSIBLE_TIMESTAMP, LAST_PLAUSIBLE_TIMESTAMP
 from lib.custom_types import ChoicePairs, PairChoiceTask, RatingData, RatingTask, TimeGapTask
-from lib.helper_functioins import ids_to_rows, number_by_first_appearance
+from lib.helper_functioins import ids_to_rows, number_by_first_appearance, sparse_matrix_from_entries
 
 SECONDS_PER_DAY = 86_400
 
@@ -96,6 +96,19 @@ def load_rating_prediction_task(training_csv_path, test_csv_path, validation_fra
         test_days=timestamps_to_days(test_timestamps) if has_time else None,
         test_timestamps=test_timestamps,
     )
+
+
+
+# every (user, item) pair whose existence is known: the whole training file (training + validation split) and the test
+# file (the pairs whose rating is asked for) -> "who rated what" as implicit feedback, e.g. SVD++'s N(u)
+# (Koren 2009: N(u) also contained the Netflix Prize qualifying pairs, whose ratings were unknown)
+# the ratings are never part of it (NaN); unknown users / items (row 0) are left out, duplicate pairs appear once
+def known_interaction_pairs(task: RatingTask) -> RatingData:
+    user_rows = np.concatenate([task.training_and_validation_data.user_rows, task.test_user_rows])
+    item_rows = np.concatenate([task.training_and_validation_data.item_rows, task.test_item_rows])
+    is_known = (user_rows > 0) & (item_rows > 0)
+    known_pairs = sparse_matrix_from_entries(user_rows[is_known], item_rows[is_known], task.n_user_rows, task.n_item_rows).tocoo()
+    return RatingData(known_pairs.row.astype(np.int64), known_pairs.col.astype(np.int64), np.full(known_pairs.nnz, np.nan, dtype=np.float32))
 
 
 

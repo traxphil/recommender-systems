@@ -102,6 +102,8 @@ def train_one_epoch(model, optimizer, mini_batches: RatingMiniBatches,
 def predict_ratings(model, user_rows: np.ndarray, item_rows: np.ndarray, days: np.ndarray | None = None,
                     timestamps: np.ndarray | None = None, chunk_size: int = 200_000) -> np.ndarray:
 
+    # a model with a large cost per rating sets its own, smaller chunk (the rating transformer: attention over the history)
+    chunk_size = getattr(model, "prediction_chunk_size", chunk_size)
     model.eval()
     prediction_chunks = []
     with torch.no_grad():

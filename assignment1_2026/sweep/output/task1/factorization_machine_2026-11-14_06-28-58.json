@@ -2,25 +2,25 @@
   "task": "task1",
   "model": "factorization_machine",
   "metric": "validation MSE (lower is better)",
-  "status": "running",
+  "status": "finished",
   "started": "2026-11-14 06:28:58",
-  "last_update": "2026-11-14 06:32:43",
-  "runs_finished": "1 / 6",
+  "last_update": "2026-11-14 06:41:36",
+  "runs_finished": "6 / 6",
   "device": "cuda",
   "best": {
-    "score": 0.752747,
+    "score": 0.751491,
     "split_seeds": [
       0
     ],
-    "best_epoch": 5,
+    "best_epoch": 4,
     "swept_values": {
-      "learning_rate": 0.00025,
+      "learning_rate": 0.0005,
       "ratings_per_batch": 256
     },
     "parameters": {
       "n_factors": 120,
       "n_activity_buckets": 10,
-      "learning_rate": 0.00025,
+      "learning_rate": 0.0005,
       "bias_regularization": 3.0,
       "factor_regularization": 8.0,
       "ratings_per_batch": 256,
@@ -50,6 +50,41 @@
       "score": 0.752747,
       "best_epoch": 5,
       "seconds": 224.7
+    },
+    {
+      "learning_rate": 0.00025,
+      "ratings_per_batch": 512,
+      "score": 0.755269,
+      "best_epoch": 5,
+      "seconds": 125.4
+    },
+    {
+      "learning_rate": 0.0005,
+      "ratings_per_batch": 256,
+      "score": 0.751491,
+      "best_epoch": 4,
+      "seconds": 149.2
+    },
+    {
+      "learning_rate": 0.0005,
+      "ratings_per_batch": 512,
+      "score": 0.752086,
+      "best_epoch": 5,
+      "seconds": 76.0
+    },
+    {
+      "learning_rate": 0.001,
+      "ratings_per_batch": 256,
+      "score": 0.754953,
+      "best_epoch": 3,
+      "seconds": 120.0
+    },
+    {
+      "learning_rate": 0.001,
+      "ratings_per_batch": 512,
+      "score": 0.754622,
+      "best_epoch": 3,
+      "seconds": 61.0
     }
   ]
 }

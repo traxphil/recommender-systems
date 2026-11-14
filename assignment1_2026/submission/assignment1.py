@@ -4,7 +4,8 @@ from pathlib import Path
 import torch
 
 from lib.config import (DEVICE, SPLIT_SEED, VALIDATION_FRACTION,
-                        TASK1_BIAS_MODEL, TASK1_FACTORIZATION_MACHINE, TASK1_ITEM_KNN, TASK1_SUBMITTED_BLENDER, TASK1_SVD,
+                        TASK1_AUTOREC, TASK1_BAYESIAN_FACTORIZATION_MACHINE, TASK1_BIAS_MODEL, TASK1_FACTORIZATION_MACHINE,
+                        TASK1_INTEGRATED_MODEL, TASK1_ITEM_KNN, TASK1_RATING_TRANSFORMER, TASK1_SUBMITTED_BLENDER, TASK1_SVD,
                         TASK1_SVDPP, TASK1_ZERO_MODEL,
                         TASK2_EASE, TASK2_ITEM_COSINE, TASK2_MULT_VAE, TASK2_PAIR_BLENDER,
                         TASK3_BIAS_MODEL, TASK3_ITEM_KNN, TASK3_SUBMITTED_BLENDER, TASK3_SVD, TASK3_SVDPP, TASK3_TIME_BIAS_MODEL,
@@ -14,19 +15,23 @@ from lib.config import (DEVICE, SPLIT_SEED, VALIDATION_FRACTION,
                         TASK5_EASE, TASK5_ITEM_COSINE, TASK5_MULT_VAE, TASK5_PAIR_BLENDER, TASK5_SASREC, TASK5_TRANSITION,
                         TASK6_LIGHTGBM_GAP_MODEL, TASK6_LINEAR_GAP_MODEL, TASK6_SUBMITTED_GAP_MODEL)
 from lib.custom_types import BlenderConfig, ModelResult, PairChoiceTask, RatingData, RatingTask, TimeGapTask
-from lib.data_loading import (load_next_item_task, load_pair_choice_task, load_rating_prediction_task, load_time_gap_task,
-                              write_choice_prediction_file, write_prediction_file)
+from lib.data_loading import (known_interaction_pairs, load_next_item_task, load_pair_choice_task, load_rating_prediction_task,
+                              load_time_gap_task, write_choice_prediction_file, write_prediction_file)
 from lib.helper_functioins import fit_closed_form_biases
+from lib.models.autorec import train_autorec
+from lib.models.bayesian_factorization_machine import train_bayesian_factorization_machine
 from lib.models.bias_model import train_bias_model
 from lib.models.blender import train_blender
 from lib.models.ease_model import train_ease_model, train_plain_and_time_weighted_ease
 from lib.models.factorization_machine import train_factorization_machine
 from lib.models.gap_regressor import train_gap_regressor, train_median_gap_baseline
+from lib.models.integrated_model import train_integrated_model
 from lib.models.item_cosine_model import train_item_cosine_model
 from lib.models.item_knn import train_item_knn
 from lib.models.mult_vae import train_mult_vae
 from lib.models.pair_blender import train_pair_blender
 from lib.models.popularity_model import train_popularity_model
+from lib.models.rating_transformer import train_rating_transformer
 from lib.models.sasrec import train_sasrec
 from lib.models.SVDpp import LatentFactorModel
 from lib.models.time_bias_model import train_time_bias_model
@@ -54,6 +59,7 @@ OUTPUT_DIR = SUBMISSION_DIR / "output"
 # SVD if use_implicit_feedback=False / SVD++ for True
 def train_latent_factor_model(task: RatingTask,
                               use_implicit_feedback: bool = True,
+                              use_test_pairs_as_implicit_feedback: bool = False,
                               n_factors: int = 500,
                               learning_rate: float = 2.5e-4,
                               user_bias_regularization: float = 1.0,   # best closed-form bias model on the Task 1 split
@@ -85,10 +91,13 @@ def train_latent_factor_model(task: RatingTask,
 
         # SVD++ only: N(u) = items of the ratings this model trains on
         # -> fit: training split only (validation pairs stay unseen), refit: whole training file; never test pairs
+        # use_test_pairs_as_implicit_feedback: N(u) = every known pair of the training + test file instead (same for fit and
+        #   refit; the validation pairs are in it like the test pairs, only "who rated what", never a rating)
+        implicit_feedback_ratings = known_interaction_pairs(task) if use_test_pairs_as_implicit_feedback else training_ratings
         return LatentFactorModel(
             task.n_user_rows, task.n_item_rows, n_factors,
             global_mean_rating=global_mean_rating,
-            implicit_feedback_ratings=training_ratings if use_implicit_feedback else None,
+            implicit_feedback_ratings=implicit_feedback_ratings if use_implicit_feedback else None,
             initial_user_biases=initial_user_biases,
             initial_item_biases=initial_item_biases,
         ).to(DEVICE)
@@ -152,6 +161,22 @@ def train_task1_factorization_machine(task: RatingTask) -> ModelResult:
     return train_factorization_machine(task, TASK1_FACTORIZATION_MACHINE)
 
 
+def train_task1_bayesian_factorization_machine(task: RatingTask) -> ModelResult:
+    return train_bayesian_factorization_machine(task, TASK1_BAYESIAN_FACTORIZATION_MACHINE)
+
+
+def train_task1_rating_transformer(task: RatingTask) -> ModelResult:
+    return train_rating_transformer(task, TASK1_RATING_TRANSFORMER)
+
+
+def train_task1_autorec(task: RatingTask) -> ModelResult:
+    return train_autorec(task, TASK1_AUTOREC)
+
+
+def train_task1_integrated_model(task: RatingTask) -> ModelResult:
+    return train_integrated_model(task, TASK1_INTEGRATED_MODEL)
+
+
 # sub-model name (as in the blender configs and in trained_models/) -> its training function
 TASK1_SUB_MODEL_TRAINERS = {
     "bias_model": train_task1_bias_model,
@@ -160,6 +185,10 @@ TASK1_SUB_MODEL_TRAINERS = {
     "item_knn": train_task1_item_knn,
     "zero_model": train_task1_zero_model,
     "factorization_machine": train_task1_factorization_machine,
+    "bayesian_factorization_machine": train_task1_bayesian_factorization_machine,
+    "rating_transformer": train_task1_rating_transformer,
+    "autorec": train_task1_autorec,
+    "integrated_model": train_task1_integrated_model,
 }
 
 
