@@ -1,9 +1,8 @@
 import numpy as np
-import scipy.sparse as sp
 
 from lib.config import RATING_MAX, RATING_MIN
 from lib.custom_types import ModelResult, RatingData, RatingTask, TimeItemKnnConfig
-from lib.helper_functioins import log, mse
+from lib.helper_functioins import log, mse, sparse_matrix_from_entries
 from lib.model_storage import load_model_result, save_model_result
 from lib.models.item_knn import ItemKnnModel
 from lib.temporal_features import require_test_days
@@ -26,8 +25,8 @@ class TimeItemKnnModel(ItemKnnModel):
 
         # user x item matrix of rating days (same entries as residual_matrix / rated_matrix)
         # stored as day + 1 -> ratings on day 0 are not dropped as sparse zeros
-        self.rating_day_matrix = sp.csr_matrix((rating_data.days + 1.0, (rating_data.user_rows, rating_data.item_rows)),
-                                               shape=(n_user_rows, n_item_rows), dtype=np.float32)
+        self.rating_day_matrix = sparse_matrix_from_entries(rating_data.user_rows, rating_data.item_rows, n_user_rows, n_item_rows,
+                                                            values=rating_data.days + 1.0)
 
     # in chunks: the rows of very active users make the sparse products large
     def predict(self, user_rows: np.ndarray, item_rows: np.ndarray, days: np.ndarray, chunk_size: int = 20_000) -> np.ndarray:
@@ -37,9 +36,10 @@ class TimeItemKnnModel(ItemKnnModel):
             chunk = slice(chunk_start, chunk_start + chunk_size)
             chunk_users, chunk_items, chunk_days = user_rows[chunk], item_rows[chunk], days[chunk]
 
-            # time decay of every rating of the asking user relative to the asked day (one row per asked rating)
+            # time decay of every rating of the asking user relative to the asked day (one row per asked rating;
+            # the COO row of an entry = the asked rating it belongs to)
             time_decays = self.rating_day_matrix[chunk_users]
-            asked_day_per_entry = np.repeat(chunk_days, np.diff(time_decays.indptr))
+            asked_day_per_entry = chunk_days[time_decays.tocoo().row]
             exponential_decay = np.exp(-np.abs(asked_day_per_entry - (time_decays.data - 1.0)) / self.time_decay_days)
             time_decays.data = (self.time_decay_floor + (1.0 - self.time_decay_floor) * exponential_decay).astype(np.float32)
 

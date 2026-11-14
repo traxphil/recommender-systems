@@ -1,8 +1,10 @@
 
+import numpy as np
 import torch
 import torch.nn as nn
 
-from lib.custom_types import ModelResult
+from lib.custom_types import ModelResult, RatingData
+from lib.helper_functioins import sparse_matrix_from_entries
 from lib.model_storage import load_model_result, save_model_result
 
 # SVD   : r(u,i) = mu + b_u + b_i + q_i . p_u
@@ -19,9 +21,10 @@ class LatentFactorModel(nn.Module):
     # user_factors              p_u     (U+1, n_factors)
     # item_factors              q_i     (I+1, n_factors)
     # implicit_item_factors     y_j     (I+1, n_factors)        // for SVD++
+    # (not a parameter) normalised_interaction_matrix: N(u) as a (U+1, I+1) scipy CSR matrix   // for SVD++
 
 
-    def __init__(self, n_user_rows, n_item_rows, n_factors, global_mean_rating, interacted_items_by_user=None,
+    def __init__(self, n_user_rows, n_item_rows, n_factors, global_mean_rating, implicit_feedback_ratings: RatingData | None = None,
                  initial_user_biases=None, initial_item_biases=None, initial_factor_std=0.01):
 
         super().__init__()
@@ -48,28 +51,32 @@ class LatentFactorModel(nn.Module):
             with torch.no_grad():
                 factor_table.weight[0] = 0.0
 
-        # SVD++ only: implicit item factors y_j & user's item list N(u)
-        self.uses_implicit_feedback = interacted_items_by_user is not None
+        # SVD++ only: implicit item factors y_j & N(u) = the items of implicit_feedback_ratings (the ratings this model trains on)
+        # as a user x item matrix with |N(u)|^-1/2 in every entry of row u -> row u times y = the implicit term of the formula
+        self.uses_implicit_feedback = implicit_feedback_ratings is not None
         if self.uses_implicit_feedback:
-            self.implicit_item_factors = nn.EmbeddingBag(n_item_rows, n_factors, mode="sum")
+            self.implicit_item_factors = nn.EmbeddingBag(n_item_rows, n_factors, mode="sum", include_last_offset=True)
             nn.init.normal_(self.implicit_item_factors.weight, std=initial_factor_std)
-            self.interacted_items_by_user = [torch.as_tensor(items) for items in interacted_items_by_user]
+
+            user_rows, item_rows = implicit_feedback_ratings.user_rows, implicit_feedback_ratings.item_rows
+            ratings_per_user = np.bincount(user_rows, minlength=n_user_rows)
+            self.normalised_interaction_matrix = sparse_matrix_from_entries(user_rows, item_rows, n_user_rows, n_item_rows,
+                                                                            values=1.0 / np.sqrt(ratings_per_user[user_rows]))
 
 
-    # For SVD++
+    # For SVD++: |N(u)|^-1/2 * sum_{j in N(u)} y_j for the user of every rating, computed once per distinct user
+    # the CSR rows of these users are exactly the bags of EmbeddingBag: indices = the items, indptr = where each user's
+    # items start, data = the weights |N(u)|^-1/2 (a user without ratings, e.g. row 0, has an empty row -> zero vector)
     def implicit_feedback_vectors(self, user_rows):
 
         distinct_users, distinct_index_per_rating = torch.unique(user_rows, return_inverse=True)
-        item_lists = [self.interacted_items_by_user[user] for user in distinct_users.tolist()]
-        list_lengths = torch.tensor([len(items) for items in item_lists])
-
-        list_starts = torch.cumsum(list_lengths, dim=0) - list_lengths
-        normalisation = torch.repeat_interleave(1 / list_lengths.clamp(min=1).float().sqrt(), list_lengths)
+        interaction_rows = self.normalised_interaction_matrix[distinct_users.cpu().numpy()]
 
         device = self.implicit_item_factors.weight.device
+        implicit_vector_per_user = self.implicit_item_factors(torch.as_tensor(interaction_rows.indices, device=device),
+                                                              torch.as_tensor(interaction_rows.indptr, device=device),
+                                                              per_sample_weights=torch.as_tensor(interaction_rows.data, device=device))
 
-        implicit_vector_per_user = self.implicit_item_factors(torch.cat(item_lists).to(device), list_starts.to(device), per_sample_weights=normalisation.to(device))
-        
         return implicit_vector_per_user[distinct_index_per_rating]
 
 

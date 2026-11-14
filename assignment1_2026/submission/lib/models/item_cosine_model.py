@@ -1,7 +1,7 @@
 import numpy as np
-import scipy.sparse as sp
 
 from lib.custom_types import ItemCosineConfig, ModelResult, PairChoiceTask, RatingData
+from lib.helper_functioins import sparse_matrix_from_entries
 from lib.model_storage import load_model_result, save_model_result
 from lib.models.item_knn import subsample_active_users, top_neighbour_similarities
 from lib.pair_choice import train_pair_scorer
@@ -21,16 +21,12 @@ class ItemCosineModel:
     def __init__(self, interactions: RatingData, n_user_rows: int, n_item_rows: int, config: ItemCosineConfig):
 
         # user x item 0/1 matrix of who read what (CSR -> fast access to the rows of the asking users)
-        def read_matrix(positions):
-            return sp.csr_matrix((np.ones(len(positions), dtype=np.float32),
-                                  (interactions.user_rows[positions], interactions.item_rows[positions])),
-                                 shape=(n_user_rows, n_item_rows))
-
-        self.read_matrix = read_matrix(np.arange(len(interactions.user_rows)))
+        self.read_matrix = sparse_matrix_from_entries(interactions.user_rows, interactions.item_rows, n_user_rows, n_item_rows)
 
         # neighbour similarities from a subsample of the most active users' interactions (memory), scores use all interactions
         similarity_positions = subsample_active_users(interactions.user_rows, config.max_interactions_per_user_for_similarity, config.seed)
-        similarity_read_matrix = read_matrix(similarity_positions)
+        similarity_read_matrix = sparse_matrix_from_entries(interactions.user_rows[similarity_positions],
+                                                            interactions.item_rows[similarity_positions], n_user_rows, n_item_rows)
         self.neighbour_similarities = top_neighbour_similarities(similarity_read_matrix, similarity_read_matrix, config)
 
     # in chunks: the rows of very active users make the sparse products large

@@ -15,7 +15,7 @@ from lib.config import (DEVICE, SPLIT_SEED, VALIDATION_FRACTION,
 from lib.custom_types import BlenderConfig, ModelResult, PairChoiceTask, RatingData, RatingTask, TimeGapTask
 from lib.data_loading import (load_next_item_task, load_pair_choice_task, load_rating_prediction_task, load_time_gap_task,
                               write_choice_prediction_file, write_prediction_file)
-from lib.helper_functioins import fit_closed_form_biases, group_by_user
+from lib.helper_functioins import fit_closed_form_biases
 from lib.models.bias_model import train_bias_model
 from lib.models.blender import train_blender
 from lib.models.ease_model import train_ease_model, train_plain_and_time_weighted_ease
@@ -83,13 +83,10 @@ def train_latent_factor_model(task: RatingTask,
 
         # SVD++ only: N(u) = items of the ratings this model trains on
         # -> fit: training split only (validation pairs stay unseen), refit: whole training file; never test pairs
-        interacted_items_by_user = (group_by_user(training_ratings.user_rows, training_ratings.item_rows, task.n_user_rows)
-                                    if use_implicit_feedback else None)
-
         return LatentFactorModel(
             task.n_user_rows, task.n_item_rows, n_factors,
             global_mean_rating=global_mean_rating,
-            interacted_items_by_user=interacted_items_by_user,
+            implicit_feedback_ratings=training_ratings if use_implicit_feedback else None,
             initial_user_biases=initial_user_biases,
             initial_item_biases=initial_item_biases,
         ).to(DEVICE)

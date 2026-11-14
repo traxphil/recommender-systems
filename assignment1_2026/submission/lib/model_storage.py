@@ -24,7 +24,7 @@ def save_model_result(model_result: ModelResult, task_name: str, model_name: str
 
 
 # load on the CPU first; PyTorch models then move only their parameters to the device
-# -> plain Python attributes (e.g. the SVD++ N(u) item lists) stay on the CPU, exactly as during training
+# -> plain Python attributes (e.g. the SVD++ N(u) matrix, a scipy CSR matrix) stay on the CPU, exactly as during training
 # -> models without a device (bias model, kNN, zero model, blenders) are returned as they are
 # weights_only=False: the file contains pickled Python objects, not only tensors -> only load files you saved yourself
 # Source: PyTorch docs, torch.load (weights_only defaults to True since PyTorch 2.6)

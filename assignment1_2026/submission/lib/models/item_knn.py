@@ -1,9 +1,10 @@
 import numpy as np
+import pandas as pd
 import scipy.sparse as sp
 
 from lib.config import RATING_MAX, RATING_MIN
 from lib.custom_types import ItemCosineConfig, ItemKnnConfig, ModelResult, RatingData, RatingTask
-from lib.helper_functioins import log, mse
+from lib.helper_functioins import log, mse, sparse_matrix_from_entries
 from lib.model_storage import load_model_result, save_model_result
 from lib.models.bias_model import BiasModel
 
@@ -42,11 +43,10 @@ def top_neighbour_similarities(residual_matrix: sp.csr_matrix, rated_matrix: sp.
         # 3) cosine (scale rows and columns by 1 / norm), then shrink by the number of common users
         cosine = sp.diags(inverse_norms[block_items]) @ residual_products @ sp.diags(inverse_norms)
         co_rating_counts.data = co_rating_counts.data / (co_rating_counts.data + config.similarity_shrinkage)
-        similarities = cosine.multiply(co_rating_counts).tocsr()
+        similarities = cosine.multiply(co_rating_counts).tocoo()
 
-        # 4) keep the n_neighbors largest positive similarities per item (never the item itself)
-        rows_in_block = np.repeat(np.arange(len(block_items)), np.diff(similarities.indptr))
-        columns, values = similarities.indices, similarities.data
+        # 4) keep the n_neighbors largest positive similarities per item (never the item itself); COO = row, column, value per entry
+        rows_in_block, columns, values = similarities.row, similarities.col, similarities.data
         is_candidate = (values > 0) & (columns != block_items[rows_in_block])
         rows_in_block, columns, values = rows_in_block[is_candidate], columns[is_candidate], values[is_candidate]
 
@@ -57,20 +57,18 @@ def top_neighbour_similarities(residual_matrix: sp.csr_matrix, rated_matrix: sp.
 
         neighbour_rows.append(block_items[rows_in_block[is_kept]])
         neighbour_columns.append(columns[is_kept])
-        neighbour_values.append(values[is_kept].astype(np.float32))
+        neighbour_values.append(values[is_kept])
 
-    return sp.csr_matrix((np.concatenate(neighbour_values), (np.concatenate(neighbour_rows), np.concatenate(neighbour_columns))),
-                         shape=(n_item_rows, n_item_rows))
+    return sparse_matrix_from_entries(np.concatenate(neighbour_rows), np.concatenate(neighbour_columns), n_item_rows, n_item_rows,
+                                      values=np.concatenate(neighbour_values))
 
 
 # keep at most max_ratings ratings per user (random, seeded) -> the item pair count grows with (ratings per user)^2
 def subsample_active_users(user_rows: np.ndarray, max_ratings: int, seed: int) -> np.ndarray:
     random_order = np.random.default_rng(seed).permutation(len(user_rows))
-    grouped_by_user = random_order[np.argsort(user_rows[random_order], kind="stable")]
-    ratings_per_user = np.bincount(user_rows)
-    first_position_of_user = np.cumsum(ratings_per_user) - ratings_per_user
-    rank_within_user = np.arange(len(grouped_by_user)) - first_position_of_user[user_rows[grouped_by_user]]
-    return np.sort(grouped_by_user[rank_within_user < max_ratings])
+    # rank of every rating among its user's ratings in that random order: 0, 1, 2, ...
+    rank_within_user = pd.Series(user_rows[random_order]).groupby(user_rows[random_order]).cumcount().to_numpy()
+    return np.sort(random_order[rank_within_user < max_ratings])
 
 
 class ItemKnnModel:
@@ -86,19 +84,17 @@ class ItemKnnModel:
         residuals = rating_data.ratings - self.baseline(rating_data.user_rows, rating_data.item_rows)
 
         # 2) user x item matrices: residuals / "has rated" (CSR -> fast access to the rows of the asking users)
-        def user_item_matrix(values, positions):
-            return sp.csr_matrix((values, (rating_data.user_rows[positions], rating_data.item_rows[positions])),
-                                 shape=(n_user_rows, n_item_rows), dtype=np.float32)
-
-        all_positions = np.arange(len(residuals))
-        self.residual_matrix = user_item_matrix(residuals, all_positions)
-        self.rated_matrix = user_item_matrix(np.ones(len(residuals)), all_positions)
+        self.residual_matrix = sparse_matrix_from_entries(rating_data.user_rows, rating_data.item_rows, n_user_rows, n_item_rows,
+                                                          values=residuals)
+        self.rated_matrix = sparse_matrix_from_entries(rating_data.user_rows, rating_data.item_rows, n_user_rows, n_item_rows)
 
         # 3) neighbour similarities from a subsample of the most active users' ratings (memory), predictions use all ratings
         similarity_positions = subsample_active_users(rating_data.user_rows, config.max_ratings_per_user_for_similarity, config.seed)
+        similarity_user_rows, similarity_item_rows = rating_data.user_rows[similarity_positions], rating_data.item_rows[similarity_positions]
         self.neighbour_similarities = top_neighbour_similarities(
-            user_item_matrix(residuals[similarity_positions], similarity_positions),
-            user_item_matrix(np.ones(len(similarity_positions)), similarity_positions),
+            sparse_matrix_from_entries(similarity_user_rows, similarity_item_rows, n_user_rows, n_item_rows,
+                                       values=residuals[similarity_positions]),
+            sparse_matrix_from_entries(similarity_user_rows, similarity_item_rows, n_user_rows, n_item_rows),
             config)
 
     def baseline(self, user_rows: np.ndarray, item_rows: np.ndarray) -> np.ndarray:

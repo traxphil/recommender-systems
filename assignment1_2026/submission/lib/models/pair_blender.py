@@ -2,9 +2,9 @@ import numpy as np
 from sklearn.model_selection import KFold
 
 from lib.custom_types import ChoicePairs, ModelResult, PairBlenderConfig, PairChoiceTask, RatingData
-from lib.helper_functioins import log
+from lib.helper_functioins import log, sparse_matrix_from_entries
 from lib.model_storage import load_model_result, save_model_result
-from lib.pair_choice import has_interacted, interaction_keys, pair_choice_accuracy
+from lib.pair_choice import pair_choice_accuracy
 from lib.temporal_features import ItemTimeline, first_day_per_row
 
 # Pair blender (Tasks 2 / 4): LightGBM learns P(first item is the real one) from both items' sub-model scores + meta-features
@@ -21,8 +21,8 @@ class PairFeatureBuilder:
     # reference = the interactions the sub-models had for these pairs (training split for validation pairs, all for test pairs)
     def __init__(self, reference: RatingData, n_user_rows: int, n_item_rows: int, config: PairBlenderConfig):
         self.config = config
-        self.n_item_rows = n_item_rows
-        self.sorted_interaction_keys = interaction_keys(reference, n_item_rows)
+        # user x item 0/1 matrix of who read what -> "did the user already read it?" by element lookup
+        self.read_matrix = sparse_matrix_from_entries(reference.user_rows, reference.item_rows, n_user_rows, n_item_rows)
         self.interactions_per_user = np.bincount(reference.user_rows, minlength=n_user_rows)
 
         if config.use_time_features:
@@ -40,7 +40,8 @@ class PairFeatureBuilder:
     #   sub-model scores | did the user already read it (the real item never is: it was held out) |
     #   Task 4: log(1 + interactions with the item within +- window of t), item age at t (negative = first read only after t)
     def item_side(self, scores_of_side: list[np.ndarray], user_rows: np.ndarray, item_rows: np.ndarray, days: np.ndarray | None) -> np.ndarray:
-        columns = list(scores_of_side) + [has_interacted(self.sorted_interaction_keys, user_rows, item_rows, self.n_item_rows)]
+        already_read = np.asarray(self.read_matrix[user_rows, item_rows]).ravel() > 0
+        columns = list(scores_of_side) + [already_read]
 
         if self.config.use_time_features:
             if days is None:

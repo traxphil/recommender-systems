@@ -3,7 +3,6 @@ import torch.nn as nn
 
 from lib.config import DEVICE
 from lib.custom_types import ModelResult, RatingData, RatingTask, TimeSVDppConfig
-from lib.helper_functioins import group_by_user
 from lib.model_storage import load_model_result, save_model_result
 from lib.models.SVDpp import LatentFactorModel
 from lib.models.time_bias_model import TemporalBiases, TimeBiasModel
@@ -28,10 +27,10 @@ class TimeSVDpp(LatentFactorModel):
     # user_factor_drift         alpha_u^p   (U+1, n_factors)    // only with use_factor_drift
 
     def __init__(self, time_bias_model: TimeBiasModel, n_user_rows, n_item_rows, n_factors, use_factor_drift: bool,
-                 train_temporal_biases: bool, interacted_items_by_user=None):
+                 train_temporal_biases: bool, implicit_feedback_ratings: RatingData | None = None):
 
         fitted_biases = time_bias_model.biases
-        super().__init__(n_user_rows, n_item_rows, n_factors, time_bias_model.global_mean_rating, interacted_items_by_user,
+        super().__init__(n_user_rows, n_item_rows, n_factors, time_bias_model.global_mean_rating, implicit_feedback_ratings,
                          initial_user_biases=fitted_biases.user_biases, initial_item_biases=fitted_biases.item_biases)
         self.temporal_biases = TemporalBiases(time_bias_model.index, fitted_biases, time_bias_model.temporal_bias_config)
         self.train_temporal_biases = train_temporal_biases
@@ -85,13 +84,10 @@ def train_time_svdpp(task: RatingTask, config: TimeSVDppConfig) -> ModelResult:
         time_bias_model = TimeBiasModel(training_ratings, task.n_user_rows, task.n_item_rows, config.time_biases)
 
         # SVD++ only: N(u) = items of the ratings this model trains on (never test pairs)
-        interacted_items_by_user = (group_by_user(training_ratings.user_rows, training_ratings.item_rows, task.n_user_rows)
-                                    if config.use_implicit_feedback else None)
-
         return TimeSVDpp(time_bias_model, task.n_user_rows, task.n_item_rows, config.n_factors,
                          use_factor_drift=config.use_factor_drift,
                          train_temporal_biases=config.train_temporal_biases,
-                         interacted_items_by_user=interacted_items_by_user).to(DEVICE)
+                         implicit_feedback_ratings=training_ratings if config.use_implicit_feedback else None).to(DEVICE)
 
     return fit_refit_and_predict(task, build_model,
                                  max_epochs=config.max_epochs,

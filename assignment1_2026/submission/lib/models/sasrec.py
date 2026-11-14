@@ -8,7 +8,7 @@ import torch.nn.functional as F
 
 from lib.config import DEVICE
 from lib.custom_types import ChoicePairs, ModelResult, PairChoiceTask, RatingData, SasRecConfig
-from lib.helper_functioins import log
+from lib.helper_functioins import log, recent_sequences
 from lib.model_storage import load_model_result, save_model_result
 from lib.pair_choice import pair_choice_accuracy
 
@@ -71,18 +71,6 @@ class SasRecNetwork(nn.Module):
         for block in self.blocks:
             hidden_states = block(hidden_states, self.causal_mask, is_book)
         return self.output_norm(hidden_states)
-
-
-# the last max_sequence_length + 1 books of every user, left-padded with 0 (interactions chronological per user)
-def recent_sequences(interactions: RatingData, n_user_rows: int, sequence_length: int) -> np.ndarray:
-    user_rows, item_rows = interactions.user_rows, interactions.item_rows
-    sequences = np.zeros((n_user_rows, sequence_length), dtype=np.int64)
-    last_positions = np.flatnonzero(np.append(user_rows[1:] != user_rows[:-1], True))
-    for steps_back in range(sequence_length):
-        positions = last_positions - steps_back
-        is_same_user = (positions >= 0) & (user_rows[np.maximum(positions, 0)] == user_rows[last_positions])
-        sequences[user_rows[last_positions[is_same_user]], sequence_length - 1 - steps_back] = item_rows[positions[is_same_user]]
-    return sequences
 
 
 class SasRecModel:

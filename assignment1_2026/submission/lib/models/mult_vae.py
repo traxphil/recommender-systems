@@ -1,14 +1,13 @@
 import copy
 
 import numpy as np
-import scipy.sparse as sp
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
 from lib.config import DEVICE
 from lib.custom_types import ChoicePairs, ModelResult, MultVaeConfig, PairChoiceTask, RatingData
-from lib.helper_functioins import log
+from lib.helper_functioins import log, most_popular_item_columns, sparse_matrix_from_entries
 from lib.model_storage import load_model_result, save_model_result
 from lib.pair_choice import pair_choice_accuracy
 
@@ -53,21 +52,15 @@ class MultVaeModel:
         self.config = config
 
         # 1) the max_items most popular items -> input / output column, others -1 (score NaN)
-        interactions_per_item = np.bincount(interactions.item_rows, minlength=n_item_rows)
-        kept_items = np.argsort(-interactions_per_item, kind="stable")[:config.max_items]
-        kept_items = kept_items[interactions_per_item[kept_items] > 0]
-        self.column_of_item = np.full(n_item_rows, -1, dtype=np.int64)
-        self.column_of_item[kept_items] = np.arange(len(kept_items))
+        self.column_of_item, n_kept_items = most_popular_item_columns(interactions.item_rows, n_item_rows, config.max_items)
 
         # 2) user x kept-item 0/1 matrix of who read what = the network's input (and the reconstruction target)
-        is_kept = self.column_of_item[interactions.item_rows] >= 0
-        self.read_matrix = sp.csr_matrix((np.ones(is_kept.sum(), dtype=np.float32),
-                                          (interactions.user_rows[is_kept], self.column_of_item[interactions.item_rows[is_kept]])),
-                                         shape=(n_user_rows, len(kept_items)))
-        self.users_with_history = np.flatnonzero(np.diff(self.read_matrix.indptr) > 0)
+        self.read_matrix = sparse_matrix_from_entries(interactions.user_rows, self.column_of_item[interactions.item_rows],
+                                                      n_user_rows, n_kept_items)
+        self.users_with_history = np.flatnonzero(self.read_matrix.getnnz(axis=1))
 
         torch.manual_seed(config.seed)  # identical initial weights for the fit and the refit
-        self.network = MultVaeNetwork(len(kept_items), config).to(DEVICE)
+        self.network = MultVaeNetwork(n_kept_items, config).to(DEVICE)
         self.optimizer = torch.optim.Adam(self.network.parameters(), lr=config.learning_rate)
         self.shuffle_generator = np.random.default_rng(config.seed)
         self.epochs_trained = 0
@@ -106,11 +99,8 @@ class MultVaeModel:
         pair_scores = np.full((len(pairs.user_rows), 2), np.nan, dtype=np.float32)
         item_columns = np.column_stack([self.column_of_item[pairs.first_item_rows], self.column_of_item[pairs.second_item_rows]])
 
-        # pairs sorted by user -> every user batch covers one contiguous block of pairs
-        pair_order = np.argsort(pairs.user_rows, kind="stable")
-        sorted_users = pairs.user_rows[pair_order]
-        distinct_users, first_pair_of_user = np.unique(sorted_users, return_index=True)
-        first_pair_of_user = np.append(first_pair_of_user, len(sorted_users))
+        # the distinct users of the pairs + for every pair the index of its user among them
+        distinct_users, user_index_of_pair = np.unique(pairs.user_rows, return_inverse=True)
 
         with torch.no_grad():
             for batch_start in range(0, len(distinct_users), self.config.users_per_batch):
@@ -118,8 +108,8 @@ class MultVaeModel:
                 logits, _, _ = self.network(self.read_rows(batch_users))
 
                 # gather the needed logits on the device (a full batch of logits is users x items)
-                batch_pairs = pair_order[first_pair_of_user[batch_start]:first_pair_of_user[batch_start + len(batch_users)]]
-                row_in_batch = np.searchsorted(batch_users, pairs.user_rows[batch_pairs])
+                batch_pairs = np.flatnonzero((user_index_of_pair >= batch_start) & (user_index_of_pair < batch_start + len(batch_users)))
+                row_in_batch = user_index_of_pair[batch_pairs] - batch_start
                 for side in (0, 1):
                     has_column = item_columns[batch_pairs, side] >= 0
                     gathered = logits[torch.as_tensor(row_in_batch[has_column], device=logits.device),

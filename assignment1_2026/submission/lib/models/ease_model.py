@@ -1,11 +1,10 @@
 import numpy as np
-import scipy.sparse as sp
 import torch
 
 from lib.config import DEVICE
 from lib.custom_types import EaseConfig, ModelResult, PairChoiceTask, RatingData
 from lib.model_storage import load_model_result, save_model_result
-from lib.helper_functioins import log
+from lib.helper_functioins import log, most_popular_item_columns, sparse_matrix_from_entries
 from lib.pair_choice import pair_choice_accuracy, train_pair_scorer
 
 # EASE (Steck 2019, "Embarrassingly Shallow Autoencoders for Sparse Data", WWW): a linear autoencoder
@@ -31,18 +30,12 @@ class EaseModel:
         self.compute_device = DEVICE if config.use_gpu else torch.device("cpu")
 
         # 1) the max_items most popular items (with at least one interaction) -> column in X and B, others -1
-        interactions_per_item = np.bincount(interactions.item_rows, minlength=n_item_rows)
-        kept_items = np.argsort(-interactions_per_item, kind="stable")[:config.max_items]
-        kept_items = kept_items[interactions_per_item[kept_items] > 0]
-        self.column_of_item = np.full(n_item_rows, -1, dtype=np.int64)
-        self.column_of_item[kept_items] = np.arange(len(kept_items))
+        self.column_of_item, n_kept_items = most_popular_item_columns(interactions.item_rows, n_item_rows, config.max_items)
 
         # 2) user x kept-item matrix of who read what, stored as day + 1 (day 0 would be dropped as a sparse zero);
-        #    X = the same matrix with every entry 1
-        is_kept = self.column_of_item[interactions.item_rows] >= 0
-        self.history_day_matrix = sp.csr_matrix(
-            (interactions.days[is_kept] + 1.0, (interactions.user_rows[is_kept], self.column_of_item[interactions.item_rows[is_kept]])),
-            shape=(n_user_rows, len(kept_items)), dtype=np.float32)
+        #    X = the same matrix with every entry 1 (interactions with items without a column are left out)
+        self.history_day_matrix = sparse_matrix_from_entries(interactions.user_rows, self.column_of_item[interactions.item_rows],
+                                                             n_user_rows, n_kept_items, values=interactions.days + 1.0)
 
         # 3) closed-form weights B
         self.item_weights = self.closed_form_weights(config)
@@ -90,10 +83,10 @@ class EaseModel:
         for chunk_start in range(0, len(positions_with_weights), self.pairs_per_scoring_chunk):
             positions = positions_with_weights[chunk_start:chunk_start + self.pairs_per_scoring_chunk]
 
-            # one entry per (pair, book in the user's history)
-            histories = self.history_day_matrix[user_rows[positions]]
-            pair_of_entry = np.repeat(np.arange(len(positions)), np.diff(histories.indptr))
-            entry_weights = self.item_weights[torch.as_tensor(histories.indices, device=weights_device),
+            # one entry per (pair, book in the user's history): COO row = the pair, column = the book
+            histories = self.history_day_matrix[user_rows[positions]].tocoo()
+            pair_of_entry = histories.row
+            entry_weights = self.item_weights[torch.as_tensor(histories.col, device=weights_device),
                                               torch.as_tensor(item_columns[positions][pair_of_entry], device=weights_device)]
 
             if weight_by_time:

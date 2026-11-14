@@ -1,6 +1,6 @@
 import numpy as np
 
-from lib.custom_types import ChoicePairs, ModelResult, PairChoiceTask, RatingData
+from lib.custom_types import ChoicePairs, ModelResult, PairChoiceTask
 from lib.helper_functioins import log
 
 # Shared pieces of the interaction models (Tasks 2 / 4):
@@ -36,14 +36,3 @@ def train_pair_scorer(task: PairChoiceTask, build_model, model_name: str) -> Mod
     model = build_model(task.training_and_validation_data)
     test_scores = score_both_items(model, task.test_pairs)
     return ModelResult(model, [], valid_scores, test_scores)
-
-
-# sorted keys user * n_item_rows + item of the interactions -> "has the user already read this item?" by binary search
-def interaction_keys(interactions: RatingData, n_item_rows: int) -> np.ndarray:
-    return np.unique(interactions.user_rows.astype(np.int64) * n_item_rows + interactions.item_rows)
-
-
-def has_interacted(sorted_interaction_keys: np.ndarray, user_rows: np.ndarray, item_rows: np.ndarray, n_item_rows: int) -> np.ndarray:
-    query_keys = user_rows.astype(np.int64) * n_item_rows + item_rows
-    positions = np.minimum(np.searchsorted(sorted_interaction_keys, query_keys), len(sorted_interaction_keys) - 1)
-    return sorted_interaction_keys[positions] == query_keys
