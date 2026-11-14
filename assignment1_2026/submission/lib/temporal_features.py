@@ -1,12 +1,59 @@
 import numpy as np
+import pandas as pd
 
+from lib.config import FIRST_PLAUSIBLE_TIMESTAMP, LAST_PLAUSIBLE_TIMESTAMP
 from lib.custom_types import RatingTask
+
+SECONDS_PER_HOUR = 3_600
 
 
 # temporal models need the day of every test row -> only tasks whose test file has timestamps (Task 3), not Task 1
 def require_test_days(task: RatingTask, model_name: str) -> None:
     if task.test_days is None:
         raise ValueError(f"{model_name} needs the day of every test row -> the test file has no timestamp column")
+
+
+# the same for models that need the full timestamp (calendar fields: hour of day, weekday, month, year)
+def require_test_timestamps(task: RatingTask, model_name: str) -> None:
+    if task.test_timestamps is None:
+        raise ValueError(f"{model_name} needs the timestamp of every test row -> the test file has no timestamp column")
+
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Calendar fields of a timestamp (one-hot features of the time-aware factorization machine)
+# all in UTC: the users' time zones are unknown
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# number of values of every calendar field; the year field covers first_year .. last_year (-> first_and_last_year)
+CALENDAR_FIELD_SIZES = {"hour_of_day": 24, "weekday": 7, "month": 12}
+
+
+# first and last calendar year among the timestamps (e.g. of the training ratings)
+def first_and_last_year(timestamps: np.ndarray) -> tuple[int, int]:
+    years = pd.to_datetime(timestamps, unit="s").year
+    return int(years.min()), int(years.max())
+
+
+# (N, fields): the row of every timestamp within each requested field
+#   hour_of_day 0 .. 23 | weekday 0 = Monday .. 6 = Sunday | month 0 = January .. 11 = December
+#   year 0 = first_year .. last_year - first_year (years outside the range are clipped into it)
+def calendar_field_rows(timestamps: np.ndarray, field_names: tuple[str, ...], first_year: int, last_year: int) -> np.ndarray:
+    moments = pd.to_datetime(timestamps, unit="s")
+    row_of_field = {
+        "hour_of_day": moments.hour,
+        "weekday": moments.day_of_week,
+        "month": moments.month - 1,
+        "year": np.clip(moments.year, first_year, last_year) - first_year,
+    }
+    return np.column_stack([np.asarray(row_of_field[name], dtype=np.int64) for name in field_names])
+
+
+# calendar_field_rows of every hour of the plausible timestamp range (the loaded timestamps are clipped into it)
+# -> a model looks the fields of a timestamp up as table[(timestamp - FIRST_PLAUSIBLE_TIMESTAMP) // SECONDS_PER_HOUR],
+#    which also works on the GPU (no calendar arithmetic there)
+def calendar_field_rows_per_hour(field_names: tuple[str, ...], first_year: int, last_year: int) -> np.ndarray:
+    hour_starts = np.arange(FIRST_PLAUSIBLE_TIMESTAMP, LAST_PLAUSIBLE_TIMESTAMP + 1, SECONDS_PER_HOUR)
+    return calendar_field_rows(hour_starts, field_names, first_year, last_year)
 
 
 # Counting a user's ratings around a day without loops over users:

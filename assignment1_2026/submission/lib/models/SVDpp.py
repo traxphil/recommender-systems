@@ -12,8 +12,9 @@ from lib.model_storage import load_model_result, save_model_result
 
 class LatentFactorModel(nn.Module):
 
-    # no time terms -> lib/torch_trainer.py only passes (user_rows, item_rows); timeSVD++ (time_svdpp.py) sets True
+    # no time terms -> lib/torch_trainer.py only passes (user_rows, item_rows); timeSVD++ (time_svdpp.py) sets uses_days = True
     uses_days = False
+    uses_timestamps = False
 
     # Parameters:
     # user_biases               b_u     (U+1, 1)

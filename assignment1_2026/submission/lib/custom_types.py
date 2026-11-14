@@ -20,6 +20,12 @@ class RatingData(NamedTuple):
     item_rows: np.ndarray                   # (N,)  int    values: 1-I          // which item was in rating k
     ratings: np.ndarray                     # (N,)  float  values: 0-5          // what was the score of rating k
     days: np.ndarray | None = None          # (N,)  int    values: 0-6575       // on which day rating k was given (day 0 = 2000-01-01)
+    timestamps: np.ndarray | None = None    # (N,)  int    unix seconds (UTC)   // when rating k was given, clipped to 2000-01-01 .. 2018-01-01
+    # days / timestamps are None when the task gives no time for its test rows (Task 1) -> no model can use time there
+
+    # the ratings at the given positions (e.g. the training split); missing columns (None) stay None
+    def at_positions(self, positions: np.ndarray) -> "RatingData":
+        return RatingData(*(None if column is None else column[positions] for column in self))
 
 
 class RatingTask(NamedTuple):
@@ -31,6 +37,7 @@ class RatingTask(NamedTuple):
     n_user_rows: int                        # U + 1 = rows of every user embedding table (row 0 = unknown)
     n_item_rows: int                        # I + 1 = rows of every item embedding table (row 0 = unknown)
     test_days: np.ndarray | None = None     # (N_test,)  int    values: 0-6575  // day of the test row / None if the test file has no timestamp (Task 1)
+    test_timestamps: np.ndarray | None = None  # (N_test,) int unix seconds     // timestamp of the test row / None as test_days
     # N(u) for SVD++ is not stored here: the pipeline builds it from the ratings a model trains on (no test data)
     
 
@@ -134,7 +141,7 @@ class ZeroModelConfig:
     max_iterations: int
 
 
-# factorization machine over user, item, user activity bucket, item popularity bucket
+# factorization machine over user, item, user activity bucket, item popularity bucket (no time -> Task 1)
 @dataclass(frozen=True)
 class FactorizationMachineConfig:
     n_factors: int
@@ -207,6 +214,12 @@ class TimeSVDppConfig:
     early_stopping_patience: int
     refit_on_train_and_valid: bool
     seed: int
+
+
+# factorization machine + one-hot calendar fields of the rating's timestamp (Task 3)
+@dataclass(frozen=True)
+class TimeFactorizationMachineConfig(FactorizationMachineConfig):
+    calendar_fields: tuple[str, ...]        # any of "hour_of_day", "weekday", "month", "year" (UTC; see lib/temporal_features.py)
 
 
 # item-item kNN whose neighbours count less the further their rating day is from the asked day

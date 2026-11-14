@@ -8,7 +8,8 @@ from lib.config import (DEVICE, SPLIT_SEED, VALIDATION_FRACTION,
                         TASK1_SVDPP, TASK1_ZERO_MODEL,
                         TASK2_EASE, TASK2_ITEM_COSINE, TASK2_MULT_VAE, TASK2_PAIR_BLENDER,
                         TASK3_BIAS_MODEL, TASK3_ITEM_KNN, TASK3_SUBMITTED_BLENDER, TASK3_SVD, TASK3_SVDPP, TASK3_TIME_BIAS_MODEL,
-                        TASK3_TIME_ITEM_KNN, TASK3_TIME_SVDPP, TASK3_TIME_ZERO_MODEL, TASK3_ZERO_MODEL,
+                        TASK3_TIME_FACTORIZATION_MACHINE, TASK3_TIME_ITEM_KNN, TASK3_TIME_SVDPP, TASK3_TIME_ZERO_MODEL,
+                        TASK3_ZERO_MODEL,
                         TASK4_EASE, TASK4_ITEM_COSINE, TASK4_MULT_VAE, TASK4_PAIR_BLENDER, TASK4_TIME_EASE,
                         TASK5_EASE, TASK5_ITEM_COSINE, TASK5_MULT_VAE, TASK5_PAIR_BLENDER, TASK5_SASREC, TASK5_TRANSITION,
                         TASK6_LIGHTGBM_GAP_MODEL, TASK6_LINEAR_GAP_MODEL, TASK6_SUBMITTED_GAP_MODEL)
@@ -29,6 +30,7 @@ from lib.models.popularity_model import train_popularity_model
 from lib.models.sasrec import train_sasrec
 from lib.models.SVDpp import LatentFactorModel
 from lib.models.time_bias_model import train_time_bias_model
+from lib.models.time_factorization_machine import train_time_factorization_machine
 from lib.models.time_item_knn import train_time_item_knn
 from lib.models.time_svdpp import train_time_svdpp
 from lib.models.time_zero_model import train_time_zero_model
@@ -119,6 +121,7 @@ TASK1_TEST_FILE = DATA_DIR / "task_1_test.csv"
 TASK1_PREDICTION_FILE = OUTPUT_DIR / "task_1_predictions.csv"
 
 
+# the test file has no timestamps -> the task has no time data at all (days / timestamps None): no Task 1 model can use time
 def load_task1() -> RatingTask:
     return load_rating_prediction_task(TASK1_TRAINING_FILE, TASK1_TEST_FILE, VALIDATION_FRACTION, SPLIT_SEED)
 
@@ -248,7 +251,7 @@ def run_task2():
 # #########################################################################################
 # Task 3 - rating prediction, timestamp available
 # Task 1 models (timestamps ignored) + temporal models: time-aware biases, timeSVD++, time-decayed item kNN,
-# temporal zero model -> blended (ridge or LightGBM with time features, see TASK3_SUBMITTED_BLENDER)
+# temporal zero model, time-aware factorization machine -> blended (ridge or LightGBM with time features, see TASK3_SUBMITTED_BLENDER)
 # #########################################################################################
 
 TASK3_TRAINING_FILE = DATA_DIR / "tasks_3_4_train.csv"
@@ -256,7 +259,7 @@ TASK3_TEST_FILE = DATA_DIR / "task_3_test.csv"
 TASK3_PREDICTION_FILE = OUTPUT_DIR / "task_3_predictions.csv"
 
 
-# the test file has timestamps -> RatingTask.test_days is set (needed by the temporal models)
+# the test file has timestamps -> RatingTask.test_days / test_timestamps are set (needed by the temporal models)
 def load_task3() -> RatingTask:
     return load_rating_prediction_task(TASK3_TRAINING_FILE, TASK3_TEST_FILE, VALIDATION_FRACTION, SPLIT_SEED)
 
@@ -299,6 +302,10 @@ def train_task3_time_zero_model(task: RatingTask) -> ModelResult:
     return train_time_zero_model(task, TASK3_TIME_ZERO_MODEL)
 
 
+def train_task3_time_factorization_machine(task: RatingTask) -> ModelResult:
+    return train_time_factorization_machine(task, TASK3_TIME_FACTORIZATION_MACHINE)
+
+
 # sub-model name (as in the blender configs and in trained_models/) -> its training function
 TASK3_SUB_MODEL_TRAINERS = {
     "bias_model": train_task3_bias_model,
@@ -310,6 +317,7 @@ TASK3_SUB_MODEL_TRAINERS = {
     "time_svdpp": train_task3_time_svdpp,
     "time_item_knn": train_task3_time_item_knn,
     "time_zero_model": train_task3_time_zero_model,
+    "time_factorization_machine": train_task3_time_factorization_machine,
 }
 
 

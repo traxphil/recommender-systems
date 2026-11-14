@@ -62,6 +62,7 @@ from lib.models.item_knn import ItemKnnModel                   # noqa: E402
 from lib.models.mult_vae import train_mult_vae                 # noqa: E402
 from lib.models.sasrec import train_sasrec                     # noqa: E402
 from lib.models.time_bias_model import TimeBiasModel           # noqa: E402
+from lib.models.time_factorization_machine import train_time_factorization_machine  # noqa: E402
 from lib.models.time_item_knn import TimeItemKnnModel          # noqa: E402
 from lib.models.time_svdpp import train_time_svdpp             # noqa: E402
 from lib.models.time_zero_model import TimeZeroModel           # noqa: E402
@@ -134,6 +135,11 @@ def validate_time_item_knn(task, config) -> ValidationRun:
     model = TimeItemKnnModel(task.training_data, task.n_user_rows, task.n_item_rows, config)
     validation = task.validation_data
     return ValidationRun(model.predict(validation.user_rows, validation.item_rows, validation.days), None)
+
+
+def validate_time_factorization_machine(task, config) -> ValidationRun:
+    model_result = train_time_factorization_machine(task, config)
+    return ValidationRun(model_result.valid_predictions, best_epoch_of(model_result.history))
 
 
 def validate_time_zero_model(task, config) -> ValidationRun:
@@ -263,6 +269,7 @@ SWEEP_TASKS = {
             "time_svdpp": SweepableModel("TASK3_TIME_SVDPP", validate_time_svdpp),
             "time_item_knn": SweepableModel("TASK3_TIME_ITEM_KNN", validate_time_item_knn),
             "time_zero_model": SweepableModel("TASK3_TIME_ZERO_MODEL", validate_time_zero_model, ZERO_LOG_LOSS),
+            "time_factorization_machine": SweepableModel("TASK3_TIME_FACTORIZATION_MACHINE", validate_time_factorization_machine),
         },
     ),
     "task4": SweepTask(

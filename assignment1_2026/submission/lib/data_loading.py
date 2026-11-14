@@ -37,11 +37,14 @@ def write_choice_prediction_file(test_csv_path, output_csv_path, first_item_wins
     chosen_item_ids = np.where(first_item_wins, test_columns["item1"], test_columns["item2"])
     write_prediction_file(test_csv_path, output_csv_path, chosen_item_ids)
 
+# unix timestamps (str column or integer array) -> int64 seconds, impossible timestamps clipped to the plausible range
+def plausible_timestamps(timestamp_column) -> np.ndarray:
+    seconds = np.asarray(pd.to_numeric(timestamp_column), dtype=np.int64)
+    return np.clip(seconds, FIRST_PLAUSIBLE_TIMESTAMP, LAST_PLAUSIBLE_TIMESTAMP)
+
 # unix timestamps (str column or integer array) -> whole days since 2000-01-01, impossible timestamps clipped to the plausible range
 def timestamps_to_days(timestamp_column) -> np.ndarray:
-    seconds = np.asarray(pd.to_numeric(timestamp_column), dtype=np.int64)
-    clipped_seconds = np.clip(seconds, FIRST_PLAUSIBLE_TIMESTAMP, LAST_PLAUSIBLE_TIMESTAMP)
-    return (clipped_seconds - FIRST_PLAUSIBLE_TIMESTAMP) // SECONDS_PER_DAY
+    return (plausible_timestamps(timestamp_column) - FIRST_PLAUSIBLE_TIMESTAMP) // SECONDS_PER_DAY
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -68,9 +71,13 @@ def load_rating_prediction_task(training_csv_path, test_csv_path, validation_fra
     n_user_rows = len(row_of_user) + 1  # U users + row 0
     n_item_rows = len(row_of_item) + 1  # I items + row 0
 
-    # day of every rating; the Task 1 test file has no timestamp -> no test days (temporal models need Task 3)
-    days = timestamps_to_days(training_columns["timestamp"])
-    test_days = timestamps_to_days(test_columns["timestamp"]) if "timestamp" in test_columns.columns else None
+    # time of every rating (day + timestamp) only if the test file has it too (Task 3): a model can only use time it also
+    # gets for the test rows -> Task 1 (test file without timestamps): no time data at all, no Task 1 model can use it
+    has_time = "timestamp" in test_columns.columns
+    timestamps = plausible_timestamps(training_columns["timestamp"]) if has_time else None
+    test_timestamps = plausible_timestamps(test_columns["timestamp"]) if has_time else None
+    all_ratings = RatingData(user_rows, item_rows, ratings,
+                             days=timestamps_to_days(timestamps) if has_time else None, timestamps=timestamps)
 
     # training and validation split / randomized with a seed
     shuffled_indices = np.random.default_rng(split_seed).permutation(len(ratings))
@@ -79,14 +86,15 @@ def load_rating_prediction_task(training_csv_path, test_csv_path, validation_fra
 
     # create rating task instance
     return RatingTask(
-        training_data=RatingData(user_rows[train_indices], item_rows[train_indices], ratings[train_indices], days[train_indices]),
-        validation_data=RatingData(user_rows[valid_indices], item_rows[valid_indices], ratings[valid_indices], days[valid_indices]),
-        training_and_validation_data=RatingData(user_rows, item_rows, ratings, days),
+        training_data=all_ratings.at_positions(train_indices),
+        validation_data=all_ratings.at_positions(valid_indices),
+        training_and_validation_data=all_ratings,
         test_user_rows=test_user_rows,
         test_item_rows=test_item_rows,
         n_user_rows=n_user_rows,
         n_item_rows=n_item_rows,
-        test_days=test_days,
+        test_days=timestamps_to_days(test_timestamps) if has_time else None,
+        test_timestamps=test_timestamps,
     )
 
 

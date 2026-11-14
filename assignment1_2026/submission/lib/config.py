@@ -4,8 +4,8 @@ import torch
 
 from lib.custom_types import (BiasModelConfig, BlenderConfig, EaseConfig, FactorizationMachineConfig, GapRegressorConfig,
                               ItemCosineConfig, ItemKnnConfig, LatentFactorConfig, MultVaeConfig, PairBlenderConfig,
-                              SasRecConfig, TemporalBiasConfig, TimeBiasModelConfig, TimeItemKnnConfig, TimeSVDppConfig,
-                              TimeZeroModelConfig, TransitionConfig, ZeroModelConfig)
+                              SasRecConfig, TemporalBiasConfig, TimeBiasModelConfig, TimeFactorizationMachineConfig,
+                              TimeItemKnnConfig, TimeSVDppConfig, TimeZeroModelConfig, TransitionConfig, ZeroModelConfig)
 
 
 # #########################################################################################
@@ -109,7 +109,7 @@ TASK1_ZERO_MODEL = ZeroModelConfig(
 )
 
 # ---- factorization machine (user, item, activity buckets) -------------------------------
-# starting point = the SVD settings above
+# starting point = the SVD settings above; no time data (the Task 1 test file has no timestamps -> load_task1 keeps none)
 TASK1_FACTORIZATION_MACHINE = FactorizationMachineConfig(
     n_factors=120,
     n_activity_buckets=10,
@@ -349,9 +349,26 @@ TASK3_TIME_ZERO_MODEL = TimeZeroModelConfig(
     window_prior_strength=2.0,              # 1 zero among 1 other rating that day -> shrunk zero share 0.34
 )
 
+# ---- time-aware factorization machine ----------------------------------------------------
+# = TASK1_FACTORIZATION_MACHINE settings (starting point, not tuned on Task 3) + one-hot calendar fields of the timestamp
+# hour_of_day: all timestamps lie in 05:00 - 09:59 UTC (dates + an offset) -> compare the validation MSE without it
+TASK3_TIME_FACTORIZATION_MACHINE = TimeFactorizationMachineConfig(
+    n_factors=120,
+    n_activity_buckets=10,
+    learning_rate=2.5e-4,
+    bias_regularization=3.0,
+    factor_regularization=8.0,
+    ratings_per_batch=512,
+    max_epochs=1000,
+    early_stopping_patience=6,
+    refit_on_train_and_valid=True,
+    seed=0,
+    calendar_fields=("hour_of_day", "weekday", "month", "year"),
+)
+
 # ---- blenders ----------------------------------------------------------------------------
 TASK3_BLENDED_MODELS = ("bias_model", "svd", "svdpp", "item_knn", "zero_model",
-                        "time_bias_model", "time_svdpp", "time_item_knn", "time_zero_model")
+                        "time_bias_model", "time_svdpp", "time_item_knn", "time_zero_model", "time_factorization_machine")
 
 # learned weighted average of the sub-model predictions
 TASK3_RIDGE_BLENDER = BlenderConfig(
