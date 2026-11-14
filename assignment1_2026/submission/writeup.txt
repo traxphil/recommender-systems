@@ -8,6 +8,12 @@ CUDA available
 
 ### Sources:
 
+# MAIN Sources:
+[1] Julian McAuley, "Personalized Machine Learning", (PML)
+[2] Yehuda Koren, "The BellKor Solution to the Netflix Grand Prize", August 2009, (Korr 2009), https://www2.seas.gwu.edu/~simhaweb/champalg/cf/papers/KorenBellKor2009.pdf
+[3] Yehuda Koren and Robert Bell, "Advances in Collaborative Filtering", https://datajobs.com/data-science-repo/Collaborative-Filtering-%5BKoren-and-Bell%5D.pdf
+
+
 # Pytorch Workflow Doucmentation: https://www.learnpytorch.io/01_pytorch_workflow/
 # Pytorch Tutorial Video: https://www.youtube.com/watch?v=V_xro1bcAuA (at ~ 4:20:00 / Chapter 34+)
 

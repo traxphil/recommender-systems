@@ -1,0 +1,71 @@
+{
+  "task": "task3",
+  "model": "time_zero_model",
+  "metric": "validation log loss of P(0) (lower is better)",
+  "status": "finished",
+  "started": "2026-11-08 10:05:48",
+  "last_update": "2026-11-08 10:05:51",
+  "runs_finished": "4 / 4",
+  "device": "cuda",
+  "best": {
+    "score": 0.053781,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": null,
+    "swept_values": {
+      "window_prior_strength": 0.5
+    },
+    "parameters": {
+      "user_prior_strength": 10.0,
+      "item_prior_strength": 20.0,
+      "inverse_regularization": 3.0,
+      "max_iterations": 1000,
+      "window_lengths_in_days": [
+        0,
+        30
+      ],
+      "window_prior_strength": 0.5
+    }
+  },
+  "swept_parameters": {
+    "window_prior_strength": [
+      0.5,
+      1.0,
+      2.0,
+      5.0
+    ]
+  },
+  "constant_parameters": {
+    "user_prior_strength": 10.0,
+    "item_prior_strength": 20.0,
+    "inverse_regularization": 3.0
+  },
+  "base_config": "TASK3_TIME_ZERO_MODEL",
+  "runs": [
+    {
+      "window_prior_strength": 0.5,
+      "score": 0.053781,
+      "best_epoch": null,
+      "seconds": 0.8
+    },
+    {
+      "window_prior_strength": 1.0,
+      "score": 0.053792,
+      "best_epoch": null,
+      "seconds": 0.8
+    },
+    {
+      "window_prior_strength": 2.0,
+      "score": 0.053801,
+      "best_epoch": null,
+      "seconds": 0.8
+    },
+    {
+      "window_prior_strength": 5.0,
+      "score": 0.053816,
+      "best_epoch": null,
+      "seconds": 0.8
+    }
+  ]
+}

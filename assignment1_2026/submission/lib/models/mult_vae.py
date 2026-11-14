@@ -129,7 +129,9 @@ class MultVaeModel:
         return pair_scores
 
 
-def train_mult_vae(task: PairChoiceTask, config: MultVaeConfig) -> ModelResult:
+# refit_on_all_interactions=False: test scores from the training-split model (used by the sweeps: the refit cannot change
+# the validation score and doubles the run time)
+def train_mult_vae(task: PairChoiceTask, config: MultVaeConfig, refit_on_all_interactions: bool = True) -> ModelResult:
     validation_pairs = task.validation_pairs
 
     # 1) fit on the training split, early stopping on the validation pair accuracy (higher = better)
@@ -154,11 +156,12 @@ def train_mult_vae(task: PairChoiceTask, config: MultVaeConfig) -> ModelResult:
     valid_scores = model.score_pairs(validation_pairs)
 
     # 2) refit from scratch on every interaction for the best number of epochs -> test scores
-    del model
-    model = MultVaeModel(task.training_and_validation_data, task.n_user_rows, task.n_item_rows, config)
-    for epoch in range(1, best_epoch + 1):
-        train_loss = model.train_one_epoch()
-        log(f"Mult-VAE refit epoch {epoch:3d} | train loss {train_loss:.2f}")
+    if refit_on_all_interactions:
+        del model
+        model = MultVaeModel(task.training_and_validation_data, task.n_user_rows, task.n_item_rows, config)
+        for epoch in range(1, best_epoch + 1):
+            train_loss = model.train_one_epoch()
+            log(f"Mult-VAE refit epoch {epoch:3d} | train loss {train_loss:.2f}")
     test_scores = model.score_pairs(task.test_pairs)
 
     # the optimizer state is not needed after training (as large as the network twice)

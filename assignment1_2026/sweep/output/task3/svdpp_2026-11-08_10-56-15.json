@@ -1,0 +1,111 @@
+{
+  "task": "task3",
+  "model": "svdpp",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-08 10:56:15",
+  "last_update": "2026-11-08 11:00:38",
+  "runs_finished": "8 / 8",
+  "device": "cuda",
+  "best": {
+    "score": 0.883401,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": 2,
+    "swept_values": {
+      "n_factors": 750,
+      "ratings_per_batch": 8192
+    },
+    "parameters": {
+      "use_implicit_feedback": true,
+      "n_factors": 750,
+      "learning_rate": 0.001,
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 5.0,
+      "factor_regularization": 4.0,
+      "ratings_per_batch": 8192,
+      "max_epochs": 1000,
+      "early_stopping_patience": 6,
+      "refit_on_train_and_valid": true,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "n_factors": [
+      250,
+      500,
+      750,
+      1000
+    ],
+    "ratings_per_batch": [
+      8192,
+      16384
+    ]
+  },
+  "constant_parameters": {
+    "user_bias_regularization": 3.0,
+    "item_bias_regularization": 5.0,
+    "factor_regularization": 4.0,
+    "learning_rate": 0.001
+  },
+  "base_config": "TASK3_SVDPP",
+  "runs": [
+    {
+      "n_factors": 250,
+      "ratings_per_batch": 8192,
+      "score": 0.884293,
+      "best_epoch": 3,
+      "seconds": 31.7
+    },
+    {
+      "n_factors": 250,
+      "ratings_per_batch": 16384,
+      "score": 0.886275,
+      "best_epoch": 3,
+      "seconds": 26.9
+    },
+    {
+      "n_factors": 500,
+      "ratings_per_batch": 8192,
+      "score": 0.884171,
+      "best_epoch": 2,
+      "seconds": 31.5
+    },
+    {
+      "n_factors": 500,
+      "ratings_per_batch": 16384,
+      "score": 0.884154,
+      "best_epoch": 3,
+      "seconds": 28.1
+    },
+    {
+      "n_factors": 750,
+      "ratings_per_batch": 8192,
+      "score": 0.883401,
+      "best_epoch": 2,
+      "seconds": 36.6
+    },
+    {
+      "n_factors": 750,
+      "ratings_per_batch": 16384,
+      "score": 0.884767,
+      "best_epoch": 3,
+      "seconds": 31.3
+    },
+    {
+      "n_factors": 1000,
+      "ratings_per_batch": 8192,
+      "score": 0.883424,
+      "best_epoch": 2,
+      "seconds": 42.2
+    },
+    {
+      "n_factors": 1000,
+      "ratings_per_batch": 16384,
+      "score": 0.885502,
+      "best_epoch": 2,
+      "seconds": 33.2
+    }
+  ]
+}

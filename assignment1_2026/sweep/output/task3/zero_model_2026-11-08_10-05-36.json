@@ -1,0 +1,265 @@
+{
+  "task": "task3",
+  "model": "zero_model",
+  "metric": "validation log loss of P(0) (lower is better)",
+  "status": "finished",
+  "started": "2026-11-08 10:05:36",
+  "last_update": "2026-11-08 10:05:48",
+  "runs_finished": "27 / 27",
+  "device": "cuda",
+  "best": {
+    "score": 0.056111,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": null,
+    "swept_values": {
+      "user_prior_strength": 10.0,
+      "item_prior_strength": 20.0,
+      "inverse_regularization": 3.0
+    },
+    "parameters": {
+      "user_prior_strength": 10.0,
+      "item_prior_strength": 20.0,
+      "inverse_regularization": 3.0,
+      "max_iterations": 1000
+    }
+  },
+  "swept_parameters": {
+    "user_prior_strength": [
+      2.0,
+      5.0,
+      10.0
+    ],
+    "item_prior_strength": [
+      10.0,
+      20.0,
+      40.0
+    ],
+    "inverse_regularization": [
+      0.3,
+      1.0,
+      3.0
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK3_ZERO_MODEL",
+  "runs": [
+    {
+      "user_prior_strength": 2.0,
+      "item_prior_strength": 10.0,
+      "inverse_regularization": 0.3,
+      "score": 0.057141,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 2.0,
+      "item_prior_strength": 10.0,
+      "inverse_regularization": 1.0,
+      "score": 0.057141,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 2.0,
+      "item_prior_strength": 10.0,
+      "inverse_regularization": 3.0,
+      "score": 0.057141,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 2.0,
+      "item_prior_strength": 20.0,
+      "inverse_regularization": 0.3,
+      "score": 0.057141,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 2.0,
+      "item_prior_strength": 20.0,
+      "inverse_regularization": 1.0,
+      "score": 0.057141,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 2.0,
+      "item_prior_strength": 20.0,
+      "inverse_regularization": 3.0,
+      "score": 0.057141,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 2.0,
+      "item_prior_strength": 40.0,
+      "inverse_regularization": 0.3,
+      "score": 0.057141,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 2.0,
+      "item_prior_strength": 40.0,
+      "inverse_regularization": 1.0,
+      "score": 0.057141,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 2.0,
+      "item_prior_strength": 40.0,
+      "inverse_regularization": 3.0,
+      "score": 0.057141,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 5.0,
+      "item_prior_strength": 10.0,
+      "inverse_regularization": 0.3,
+      "score": 0.056432,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 5.0,
+      "item_prior_strength": 10.0,
+      "inverse_regularization": 1.0,
+      "score": 0.056432,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 5.0,
+      "item_prior_strength": 10.0,
+      "inverse_regularization": 3.0,
+      "score": 0.056432,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 5.0,
+      "item_prior_strength": 20.0,
+      "inverse_regularization": 0.3,
+      "score": 0.056432,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 5.0,
+      "item_prior_strength": 20.0,
+      "inverse_regularization": 1.0,
+      "score": 0.056432,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 5.0,
+      "item_prior_strength": 20.0,
+      "inverse_regularization": 3.0,
+      "score": 0.056432,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 5.0,
+      "item_prior_strength": 40.0,
+      "inverse_regularization": 0.3,
+      "score": 0.056433,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 5.0,
+      "item_prior_strength": 40.0,
+      "inverse_regularization": 1.0,
+      "score": 0.056433,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 5.0,
+      "item_prior_strength": 40.0,
+      "inverse_regularization": 3.0,
+      "score": 0.056433,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 10.0,
+      "item_prior_strength": 10.0,
+      "inverse_regularization": 0.3,
+      "score": 0.056111,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 10.0,
+      "item_prior_strength": 10.0,
+      "inverse_regularization": 1.0,
+      "score": 0.056111,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 10.0,
+      "item_prior_strength": 10.0,
+      "inverse_regularization": 3.0,
+      "score": 0.056111,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 10.0,
+      "item_prior_strength": 20.0,
+      "inverse_regularization": 0.3,
+      "score": 0.056111,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 10.0,
+      "item_prior_strength": 20.0,
+      "inverse_regularization": 1.0,
+      "score": 0.056111,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 10.0,
+      "item_prior_strength": 20.0,
+      "inverse_regularization": 3.0,
+      "score": 0.056111,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 10.0,
+      "item_prior_strength": 40.0,
+      "inverse_regularization": 0.3,
+      "score": 0.056111,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 10.0,
+      "item_prior_strength": 40.0,
+      "inverse_regularization": 1.0,
+      "score": 0.056111,
+      "best_epoch": null,
+      "seconds": 0.4
+    },
+    {
+      "user_prior_strength": 10.0,
+      "item_prior_strength": 40.0,
+      "inverse_regularization": 3.0,
+      "score": 0.056111,
+      "best_epoch": null,
+      "seconds": 0.4
+    }
+  ]
+}

@@ -1,0 +1,195 @@
+{
+  "task": "task3",
+  "model": "svd",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-08 10:26:46",
+  "last_update": "2026-11-08 10:56:15",
+  "runs_finished": "16 / 16",
+  "device": "cuda",
+  "best": {
+    "score": 0.894222,
+    "split_seeds": [
+      0,
+      1,
+      2
+    ],
+    "scores_by_split_seed": {
+      "0": 0.889642,
+      "1": 0.895447,
+      "2": 0.897577
+    },
+    "best_epoch_by_split_seed": {
+      "0": 4,
+      "1": 4,
+      "2": 4
+    },
+    "swept_values": {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 5.0,
+      "factor_regularization": 8.0
+    },
+    "parameters": {
+      "use_implicit_feedback": false,
+      "n_factors": 500,
+      "learning_rate": 0.00025,
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 5.0,
+      "factor_regularization": 8.0,
+      "ratings_per_batch": 512,
+      "max_epochs": 1000,
+      "early_stopping_patience": 6,
+      "refit_on_train_and_valid": true,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "user_bias_regularization": [
+      1.0,
+      3.0
+    ],
+    "item_bias_regularization": [
+      3.0,
+      5.0
+    ],
+    "factor_regularization": [
+      4.0,
+      8.0,
+      16.0
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK3_SVD",
+  "runs": [
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 3.0,
+      "factor_regularization": 4.0,
+      "score": 0.892028,
+      "best_epoch": 4,
+      "seconds": 105.4
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 3.0,
+      "factor_regularization": 8.0,
+      "score": 0.891436,
+      "best_epoch": 4,
+      "seconds": 105.4
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 3.0,
+      "factor_regularization": 16.0,
+      "score": 0.895304,
+      "best_epoch": 6,
+      "seconds": 126.2
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0,
+      "factor_regularization": 4.0,
+      "score": 0.891638,
+      "best_epoch": 4,
+      "seconds": 105.2
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0,
+      "factor_regularization": 8.0,
+      "score": 0.89105,
+      "best_epoch": 4,
+      "seconds": 105.2
+    },
+    {
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0,
+      "factor_regularization": 16.0,
+      "score": 0.894949,
+      "best_epoch": 6,
+      "seconds": 126.2
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 3.0,
+      "factor_regularization": 4.0,
+      "score": 0.890552,
+      "best_epoch": 4,
+      "seconds": 105.2
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 3.0,
+      "factor_regularization": 8.0,
+      "score": 0.890041,
+      "best_epoch": 4,
+      "seconds": 105.3
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 3.0,
+      "factor_regularization": 16.0,
+      "score": 0.893933,
+      "best_epoch": 6,
+      "seconds": 126.3
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 5.0,
+      "factor_regularization": 4.0,
+      "score": 0.890151,
+      "best_epoch": 4,
+      "seconds": 105.4
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 5.0,
+      "factor_regularization": 8.0,
+      "score": 0.889642,
+      "best_epoch": 4,
+      "seconds": 105.3
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 5.0,
+      "factor_regularization": 16.0,
+      "score": 0.893561,
+      "best_epoch": 6,
+      "seconds": 126.3
+    }
+  ],
+  "finalists": [
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 5.0,
+      "factor_regularization": 8.0,
+      "mean_score": 0.894222,
+      "scores_by_split_seed": {
+        "0": 0.889642,
+        "1": 0.895447,
+        "2": 0.897577
+      },
+      "best_epoch_by_split_seed": {
+        "0": 4,
+        "1": 4,
+        "2": 4
+      }
+    },
+    {
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 3.0,
+      "factor_regularization": 8.0,
+      "mean_score": 0.894514,
+      "scores_by_split_seed": {
+        "0": 0.890041,
+        "1": 0.895694,
+        "2": 0.897808
+      },
+      "best_epoch_by_split_seed": {
+        "0": 4,
+        "1": 4,
+        "2": 4
+      }
+    }
+  ]
+}

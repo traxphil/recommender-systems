@@ -151,7 +151,9 @@ class SasRecModel:
         return pair_scores
 
 
-def train_sasrec(task: PairChoiceTask, config: SasRecConfig) -> ModelResult:
+# refit_on_all_interactions=False: test scores from the training-split model (used by the sweeps: the refit cannot change
+# the validation score and doubles the run time)
+def train_sasrec(task: PairChoiceTask, config: SasRecConfig, refit_on_all_interactions: bool = True) -> ModelResult:
     validation_pairs = task.validation_pairs
 
     # 1) fit on the training split, early stopping on the validation pair accuracy (higher = better)
@@ -176,11 +178,12 @@ def train_sasrec(task: PairChoiceTask, config: SasRecConfig) -> ModelResult:
     valid_scores = model.score_pairs(validation_pairs)
 
     # 2) refit from scratch on every interaction for the best number of epochs -> test scores
-    del model
-    model = SasRecModel(task.training_and_validation_data, task.n_user_rows, task.n_item_rows, config)
-    for epoch in range(1, best_epoch + 1):
-        train_loss = model.train_one_epoch()
-        log(f"SASRec refit epoch {epoch:3d} | train loss {train_loss:.4f}")
+    if refit_on_all_interactions:
+        del model
+        model = SasRecModel(task.training_and_validation_data, task.n_user_rows, task.n_item_rows, config)
+        for epoch in range(1, best_epoch + 1):
+            train_loss = model.train_one_epoch()
+            log(f"SASRec refit epoch {epoch:3d} | train loss {train_loss:.4f}")
     test_scores = model.score_pairs(task.test_pairs)
 
     model.optimizer = None  # not needed after training

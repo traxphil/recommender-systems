@@ -1,0 +1,337 @@
+{
+  "task": "task3",
+  "model": "time_bias_model",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-08 09:58:51",
+  "last_update": "2026-11-08 10:00:13",
+  "runs_finished": "33 / 33",
+  "device": "cuda",
+  "best": {
+    "score": 0.887066,
+    "split_seeds": [
+      0,
+      1,
+      2
+    ],
+    "scores_by_split_seed": {
+      "0": 0.882908,
+      "1": 0.887685,
+      "2": 0.890606
+    },
+    "best_epoch_by_split_seed": {
+      "0": null,
+      "1": null,
+      "2": null
+    },
+    "swept_values": {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "bias_regularization": 3.0
+    },
+    "parameters": {
+      "temporal_biases": {
+        "n_time_bins": 30,
+        "user_period_lengths_in_days": [
+          1,
+          7,
+          30,
+          90,
+          365
+        ],
+        "drift_exponent": 0.4,
+        "time_bias_regularization": 50.0,
+        "drift_regularization": 3000.0
+      },
+      "bias_regularization": 3.0,
+      "n_iterations": 10
+    }
+  },
+  "swept_parameters": {
+    "temporal_biases.time_bias_regularization": [
+      25.0,
+      50.0,
+      100.0
+    ],
+    "temporal_biases.drift_regularization": [
+      1000.0,
+      3000.0,
+      10000.0
+    ],
+    "bias_regularization": [
+      1.0,
+      3.0,
+      5.0
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK3_TIME_BIAS_MODEL",
+  "runs": [
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "bias_regularization": 1.0,
+      "score": 0.888027,
+      "best_epoch": null,
+      "seconds": 2.6
+    },
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "bias_regularization": 3.0,
+      "score": 0.886857,
+      "best_epoch": null,
+      "seconds": 2.7
+    },
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "bias_regularization": 5.0,
+      "score": 0.888708,
+      "best_epoch": null,
+      "seconds": 2.7
+    },
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "bias_regularization": 1.0,
+      "score": 0.886055,
+      "best_epoch": null,
+      "seconds": 2.6
+    },
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "bias_regularization": 3.0,
+      "score": 0.884817,
+      "best_epoch": null,
+      "seconds": 2.6
+    },
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "bias_regularization": 5.0,
+      "score": 0.886607,
+      "best_epoch": null,
+      "seconds": 2.6
+    },
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "bias_regularization": 1.0,
+      "score": 0.886597,
+      "best_epoch": null,
+      "seconds": 2.6
+    },
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "bias_regularization": 3.0,
+      "score": 0.885331,
+      "best_epoch": null,
+      "seconds": 2.5
+    },
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "bias_regularization": 5.0,
+      "score": 0.887097,
+      "best_epoch": null,
+      "seconds": 2.6
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "bias_regularization": 1.0,
+      "score": 0.886473,
+      "best_epoch": null,
+      "seconds": 2.6
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "bias_regularization": 3.0,
+      "score": 0.88507,
+      "best_epoch": null,
+      "seconds": 2.6
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "bias_regularization": 5.0,
+      "score": 0.886692,
+      "best_epoch": null,
+      "seconds": 2.6
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "bias_regularization": 1.0,
+      "score": 0.884379,
+      "best_epoch": null,
+      "seconds": 2.6
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "bias_regularization": 3.0,
+      "score": 0.882908,
+      "best_epoch": null,
+      "seconds": 2.5
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "bias_regularization": 5.0,
+      "score": 0.884457,
+      "best_epoch": null,
+      "seconds": 2.5
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "bias_regularization": 1.0,
+      "score": 0.885288,
+      "best_epoch": null,
+      "seconds": 2.6
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "bias_regularization": 3.0,
+      "score": 0.883781,
+      "best_epoch": null,
+      "seconds": 2.5
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "bias_regularization": 5.0,
+      "score": 0.885299,
+      "best_epoch": null,
+      "seconds": 2.5
+    },
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "bias_regularization": 1.0,
+      "score": 0.88813,
+      "best_epoch": null,
+      "seconds": 2.5
+    },
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "bias_regularization": 3.0,
+      "score": 0.886618,
+      "best_epoch": null,
+      "seconds": 2.6
+    },
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "bias_regularization": 5.0,
+      "score": 0.888122,
+      "best_epoch": null,
+      "seconds": 2.2
+    },
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "bias_regularization": 1.0,
+      "score": 0.885989,
+      "best_epoch": null,
+      "seconds": 2.2
+    },
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "bias_regularization": 3.0,
+      "score": 0.884415,
+      "best_epoch": null,
+      "seconds": 2.2
+    },
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "bias_regularization": 5.0,
+      "score": 0.885843,
+      "best_epoch": null,
+      "seconds": 2.1
+    },
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "bias_regularization": 1.0,
+      "score": 0.887243,
+      "best_epoch": null,
+      "seconds": 2.2
+    },
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "bias_regularization": 3.0,
+      "score": 0.885627,
+      "best_epoch": null,
+      "seconds": 2.1
+    },
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "bias_regularization": 5.0,
+      "score": 0.887019,
+      "best_epoch": null,
+      "seconds": 2.1
+    }
+  ],
+  "finalists": [
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "bias_regularization": 3.0,
+      "mean_score": 0.887066,
+      "scores_by_split_seed": {
+        "0": 0.882908,
+        "1": 0.887685,
+        "2": 0.890606
+      },
+      "best_epoch_by_split_seed": {
+        "0": null,
+        "1": null,
+        "2": null
+      }
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "bias_regularization": 3.0,
+      "mean_score": 0.887814,
+      "scores_by_split_seed": {
+        "0": 0.883781,
+        "1": 0.888274,
+        "2": 0.891386
+      },
+      "best_epoch_by_split_seed": {
+        "0": null,
+        "1": null,
+        "2": null
+      }
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "bias_regularization": 1.0,
+      "mean_score": 0.888169,
+      "scores_by_split_seed": {
+        "0": 0.884379,
+        "1": 0.88841,
+        "2": 0.891719
+      },
+      "best_epoch_by_split_seed": {
+        "0": null,
+        "1": null,
+        "2": null
+      }
+    }
+  ]
+}
