@@ -8,31 +8,71 @@ CUDA available
 
 ### Sources:
 
-# MAIN Sources:
+# Main Sources:
 [1] Julian McAuley, "Personalized Machine Learning", (PML)
 [2] Yehuda Koren, "The BellKor Solution to the Netflix Grand Prize", August 2009, (Korr 2009), https://www2.seas.gwu.edu/~simhaweb/champalg/cf/papers/KorenBellKor2009.pdf
 [3] Yehuda Koren and Robert Bell, "Advances in Collaborative Filtering", https://datajobs.com/data-science-repo/Collaborative-Filtering-%5BKoren-and-Bell%5D.pdf
 
 
-# Pytorch Workflow Doucmentation: https://www.learnpytorch.io/01_pytorch_workflow/
-# Pytorch Tutorial Video: https://www.youtube.com/watch?v=V_xro1bcAuA (at ~ 4:20:00 / Chapter 34+)
+# Specific Model Sources:
+[4] Yehuda Koren, "Factorization Meets the Neighborhood: a Multifaceted Collaborative Filtering Model", KDD 2008, (Koren 2008), https://doi.org/10.1145/1401890.1401944
+    -> SVD++ (Tasks 1, 3), integrated model: SVD++ + learned neighbourhood (Task 1)
+[5] Yehuda Koren, "Collaborative Filtering with Temporal Dynamics", KDD 2009, (Koren 2009), https://doi.org/10.1145/1557019.1557072
+    -> time-aware bias model, timeSVD++, time-decayed item kNN (Task 3)
+[6] Yehuda Koren, "Factor in the Neighbors: Scalable and Accurate Collaborative Filtering", ACM TKDD 4(1), 2010, (Koren 2010), https://doi.org/10.1145/1644873.1644874
+    -> item kNN on the bias model's residuals, shrunk similarities (Tasks 1, 3)
+[7] Badrul Sarwar, George Karypis, Joseph Konstan and John Riedl, "Item-based Collaborative Filtering Recommendation Algorithms", WWW 2001, (Sarwar et al. 2001), https://archives.iw3c2.org/www10/cdrom/papers/519/sdm2.html
+    -> item-based collaborative filtering, adjusted cosine similarity (item kNN)
+[8] Yi Ding and Xue Li, "Time Weight Collaborative Filtering", CIKM 2005, (Ding & Li 2005), https://doi.org/10.1145/1099554.1099689
+    -> time-decayed item kNN (Task 3)
+[9] Steffen Rendle, "Factorization Machines", ICDM 2010, (Rendle 2010), https://doi.org/10.1109/ICDM.2010.127
+    -> factorization machine (Task 1), time-aware factorization machine (Task 3)
+[10] Christoph Freudenthaler, Lars Schmidt-Thieme and Steffen Rendle, "Bayesian Factorization Machines", NIPS Workshop on Sparse Representation and Low-rank Approximation 2011, (Freudenthaler et al. 2011)
+    -> Bayesian factorization machine (Task 1)
+[11] Steffen Rendle, "Factorization Machines with libFM", ACM TIST 3(3), 2012, (Rendle 2012), https://doi.org/10.1145/2168752.2168771
+    -> Bayesian factorization machine: Gibbs sampling / MCMC learning (Task 1)
+[12] Suvash Sedhain, Aditya Krishna Menon, Scott Sanner and Lexing Xie, "AutoRec: Autoencoders Meet Collaborative Filtering", WWW 2015, (Sedhain et al. 2015), https://doi.org/10.1145/2740908.2742726
+    -> I-AutoRec (Task 1)
+[13] Harald Steck, "Embarrassingly Shallow Autoencoders for Sparse Data", WWW 2019, (Steck 2019), https://arxiv.org/abs/1905.03375
+    -> EASE (Tasks 2, 4, 5)
+[14] Dawen Liang, Rahul G. Krishnan, Matthew D. Hoffman and Tony Jebara, "Variational Autoencoders for Collaborative Filtering", WWW 2018, (Liang et al. 2018), https://arxiv.org/abs/1802.05814
+    -> Mult-VAE (Tasks 2, 4, 5)
+[15] Wang-Cheng Kang and Julian McAuley, "Self-Attentive Sequential Recommendation", ICDM 2018, (Kang & McAuley 2018), https://arxiv.org/abs/1808.09781
+    -> SASRec (Task 5)
 
 
-- Netflix Prize Winner Model: https://www2.seas.gwu.edu/~simhaweb/champalg/cf/papers/KorenBellKor2009.pdf
-Source: Koren 2008 (KDD), SVD++; also Koren, Bell & Volinsky 2009, "Additional input sources"
-https://datajobs.com/data-science-repo/Collaborative-Filtering-%5BKoren-and-Bell%5D.pdf
-https://surprise.readthedocs.io/en/stable/prediction_algorithms.html
-https://surprise.readthedocs.io/en/stable/matrix_factorization.html
-https://www.cs.columbia.edu/~blei/fogm/2023F/readings/KorenBellVolinsky2009.pdf
-https://en.wikipedia.org/wiki/Matrix_factorization_(recommender_systems)
-https://surprise.readthedocs.io/en/stable/knn_inspired.html
-https://archives.iw3c2.org/www10/cdrom/papers/519/sdm2.html
-https://d2l.ai/chapter_recommender-systems/fm.html
-https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingRegressor.html
-https://scikit-learn.org/stable/api/sklearn.linear_model.html
-https://xgboost.readthedocs.io/en/stable/tutorials/model.html
-https://lightgbm.readthedocs.io/en/latest/Features.html
-https://docs.pytorch.org/docs/2.0/generated/torch.optim.Adam.html
+# Extended Theory Sources:
+[16] Yehuda Koren, Robert Bell and Chris Volinsky, "Matrix Factorization Techniques for Recommender Systems", IEEE Computer 42(8), 2009, (Koren, Bell & Volinsky 2009), https://www.cs.columbia.edu/~blei/fogm/2023F/readings/KorenBellVolinsky2009.pdf
+    -> section "Additional input sources" (implicit feedback in SVD++)
+[17] Santosh Kabbur, Xia Ning and George Karypis, "FISM: Factored Item Similarity Models for Top-N Recommender Systems", KDD 2013, (FISM), https://doi.org/10.1145/2487575.2487589
+    -> the |N(u)|^-1/2 normalised implicit feedback (PML Sec. 5.3.2)
+[18] Steffen Rendle, "Scaling Factorization Machines to Relational Data", PVLDB 6(5), 2013, (Rendle 2013), https://doi.org/10.14778/2535573.2488340
+    -> relation blocks: the per-user / per-item features of the Bayesian factorization machine stored once
+[19] Steffen Rendle, Li Zhang and Yehuda Koren, "On the Difficulty of Evaluating Baselines: A Study on Recommender Systems", arXiv 2019, (Rendle et al. 2019), https://arxiv.org/abs/1905.01395
+    -> well-tuned (Bayesian) factorization models as strong rating predictors
+[20] Ashish Vaswani et al., "Attention Is All You Need", NeurIPS 2017, (Vaswani et al. 2017), https://arxiv.org/abs/1706.03762
+    -> transformer encoder blocks of the rating transformer (Task 1) and SASRec (Task 5)
+[21] Fei Sun et al., "BERT4Rec: Sequential Recommendation with Bidirectional Encoder Representations from Transformer", CIKM 2019, (BERT4Rec), https://arxiv.org/abs/1904.06690
+    -> related transformer recommender (the rating transformer is a set version without positions)
+
+
+# Library Documentation and Workflows:
+- PyTorch workflow documentation: https://www.learnpytorch.io/01_pytorch_workflow/
+- PyTorch tutorial video: https://www.youtube.com/watch?v=V_xro1bcAuA (at ~ 4:20:00 / Chapter 34+)
+- PyTorch Adam: https://docs.pytorch.org/docs/2.0/generated/torch.optim.Adam.html
+- Surprise, prediction algorithms: https://surprise.readthedocs.io/en/stable/prediction_algorithms.html
+- Surprise, matrix factorization: https://surprise.readthedocs.io/en/stable/matrix_factorization.html
+- Surprise, k-NN inspired algorithms: https://surprise.readthedocs.io/en/stable/knn_inspired.html
+- scikit-learn StackingRegressor: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingRegressor.html
+- scikit-learn linear models: https://scikit-learn.org/stable/api/sklearn.linear_model.html
+- XGBoost, introduction to boosted trees: https://xgboost.readthedocs.io/en/stable/tutorials/model.html
+- LightGBM features: https://lightgbm.readthedocs.io/en/latest/Features.html
+- myFM (Bayesian factorization machines): https://myfm.readthedocs.io
+
+
+# Additional Web Sources:
+- Wikipedia, "Matrix factorization (recommender systems)": https://en.wikipedia.org/wiki/Matrix_factorization_(recommender_systems)
+- Dive into Deep Learning, "Factorization Machines": https://d2l.ai/chapter_recommender-systems/fm.html
 
 
 
@@ -97,12 +137,246 @@ included in /submission.
 ### Library & Helper Functions
 
 
-### Loading and Processing of data
+### Loading and Processing of data - - - - - - - - - - - - - - - - - - - - - - - -
 
-Why I didn't use one super large matrix
+The loading code is in lib/data_loading.py and is the same for Task 1 and Task 3 (load_rating_prediction_task):
+
+-   Both CSV files are read as plain string columns. Every user and book id gets a row number in the order it first appears in
+    the training file. Row 0 is reserved for ids that only appear in the test file (Task 1 has none). These row numbers are the
+    indices into every embedding table and sparse matrix.
+
+-   The ratings are kept as aligned arrays in a RatingData object: user_rows[k], item_rows[k] and ratings[k] describe rating k
+    (Task 3 also has days[k] / timestamps[k]). A RatingTask bundles the training split, the validation split, both together,
+    the test pairs and the number of user / book rows.
+
+-   10 % of the training file is held out at random as the validation split (VALIDATION_FRACTION, fixed SPLIT_SEED). No model
+    fitted on the training split ever sees these ratings, also not through its biases, its N(u) or its book similarities. This
+    keeps the validation MSE honest, so it can be used for early stopping, for the sweeps and as the training data of the blend.
+
+-   Time is only loaded if the test file has a timestamp column. The Task 1 test file has none, so days and timestamps are None
+    in Task 1 and no model can use time by accident.
+
+-   When a model needs all ratings of a user or of a book at once (SVD++'s N(u), the kNN residuals, AutoRec, the Bayesian FM
+    features), it builds a scipy sparse matrix with one shared helper (sparse_matrix_from_entries: built as COO, used as CSR).
+
+Why I didn't use one super large matrix:
+The full user x book matrix would have 30,909 x 51,007 = 1.58 billion cells (6.3 GB as float32), but only 1.86 million of them
+(0.12 %) are filled. Apart from the memory, a dense matrix would also mix up "not rated" with "rated 0 stars", which is a real
+rating here. So the ratings stay a list of (user, book, rating) entries, the models train on mini-batches of these entries, and
+sparse matrices are only built where a model really needs whole rows.
+
+
+### Central Logic of assignment1.py - - - - - - - - - - - - - - - - - - - - - - - -
+
+assignment1.py connects the data, the settings and the models; it contains no model code itself. For every task it has:
+
+-   the file paths and a load_taskN() function,
+
+-   one small train_taskN_<model>() function per sub-model, which only calls the model's training function with its settings
+    from lib/config.py. All hyperparameters live in config.py, so this file reproduces the submitted predictions,
+
+-   a registry TASKN_SUB_MODEL_TRAINERS (model name -> training function) and train_taskN_models(), which trains every model the
+    submitted blend uses,
+
+-   train_taskN_blender(), write_taskN_predictions() and run_taskN(), which runs the whole task from loading to the prediction file.
+
+Every training function returns the same ModelResult: the model, its training history, its validation predictions and its test
+predictions. The predictions are all the blender needs, which is why the notebooks store every sub-model in
+trained_models/<task>/<model>.pt and can redo the blend after a kernel restart without retraining anything.
+
+
+### Training Pipeline - - - - - - - - - - - - - - - - - - - - - - - -
+
+Every sub-model goes through the same four steps:
+
+    1. fit on the 90 % training split
+    2. predict the validation ratings -> these predictions are the training data of the blender
+    3. refit from scratch on 100 % of the training file (training + validation split)
+    4. predict the test pairs -> the blender combines these
+
+The refit gives the final models 11 % more ratings. The blender learned in step 2 is then applied to the predictions of step 4,
+the same "probe -> quiz" scheme the Netflix Prize teams used for their blends [2].
+
+For the PyTorch models these steps are one shared function (fit_refit_and_predict in lib/torch_trainer.py):
+
+-   Mini-batches of single ratings in random order, Adam, loss = MSE + L2 penalty. Each user's / book's penalty is divided by its
+    number of ratings, so over one epoch every parameter is penalised about once, as in the usual sum-of-squares objective [1].
+
+-   The biases start at the closed-form bias model and the factors at small random values, so epoch 0 already equals the bias
+    baseline and training can only improve on it.
+
+-   After every epoch the validation MSE is measured. The best weights are kept, and training stops after early_stopping_patience
+    epochs without improvement. Early stopping was the main reason I moved from Surprise to PyTorch.
+
+-   The refit trains a fresh model for exactly the best number of epochs, since there is no validation data left to stop on.
+
+The models without gradient descent (bias model, item kNN, zero model, Bayesian FM) and AutoRec (own training loop) follow the
+same four steps with their own code. The sweeps in /sweep call exactly these training functions, with the refit switched off.
 
 
 ### Sweeping for Hyperparameter Identification
+
+
+
+# #########################################################################################
+# Task 1 Description
+# #########################################################################################
+
+### Task 1 General Info - - - - - - - - - - - - - - - - - - - - - - - -
+
+Task 1 asks for the star rating (0 - 5) of 20,000 (user, book) pairs in task_1_test.csv and is scored by the MSE. The training file
+tasks_1_2_train.csv has 1,861,643 ratings from 30,909 users on 51,007 books, and every test user and book also appears in it. The
+data is sparse (on average 60 ratings per user and 36 per book) and skewed towards high ratings (mean 4.0; 40 % are 5 stars).
+
+Two things shaped the models:
+
+-   The test file has no timestamps, so Task 1 uses no time information at all (unlike Task 3).
+
+-   0 stars are only 1.5 % of the ratings but cause about 21 % of the bias model's squared error. On Goodreads a 0 mostly means
+    "shelved without a rating", which a rating model cannot explain -> a separate zero model.
+
+The final prediction is a blend of ten sub-models (TASK1_BLENDED_MODELS in lib/config.py). The formulas of every model are in
+task1_ensemble.ipynb; the numbers in brackets refer to the sources above.
+
+
+### Model 1: Bias Model - - - - - - - - - - - - - - - - - - - - - - - -
+
+Every rating is the global mean plus a user offset and a book offset; this simple baseline already explains a large part of what
+is predictable, and almost every other model starts from it.
+
+r(u,i) = mu + b_u + b_i, fitted in closed form (alternating exact updates) with one lambda per side: 1 for users, 5 for books
+(the users' offsets vary much more than the books'). The same fit is the baseline of the item kNN (see the ensemble). [1], [4]
+
+
+### Model 2: SVD - - - - - - - - - - - - - - - - - - - - - - - -
+
+Users and books get k latent factors whose dot product captures how much a user likes a kind of book on top of the biases; this
+is the standard latent factor model of [1] Ch. 5 and the backbone of the Netflix Prize solutions.
+
+r(u,i) = mu + b_u + b_i + q_i . p_u with k = 120 (learning rate 2.5e-4, batch 512, lambda 8 for the factors). The sweep of 7 Nov
+(222 runs) showed that many factors with little regularisation, plus early stopping, work best. [1], [16]
+
+
+### Model 3: SVD++ - - - - - - - - - - - - - - - - - - - - - - - -
+
+A user is also described by which books they rated, not only by how they rated them (implicit feedback); this helps users with
+few ratings, and SVD++ was the strongest single model of the Netflix Prize.
+
+r(u,i) = mu + b_u + b_i + q_i . (p_u + |N(u)|^-1/2 * sum of y_j over the books j in N(u)), k = 500. N(u) comes from the ratings the
+model trains on. I also tried adding the test pairs to N(u), as the Netflix teams did with the qualifying set; it gave no gain
+(0.7508 vs 0.7506 in a small check), so it is switched off. [3], [4], [16], [17]
+
+
+### Model 4: Item-item kNN on the bias residuals - - - - - - - - - - - - - - - - - - - - - - - -
+
+A rating is predicted from how the user rated the most similar books, relative to the baseline; this captures local "people who
+liked X more than expected also liked Y" structure that the low-rank factor models smooth out.
+
+The similarity of two books is the shrunk cosine of their residual columns (rating - bias model); the 100 most similar books are
+kept per book. The prediction is the baseline plus a similarity-weighted average of the user's residuals on these neighbours.
+The similarities are computed on the CPU in blocks of 2,000 books, so the full book x book matrix never exists. [1], [6], [7]
+
+
+### Model 5: Zero Model - - - - - - - - - - - - - - - - - - - - - - - -
+
+This model estimates the probability that a rating is 0 stars, because a 0 behaves like a separate "shelved, not rated" event
+that the rating models cannot predict.
+
+A logistic regression on the share of zeros of the user and of the book (shrunk towards the global share when they have few
+ratings) and on their numbers of ratings. For the training ratings the rating itself is left out of these counts, otherwise the
+feature would contain the answer. The model predicts no rating: the blender gets P(0) as one more input and can pull a
+prediction towards 0 where a zero is likely.
+
+
+### Model 6: Factorization Machine - - - - - - - - - - - - - - - - - - - - - - - -
+
+A factorization machine generalises SVD to any set of categorical features, so besides user and book I could add the user's
+activity and the book's popularity and let all of them interact (e.g. a user's taste for popular vs. niche books).
+
+Four fields with one active value each: user | book | user activity bucket | book popularity bucket (deciles of the number of
+ratings). r = mu + the weights of the four values + all pairwise dot products of their factors. k = 120, learning rate 5e-4,
+batch 256 (sweep 14 Nov). [1] Sec. 6.1, [9]
+
+
+### Model 7: Bayesian Factorization Machine - - - - - - - - - - - - - - - - - - - - - - - -
+
+Instead of one optimum, the prediction is the average over many parameter samples drawn by Gibbs sampling; there is no learning
+rate or lambda to tune and it hardly overfits, and well-run Bayesian factorization models are among the strongest rating
+predictors [19].
+
+Features: user, book, the user's rated books N(u) and the book's raters N(i), both weighted with |.|^-1/2 as in SVD++. Implemented
+with myFM; its relation blocks store the features of a user or book once instead of copying them into every rating [18]. Rank 32,
+20 burn-in draws + 180 kept draws, averaged on the fly. It runs on one CPU core (about 6 s per draw). [10], [11], [18]
+
+
+### Model 8: Rating Transformer - - - - - - - - - - - - - - - - - - - - - - - -
+
+The asked book attends over the books the user has rated (each one a book embedding plus an embedding of the stars given); this is
+a learned, non-linear mix of the kNN idea (attention = learned book similarity) and SVD++ (the history describes the user).
+
+A transformer encoder over [a query token for the asked book, up to 200 of the user's rated books], without positions because
+Task 1 has no order. The asked book is always hidden from its own history, so a training rating can never be copied.
+r = mu + b_u + b_i + w . h_query; d = 64, 2 blocks, 2 heads. The output layer starts at 0, so epoch 0 is the bias model.
+[15], [20], [21]
+
+
+### Model 9: I-AutoRec - - - - - - - - - - - - - - - - - - - - - - - -
+
+An autoencoder compresses each book's vector of ratings and reconstructs it; this gives a non-linear model whose errors differ
+from those of the factor models [12].
+
+h_i = tanh(V x_i + b), r(u,i) = baseline(u,i) + (W h_i)_u, 500 hidden units. As in the paper it worked badly on this data
+(0.824 vs 0.763 for the bias model), so I changed three things: it models the residuals of the bias model, it uses tanh and no
+output bias, and it trains masked (25 % of a book's ratings are hidden from its input and only those are predicted), so a rating
+never predicts itself. [12]
+
+
+### Model 10: Integrated Model - - - - - - - - - - - - - - - - - - - - - - - -
+
+Koren's integrated model adds a neighbourhood to SVD++ whose weights are learned from the ratings instead of fixed similarities,
+so the global factors and the local book-to-book effects are fitted together.
+
+r(u,i) = SVD++ + |R(i;u)|^-1/2 * sum of (r_uj - b_uj) w_ij + |N(i;u)|^-1/2 * sum of c_ij, both over the user's books j among the
+100 neighbours of i (found with the item kNN's similarity). w_ij and c_ij start at 0, so epoch 0 is SVD++. Same settings as
+SVD++ (k = 500, learning rate 2.5e-4, batch 512). [4] Sec. 5
+
+
+### Ensemble Logic Task 1 - - - - - - - - - - - - - - - - - - - - - - - -
+
+The sub-models are combined by stacking: a small regression model learns how much to trust each of them.
+
+-   Inputs: the validation predictions of all ten sub-models (fitted on the training split only, so they predict ratings they
+    have never seen), including P(0) of the zero model.
+
+-   Blender: ridge regression (alpha 1), the submitted one. The alternative is LightGBM with the numbers of ratings of user and book
+    as two extra inputs, which lets the weights depend on how much is known about them.
+
+-   Score: 5-fold out-of-fold predictions on the validation ratings, so every validation rating is predicted by a blender that
+    never saw it.
+
+-   Test: the blender fitted on all validation ratings is applied to the test predictions of the sub-models refit on 100 % and
+    clipped to 0 - 5.
+
+The bias model and the item kNN share exactly the same baseline fit (TASK1_SHARED_BASELINE_BIASES). The ridge weights are about
+-3 for the bias model and +3 for the kNN, so the blend effectively uses their difference, which is the kNN's neighbourhood
+correction. With different baselines the blend got worse (0.7302 -> 0.7368).
+
+Validation MSE (10 % split, seed 0):
+
+    bias model                       0.7628
+    SVD                              0.7486
+    SVD++                            0.7432   (mean of 3 validation splits)
+    item kNN                         0.756
+    factorization machine            0.7515
+    ridge blend before the newer models were added: 0.7302 (out-of-fold)
+
+    first checks of the newer models (smaller versions on the CPU, before tuning):
+    Bayesian FM (rank 32, 100 draws) 0.7255
+    integrated model (k = 32)        0.7366
+    AutoRec (hidden 200)             0.7506
+    rating transformer (d = 32)      0.7590   (after 4 epochs, still improving)
+    ridge blend of SVD++, Bayesian FM and the integrated model (all k / rank 32): 0.7147 (5-fold cross-validated)
+
 
 ### 
 

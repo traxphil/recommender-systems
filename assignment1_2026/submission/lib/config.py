@@ -205,10 +205,23 @@ TASK1_INTEGRATED_MODEL = IntegratedModelConfig(
 )
 
 # ---- blenders ----------------------------------------------------------------------------
-# check 14 Nov, 5-fold cross-validated ridge on the validation predictions of the CPU versions above (k / rank 32):
-# SVD++ alone 0.7503 | + Bayesian FM 0.7245 | + integrated model 0.7147 | + AutoRec 0.7147 (adds nothing on top of those two)
-TASK1_BLENDED_MODELS = ("bias_model", "svd", "svdpp", "item_knn", "zero_model", "factorization_machine",
-                        "bayesian_factorization_machine", "rating_transformer", "autorec", "integrated_model")
+# which sub-models the blend combines: True = in the blend, False = left out (still trained and stored -> can be switched back on)
+# ensemble sweep 14 Nov (sweep/task1_ensemble_sweep.ipynb, all ten models trained on the GPU), out-of-fold MSE of the ridge:
+# blend of all ten 0.71118 (before the newer models: 0.7302); dropping the zero model, FM, AutoRec and SVD costs 0.00016 -> 0.71134
+# (without them: Bayesian FM +0.0137, bias model + item kNN +0.0037, integrated model +0.0026, SVD++ +0.0013, transformer +0.0009)
+TASK1_BLEND_MODEL_FLAGS = {
+    "bias_model": True,
+    "svd": False,
+    "svdpp": True,
+    "item_knn": True,                       # bias model and item kNN only together: the blend uses their difference
+    "zero_model": False,
+    "factorization_machine": False,
+    "bayesian_factorization_machine": True,
+    "rating_transformer": True,
+    "autorec": False,
+    "integrated_model": True,
+}
+TASK1_BLENDED_MODELS = tuple(model_name for model_name, is_blended in TASK1_BLEND_MODEL_FLAGS.items() if is_blended)
 
 # learned weighted average of the sub-model predictions
 TASK1_RIDGE_BLENDER = BlenderConfig(
@@ -285,8 +298,15 @@ TASK2_MULT_VAE = MultVaeConfig(
 )
 
 # ---- pair blender --------------------------------------------------------------------------
+# which sub-models the blend combines: True = in the blend, False = left out (still trained and stored -> can be switched back on)
+TASK2_PAIR_BLEND_MODEL_FLAGS = {
+    "popularity": True,
+    "item_cosine": True,
+    "ease": True,
+    "mult_vae": True,
+}
 TASK2_PAIR_BLENDER = PairBlenderConfig(
-    combined_models=("popularity", "item_cosine", "ease", "mult_vae"),
+    combined_models=tuple(model_name for model_name, is_blended in TASK2_PAIR_BLEND_MODEL_FLAGS.items() if is_blended),
     use_time_features=False,                # the Task 2 test file has no timestamp
     activity_window_days=30,                # not used without time features
     n_folds=5,
@@ -438,7 +458,8 @@ TASK3_TIME_ZERO_MODEL = TimeZeroModelConfig(
 
 # ---- time-aware factorization machine ----------------------------------------------------
 # = TASK1_FACTORIZATION_MACHINE settings (starting point, not tuned on Task 3) + one-hot calendar fields of the timestamp
-# hour_of_day: all timestamps lie in 05:00 - 09:59 UTC (dates + an offset) -> compare the validation MSE without it
+# hour_of_day: all timestamps lie in 05:00 - 09:59 UTC (dates + an offset) -> little real signal
+# sweep 14 Nov, calendar fields: all four 0.89674, weekday + month + year 0.89555, month + year 0.89413, year 0.89543
 TASK3_TIME_FACTORIZATION_MACHINE = TimeFactorizationMachineConfig(
     n_factors=120,
     n_activity_buckets=10,
@@ -450,12 +471,25 @@ TASK3_TIME_FACTORIZATION_MACHINE = TimeFactorizationMachineConfig(
     early_stopping_patience=6,
     refit_on_train_and_valid=True,
     seed=0,
-    calendar_fields=("hour_of_day", "weekday", "month", "year"),
+    calendar_fields=("month", "year"),
 )
 
 # ---- blenders ----------------------------------------------------------------------------
-TASK3_BLENDED_MODELS = ("bias_model", "svd", "svdpp", "item_knn", "zero_model",
-                        "time_bias_model", "time_svdpp", "time_item_knn", "time_zero_model", "time_factorization_machine")
+# which sub-models the blend combines: True = in the blend, False = left out (still trained and stored -> can be switched back on)
+# (only together: bias model + item kNN + time-decayed kNN share one baseline; zero model + time zero model enter as a pair)
+TASK3_BLEND_MODEL_FLAGS = {
+    "bias_model": True,
+    "svd": True,
+    "svdpp": True,
+    "item_knn": True,
+    "zero_model": True,
+    "time_bias_model": True,
+    "time_svdpp": True,
+    "time_item_knn": True,
+    "time_zero_model": True,
+    "time_factorization_machine": True,
+}
+TASK3_BLENDED_MODELS = tuple(model_name for model_name, is_blended in TASK3_BLEND_MODEL_FLAGS.items() if is_blended)
 
 # learned weighted average of the sub-model predictions
 TASK3_RIDGE_BLENDER = BlenderConfig(
@@ -549,8 +583,16 @@ TASK4_MULT_VAE = MultVaeConfig(
 )
 
 # ---- pair blender --------------------------------------------------------------------------
+# which sub-models the blend combines: True = in the blend, False = left out (still trained and stored -> can be switched back on)
+TASK4_PAIR_BLEND_MODEL_FLAGS = {
+    "popularity": True,
+    "item_cosine": True,
+    "ease": True,
+    "time_ease": True,
+    "mult_vae": True,
+}
 TASK4_PAIR_BLENDER = PairBlenderConfig(
-    combined_models=("popularity", "item_cosine", "ease", "time_ease", "mult_vae"),
+    combined_models=tuple(model_name for model_name, is_blended in TASK4_PAIR_BLEND_MODEL_FLAGS.items() if is_blended),
     use_time_features=True,
     activity_window_days=30,                # "popularity around t" = interactions with the book within +- 30 days
     n_folds=5,
@@ -628,8 +670,18 @@ TASK5_SASREC = SasRecConfig(
 )
 
 # ---- pair blender --------------------------------------------------------------------------
+# which sub-models the blend combines: True = in the blend, False = left out (still trained and stored -> can be switched back on)
+TASK5_PAIR_BLEND_MODEL_FLAGS = {
+    "popularity": True,
+    "item_cosine": True,
+    "transition": True,
+    "ease": True,
+    "time_ease": True,
+    "mult_vae": True,
+    "sasrec": True,
+}
 TASK5_PAIR_BLENDER = PairBlenderConfig(
-    combined_models=("popularity", "item_cosine", "transition", "ease", "time_ease", "mult_vae", "sasrec"),
+    combined_models=tuple(model_name for model_name, is_blended in TASK5_PAIR_BLEND_MODEL_FLAGS.items() if is_blended),
     use_time_features=True,                 # t = the day of the user's last interaction ("now")
     activity_window_days=30,
     n_folds=5,

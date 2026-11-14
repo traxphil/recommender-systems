@@ -1,0 +1,91 @@
+{
+  "task": "task2",
+  "model": "mult_vae",
+  "metric": "validation pair accuracy (higher is better)",
+  "status": "finished",
+  "started": "2026-11-14 10:52:19",
+  "last_update": "2026-11-14 11:06:58",
+  "runs_finished": "6 / 6",
+  "device": "cuda",
+  "best": {
+    "score": 0.857738,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": 17,
+    "swept_values": {
+      "input_dropout": 0.3,
+      "kl_weight_max": 0.3
+    },
+    "parameters": {
+      "hidden_dimension": 600,
+      "latent_dimension": 200,
+      "input_dropout": 0.3,
+      "kl_weight_max": 0.3,
+      "kl_annealing_epochs": 20,
+      "learning_rate": 0.001,
+      "users_per_batch": 500,
+      "max_epochs": 200,
+      "early_stopping_patience": 10,
+      "max_items": 60000,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "input_dropout": [
+      0.3,
+      0.5
+    ],
+    "kl_weight_max": [
+      0.1,
+      0.2,
+      0.3
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK2_MULT_VAE",
+  "runs": [
+    {
+      "input_dropout": 0.3,
+      "kl_weight_max": 0.1,
+      "score": 0.856143,
+      "best_epoch": 14,
+      "seconds": 127.7
+    },
+    {
+      "input_dropout": 0.3,
+      "kl_weight_max": 0.2,
+      "score": 0.856739,
+      "best_epoch": 14,
+      "seconds": 126.3
+    },
+    {
+      "input_dropout": 0.3,
+      "kl_weight_max": 0.3,
+      "score": 0.857738,
+      "best_epoch": 17,
+      "seconds": 146.2
+    },
+    {
+      "input_dropout": 0.5,
+      "kl_weight_max": 0.1,
+      "score": 0.85401,
+      "best_epoch": 17,
+      "seconds": 144.4
+    },
+    {
+      "input_dropout": 0.5,
+      "kl_weight_max": 0.2,
+      "score": 0.856154,
+      "best_epoch": 21,
+      "seconds": 172.9
+    },
+    {
+      "input_dropout": 0.5,
+      "kl_weight_max": 0.3,
+      "score": 0.856637,
+      "best_epoch": 20,
+      "seconds": 160.1
+    }
+  ]
+}

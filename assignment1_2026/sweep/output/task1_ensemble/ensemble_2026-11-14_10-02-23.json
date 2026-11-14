@@ -1,0 +1,278 @@
+{
+  "task": "task1",
+  "stored_models": [
+    "bias_model",
+    "svd",
+    "svdpp",
+    "item_knn",
+    "zero_model",
+    "factorization_machine",
+    "bayesian_factorization_machine",
+    "rating_transformer",
+    "autorec",
+    "integrated_model"
+  ],
+  "missing_models": [],
+  "fold_seeds": [
+    0,
+    1,
+    2
+  ],
+  "base_blender": "BlenderConfig(method='ridge', blended_models=('bias_model', 'svd', 'svdpp', 'item_knn', 'zero_model', 'factorization_machine', 'bayesian_factorization_machine', 'rating_transformer', 'autorec', 'integrated_model'), use_count_features=False, n_folds=5, ridge_alpha=1.0, lightgbm_n_estimators=0, lightgbm_learning_rate=0.0, lightgbm_num_leaves=0, lightgbm_min_child_samples=0, seed=0, use_time_features=False, activity_window_days=30)",
+  "single": {
+    "single_models": {
+      "bias_model": 0.7626550197601318,
+      "svd": 0.7485597133636475,
+      "svdpp": 0.7430990934371948,
+      "item_knn": 0.7540892958641052,
+      "factorization_machine": 0.7514910697937012,
+      "bayesian_factorization_machine": 0.7272139191627502,
+      "rating_transformer": 0.7580022811889648,
+      "autorec": 0.7510790824890137,
+      "integrated_model": 0.7364761233329773
+    },
+    "all_models": 0.7111762971627527
+  },
+  "drop_one": [
+    {
+      "without": [
+        "bayesian_factorization_machine"
+      ],
+      "change": 0.013654067378345541,
+      "standard_error": 0.0006535668775233696
+    },
+    {
+      "without": [
+        "bias_model",
+        "item_knn"
+      ],
+      "change": 0.0037180636538288914,
+      "standard_error": 0.0002742136163540659
+    },
+    {
+      "without": [
+        "integrated_model"
+      ],
+      "change": 0.002586139660657774,
+      "standard_error": 0.0002253380458698049
+    },
+    {
+      "without": [
+        "svdpp"
+      ],
+      "change": 0.0013140527030012204,
+      "standard_error": 0.00016376788457833028
+    },
+    {
+      "without": [
+        "rating_transformer"
+      ],
+      "change": 0.0008649785610244439,
+      "standard_error": 0.00014058391424485436
+    },
+    {
+      "without": [
+        "svd"
+      ],
+      "change": 5.181499660002217e-05,
+      "standard_error": 4.1161951772949226e-05
+    },
+    {
+      "without": [
+        "autorec"
+      ],
+      "change": 3.8289651898455816e-05,
+      "standard_error": 2.9480207609547483e-05
+    },
+    {
+      "without": [
+        "factorization_machine"
+      ],
+      "change": -5.533475805440636e-06,
+      "standard_error": 6.966456462852611e-06
+    },
+    {
+      "without": [
+        "zero_model"
+      ],
+      "change": -2.9485922455045983e-05,
+      "standard_error": 5.949829117918275e-06
+    }
+  ],
+  "elimination": {
+    "tolerance": 0.0002,
+    "path": [
+      {
+        "removed": null,
+        "kept": [
+          "bias_model",
+          "item_knn",
+          "svd",
+          "svdpp",
+          "zero_model",
+          "factorization_machine",
+          "bayesian_factorization_machine",
+          "rating_transformer",
+          "autorec",
+          "integrated_model"
+        ],
+        "mse": 0.7111763030247894,
+        "change": 0.0,
+        "standard_error": 0.0
+      },
+      {
+        "removed": [
+          "zero_model"
+        ],
+        "kept": [
+          "bias_model",
+          "item_knn",
+          "svd",
+          "svdpp",
+          "factorization_machine",
+          "bayesian_factorization_machine",
+          "rating_transformer",
+          "autorec",
+          "integrated_model"
+        ],
+        "mse": 0.7111468171023343,
+        "change": -2.9485922455045983e-05,
+        "standard_error": 5.949829117918275e-06
+      },
+      {
+        "removed": [
+          "factorization_machine"
+        ],
+        "kept": [
+          "bias_model",
+          "item_knn",
+          "svd",
+          "svdpp",
+          "bayesian_factorization_machine",
+          "rating_transformer",
+          "autorec",
+          "integrated_model"
+        ],
+        "mse": 0.7111414247058289,
+        "change": -3.4878318960545056e-05,
+        "standard_error": 9.198655164407749e-06
+      },
+      {
+        "removed": [
+          "autorec"
+        ],
+        "kept": [
+          "bias_model",
+          "item_knn",
+          "svd",
+          "svdpp",
+          "bayesian_factorization_machine",
+          "rating_transformer",
+          "integrated_model"
+        ],
+        "mse": 0.7111773038200654,
+        "change": 1.0007952759326651e-06,
+        "standard_error": 3.054085945412756e-05
+      },
+      {
+        "removed": [
+          "svd"
+        ],
+        "kept": [
+          "bias_model",
+          "item_knn",
+          "svdpp",
+          "bayesian_factorization_machine",
+          "rating_transformer",
+          "integrated_model"
+        ],
+        "mse": 0.711344512405371,
+        "change": 0.00016820938058157608,
+        "standard_error": 6.890078843430171e-05
+      }
+    ],
+    "selected_models": [
+      "bias_model",
+      "item_knn",
+      "svdpp",
+      "bayesian_factorization_machine",
+      "rating_transformer",
+      "integrated_model"
+    ]
+  },
+  "blenders": {
+    "rows": [
+      {
+        "blender": "ridge alpha 1 (submitted)",
+        "mse": 0.711344512405371,
+        "change": 0.0,
+        "standard_error": 0.0
+      },
+      {
+        "blender": "ridge alpha 0.1",
+        "mse": 0.7113381847626428,
+        "change": -6.327642728231417e-06,
+        "standard_error": 3.7764442132023627e-06
+      },
+      {
+        "blender": "ridge alpha 10",
+        "mse": 0.711446419972736,
+        "change": 0.00010190756736510775,
+        "standard_error": 3.320798022563601e-05
+      },
+      {
+        "blender": "ridge alpha 100",
+        "mse": 0.713110574857196,
+        "change": 0.001766062451825227,
+        "standard_error": 0.0001896451049262289
+      },
+      {
+        "blender": "LightGBM + counts (lib/config.py)",
+        "mse": 0.7150978252543275,
+        "change": 0.0037533128489565656,
+        "standard_error": 0.0004510199441346498
+      },
+      {
+        "blender": "LightGBM without counts",
+        "mse": 0.7154911865584491,
+        "change": 0.004146674153078216,
+        "standard_error": 0.00042575125101579337
+      },
+      {
+        "blender": "LightGBM + counts, 15 leaves",
+        "mse": 0.7152599021649685,
+        "change": 0.003915389759597522,
+        "standard_error": 0.000417854043861906
+      },
+      {
+        "blender": "LightGBM + counts, 63 leaves",
+        "mse": 0.7170836481881431,
+        "change": 0.005739135782772014,
+        "standard_error": 0.0005167096396068745
+      }
+    ],
+    "reference": "ridge alpha 1 (submitted)",
+    "recommended": "ridge alpha 1 (submitted)",
+    "recommended_config": {
+      "method": "ridge",
+      "blended_models": [
+        "bias_model",
+        "item_knn",
+        "svdpp",
+        "bayesian_factorization_machine",
+        "rating_transformer",
+        "integrated_model"
+      ],
+      "use_count_features": false,
+      "n_folds": 5,
+      "ridge_alpha": 1.0,
+      "lightgbm_n_estimators": 0,
+      "lightgbm_learning_rate": 0.0,
+      "lightgbm_num_leaves": 0,
+      "lightgbm_min_child_samples": 0,
+      "seed": 0,
+      "use_time_features": false,
+      "activity_window_days": 30
+    }
+  }
+}

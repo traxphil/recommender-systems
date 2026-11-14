@@ -1,0 +1,107 @@
+{
+  "task": "task2",
+  "model": "item_cosine",
+  "metric": "validation pair accuracy (higher is better)",
+  "status": "finished",
+  "started": "2026-11-14 10:41:03",
+  "last_update": "2026-11-14 10:44:08",
+  "runs_finished": "9 / 9",
+  "device": "cuda",
+  "best": {
+    "score": 0.840783,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": null,
+    "swept_values": {
+      "n_neighbors": 100,
+      "similarity_shrinkage": 10.0
+    },
+    "parameters": {
+      "n_neighbors": 100,
+      "similarity_shrinkage": 10.0,
+      "max_interactions_per_user_for_similarity": 300,
+      "items_per_similarity_block": 2000,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "n_neighbors": [
+      50,
+      100,
+      200
+    ],
+    "similarity_shrinkage": [
+      10.0,
+      20.0,
+      50.0
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK2_ITEM_COSINE",
+  "runs": [
+    {
+      "n_neighbors": 50,
+      "similarity_shrinkage": 10.0,
+      "score": 0.836671,
+      "best_epoch": null,
+      "seconds": 19.6
+    },
+    {
+      "n_neighbors": 50,
+      "similarity_shrinkage": 20.0,
+      "score": 0.830612,
+      "best_epoch": null,
+      "seconds": 19.7
+    },
+    {
+      "n_neighbors": 50,
+      "similarity_shrinkage": 50.0,
+      "score": 0.822815,
+      "best_epoch": null,
+      "seconds": 19.4
+    },
+    {
+      "n_neighbors": 100,
+      "similarity_shrinkage": 10.0,
+      "score": 0.840783,
+      "best_epoch": null,
+      "seconds": 19.9
+    },
+    {
+      "n_neighbors": 100,
+      "similarity_shrinkage": 20.0,
+      "score": 0.832849,
+      "best_epoch": null,
+      "seconds": 21.6
+    },
+    {
+      "n_neighbors": 100,
+      "similarity_shrinkage": 50.0,
+      "score": 0.822922,
+      "best_epoch": null,
+      "seconds": 19.2
+    },
+    {
+      "n_neighbors": 200,
+      "similarity_shrinkage": 10.0,
+      "score": 0.839357,
+      "best_epoch": null,
+      "seconds": 19.7
+    },
+    {
+      "n_neighbors": 200,
+      "similarity_shrinkage": 20.0,
+      "score": 0.83005,
+      "best_epoch": null,
+      "seconds": 21.5
+    },
+    {
+      "n_neighbors": 200,
+      "similarity_shrinkage": 50.0,
+      "score": 0.819159,
+      "best_epoch": null,
+      "seconds": 22.2
+    }
+  ]
+}

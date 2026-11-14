@@ -3,17 +3,8 @@ from pathlib import Path
 
 import torch
 
-from lib.config import (DEVICE, SPLIT_SEED, VALIDATION_FRACTION,
-                        TASK1_AUTOREC, TASK1_BAYESIAN_FACTORIZATION_MACHINE, TASK1_BIAS_MODEL, TASK1_FACTORIZATION_MACHINE,
-                        TASK1_INTEGRATED_MODEL, TASK1_ITEM_KNN, TASK1_RATING_TRANSFORMER, TASK1_SUBMITTED_BLENDER, TASK1_SVD,
-                        TASK1_SVDPP, TASK1_ZERO_MODEL,
-                        TASK2_EASE, TASK2_ITEM_COSINE, TASK2_MULT_VAE, TASK2_PAIR_BLENDER,
-                        TASK3_BIAS_MODEL, TASK3_ITEM_KNN, TASK3_SUBMITTED_BLENDER, TASK3_SVD, TASK3_SVDPP, TASK3_TIME_BIAS_MODEL,
-                        TASK3_TIME_FACTORIZATION_MACHINE, TASK3_TIME_ITEM_KNN, TASK3_TIME_SVDPP, TASK3_TIME_ZERO_MODEL,
-                        TASK3_ZERO_MODEL,
-                        TASK4_EASE, TASK4_ITEM_COSINE, TASK4_MULT_VAE, TASK4_PAIR_BLENDER, TASK4_TIME_EASE,
-                        TASK5_EASE, TASK5_ITEM_COSINE, TASK5_MULT_VAE, TASK5_PAIR_BLENDER, TASK5_SASREC, TASK5_TRANSITION,
-                        TASK6_LIGHTGBM_GAP_MODEL, TASK6_LINEAR_GAP_MODEL, TASK6_SUBMITTED_GAP_MODEL)
+import lib.config as model_configs
+from lib.config import DEVICE, SPLIT_SEED, VALIDATION_FRACTION
 from lib.custom_types import BlenderConfig, ModelResult, PairChoiceTask, RatingData, RatingTask, TimeGapTask
 from lib.data_loading import (known_interaction_pairs, load_next_item_task, load_pair_choice_task, load_rating_prediction_task,
                               load_time_gap_task, write_choice_prediction_file, write_prediction_file)
@@ -51,6 +42,10 @@ SUBMISSION_DIR = Path(__file__).resolve().parent
 DATA_DIR = SUBMISSION_DIR.parent / "data"
 OUTPUT_DIR = SUBMISSION_DIR / "output"
 
+
+# every setting is read from lib/config.py when a function runs (model_configs.<NAME>), not imported once by name:
+# a value imported with "from lib.config import NAME" stays the old object after an edit of config.py (autoreload only
+# refreshes the module itself) -> the notebooks use new settings without a kernel restart
 
 # #########################################################################################
 # Main Pipeline Handlers for the Models
@@ -138,43 +133,43 @@ def load_task1() -> RatingTask:
 # one function per sub-model, so each can be trained on its own from the notebook
 # hyperparameters live in lib/config.py (Task 1 section), so this file reproduces the submitted predictions
 def train_task1_bias_model(task: RatingTask) -> ModelResult:
-    return train_bias_model(task, TASK1_BIAS_MODEL)
+    return train_bias_model(task, model_configs.TASK1_BIAS_MODEL)
 
 
 def train_task1_svd(task: RatingTask) -> ModelResult:
-    return train_latent_factor_model(task, **asdict(TASK1_SVD))
+    return train_latent_factor_model(task, **asdict(model_configs.TASK1_SVD))
 
 
 def train_task1_svdpp(task: RatingTask) -> ModelResult:
-    return train_latent_factor_model(task, **asdict(TASK1_SVDPP))
+    return train_latent_factor_model(task, **asdict(model_configs.TASK1_SVDPP))
 
 
 def train_task1_item_knn(task: RatingTask) -> ModelResult:
-    return train_item_knn(task, TASK1_ITEM_KNN)
+    return train_item_knn(task, model_configs.TASK1_ITEM_KNN)
 
 
 def train_task1_zero_model(task: RatingTask) -> ModelResult:
-    return train_zero_model(task, TASK1_ZERO_MODEL)
+    return train_zero_model(task, model_configs.TASK1_ZERO_MODEL)
 
 
 def train_task1_factorization_machine(task: RatingTask) -> ModelResult:
-    return train_factorization_machine(task, TASK1_FACTORIZATION_MACHINE)
+    return train_factorization_machine(task, model_configs.TASK1_FACTORIZATION_MACHINE)
 
 
 def train_task1_bayesian_factorization_machine(task: RatingTask) -> ModelResult:
-    return train_bayesian_factorization_machine(task, TASK1_BAYESIAN_FACTORIZATION_MACHINE)
+    return train_bayesian_factorization_machine(task, model_configs.TASK1_BAYESIAN_FACTORIZATION_MACHINE)
 
 
 def train_task1_rating_transformer(task: RatingTask) -> ModelResult:
-    return train_rating_transformer(task, TASK1_RATING_TRANSFORMER)
+    return train_rating_transformer(task, model_configs.TASK1_RATING_TRANSFORMER)
 
 
 def train_task1_autorec(task: RatingTask) -> ModelResult:
-    return train_autorec(task, TASK1_AUTOREC)
+    return train_autorec(task, model_configs.TASK1_AUTOREC)
 
 
 def train_task1_integrated_model(task: RatingTask) -> ModelResult:
-    return train_integrated_model(task, TASK1_INTEGRATED_MODEL)
+    return train_integrated_model(task, model_configs.TASK1_INTEGRATED_MODEL)
 
 
 # sub-model name (as in the blender configs and in trained_models/) -> its training function
@@ -194,12 +189,12 @@ TASK1_SUB_MODEL_TRAINERS = {
 
 # every sub-model the submitted blend uses
 def train_task1_models(task: RatingTask) -> dict[str, ModelResult]:
-    return {model_name: TASK1_SUB_MODEL_TRAINERS[model_name](task) for model_name in TASK1_SUBMITTED_BLENDER.blended_models}
+    return {model_name: TASK1_SUB_MODEL_TRAINERS[model_name](task) for model_name in model_configs.TASK1_SUBMITTED_BLENDER.blended_models}
 
 
 def train_task1_blender(task: RatingTask, model_results: dict[str, ModelResult],
-                        blender_config: BlenderConfig = TASK1_SUBMITTED_BLENDER) -> ModelResult:
-    return train_blender(task, model_results, blender_config)
+                        blender_config: BlenderConfig | None = None) -> ModelResult:
+    return train_blender(task, model_results, blender_config or model_configs.TASK1_SUBMITTED_BLENDER)
 
 
 def write_task1_predictions(test_predictions) -> None:
@@ -236,15 +231,15 @@ def train_task2_popularity_model(task: PairChoiceTask) -> ModelResult:
 
 
 def train_task2_item_cosine_model(task: PairChoiceTask) -> ModelResult:
-    return train_item_cosine_model(task, TASK2_ITEM_COSINE)
+    return train_item_cosine_model(task, model_configs.TASK2_ITEM_COSINE)
 
 
 def train_task2_ease_model(task: PairChoiceTask) -> ModelResult:
-    return train_ease_model(task, TASK2_EASE)
+    return train_ease_model(task, model_configs.TASK2_EASE)
 
 
 def train_task2_mult_vae(task: PairChoiceTask) -> ModelResult:
-    return train_mult_vae(task, TASK2_MULT_VAE)
+    return train_mult_vae(task, model_configs.TASK2_MULT_VAE)
 
 
 # sub-model name (as in the pair blender config and in trained_models/) -> its training function
@@ -257,11 +252,11 @@ TASK2_SUB_MODEL_TRAINERS = {
 
 
 def train_task2_models(task: PairChoiceTask) -> dict[str, ModelResult]:
-    return {model_name: TASK2_SUB_MODEL_TRAINERS[model_name](task) for model_name in TASK2_PAIR_BLENDER.combined_models}
+    return {model_name: TASK2_SUB_MODEL_TRAINERS[model_name](task) for model_name in model_configs.TASK2_PAIR_BLENDER.combined_models}
 
 
 def train_task2_blender(task: PairChoiceTask, model_results: dict[str, ModelResult]) -> ModelResult:
-    return train_pair_blender(task, model_results, TASK2_PAIR_BLENDER)
+    return train_pair_blender(task, model_results, model_configs.TASK2_PAIR_BLENDER)
 
 
 # first_item_probabilities = the pair blender's P(item1 is the real one) per test row
@@ -296,43 +291,43 @@ def load_task3() -> RatingTask:
 # one function per sub-model, so each can be trained on its own from the notebook
 # hyperparameters live in lib/config.py (Task 3 section)
 def train_task3_bias_model(task: RatingTask) -> ModelResult:
-    return train_bias_model(task, TASK3_BIAS_MODEL)
+    return train_bias_model(task, model_configs.TASK3_BIAS_MODEL)
 
 
 def train_task3_svd(task: RatingTask) -> ModelResult:
-    return train_latent_factor_model(task, **asdict(TASK3_SVD))
+    return train_latent_factor_model(task, **asdict(model_configs.TASK3_SVD))
 
 
 def train_task3_svdpp(task: RatingTask) -> ModelResult:
-    return train_latent_factor_model(task, **asdict(TASK3_SVDPP))
+    return train_latent_factor_model(task, **asdict(model_configs.TASK3_SVDPP))
 
 
 def train_task3_item_knn(task: RatingTask) -> ModelResult:
-    return train_item_knn(task, TASK3_ITEM_KNN)
+    return train_item_knn(task, model_configs.TASK3_ITEM_KNN)
 
 
 def train_task3_zero_model(task: RatingTask) -> ModelResult:
-    return train_zero_model(task, TASK3_ZERO_MODEL)
+    return train_zero_model(task, model_configs.TASK3_ZERO_MODEL)
 
 
 def train_task3_time_bias_model(task: RatingTask) -> ModelResult:
-    return train_time_bias_model(task, TASK3_TIME_BIAS_MODEL)
+    return train_time_bias_model(task, model_configs.TASK3_TIME_BIAS_MODEL)
 
 
 def train_task3_time_svdpp(task: RatingTask) -> ModelResult:
-    return train_time_svdpp(task, TASK3_TIME_SVDPP)
+    return train_time_svdpp(task, model_configs.TASK3_TIME_SVDPP)
 
 
 def train_task3_time_item_knn(task: RatingTask) -> ModelResult:
-    return train_time_item_knn(task, TASK3_TIME_ITEM_KNN)
+    return train_time_item_knn(task, model_configs.TASK3_TIME_ITEM_KNN)
 
 
 def train_task3_time_zero_model(task: RatingTask) -> ModelResult:
-    return train_time_zero_model(task, TASK3_TIME_ZERO_MODEL)
+    return train_time_zero_model(task, model_configs.TASK3_TIME_ZERO_MODEL)
 
 
 def train_task3_time_factorization_machine(task: RatingTask) -> ModelResult:
-    return train_time_factorization_machine(task, TASK3_TIME_FACTORIZATION_MACHINE)
+    return train_time_factorization_machine(task, model_configs.TASK3_TIME_FACTORIZATION_MACHINE)
 
 
 # sub-model name (as in the blender configs and in trained_models/) -> its training function
@@ -352,12 +347,12 @@ TASK3_SUB_MODEL_TRAINERS = {
 
 # every sub-model the submitted blend uses
 def train_task3_models(task: RatingTask) -> dict[str, ModelResult]:
-    return {model_name: TASK3_SUB_MODEL_TRAINERS[model_name](task) for model_name in TASK3_SUBMITTED_BLENDER.blended_models}
+    return {model_name: TASK3_SUB_MODEL_TRAINERS[model_name](task) for model_name in model_configs.TASK3_SUBMITTED_BLENDER.blended_models}
 
 
 def train_task3_blender(task: RatingTask, model_results: dict[str, ModelResult],
-                        blender_config: BlenderConfig = TASK3_SUBMITTED_BLENDER) -> ModelResult:
-    return train_blender(task, model_results, blender_config)
+                        blender_config: BlenderConfig | None = None) -> ModelResult:
+    return train_blender(task, model_results, blender_config or model_configs.TASK3_SUBMITTED_BLENDER)
 
 
 def write_task3_predictions(test_predictions) -> None:
@@ -393,19 +388,19 @@ def train_task4_popularity_model(task: PairChoiceTask) -> ModelResult:
 
 
 def train_task4_item_cosine_model(task: PairChoiceTask) -> ModelResult:
-    return train_item_cosine_model(task, TASK4_ITEM_COSINE)
+    return train_item_cosine_model(task, model_configs.TASK4_ITEM_COSINE)
 
 
 def train_task4_ease_model(task: PairChoiceTask) -> ModelResult:
-    return train_ease_model(task, TASK4_EASE)
+    return train_ease_model(task, model_configs.TASK4_EASE)
 
 
 def train_task4_time_ease_model(task: PairChoiceTask) -> ModelResult:
-    return train_ease_model(task, TASK4_TIME_EASE, model_name="time-weighted EASE")
+    return train_ease_model(task, model_configs.TASK4_TIME_EASE, model_name="time-weighted EASE")
 
 
 def train_task4_mult_vae(task: PairChoiceTask) -> ModelResult:
-    return train_mult_vae(task, TASK4_MULT_VAE)
+    return train_mult_vae(task, model_configs.TASK4_MULT_VAE)
 
 
 TASK4_SUB_MODEL_TRAINERS = {
@@ -418,11 +413,11 @@ TASK4_SUB_MODEL_TRAINERS = {
 
 
 def train_task4_models(task: PairChoiceTask) -> dict[str, ModelResult]:
-    return {model_name: TASK4_SUB_MODEL_TRAINERS[model_name](task) for model_name in TASK4_PAIR_BLENDER.combined_models}
+    return {model_name: TASK4_SUB_MODEL_TRAINERS[model_name](task) for model_name in model_configs.TASK4_PAIR_BLENDER.combined_models}
 
 
 def train_task4_blender(task: PairChoiceTask, model_results: dict[str, ModelResult]) -> ModelResult:
-    return train_pair_blender(task, model_results, TASK4_PAIR_BLENDER)
+    return train_pair_blender(task, model_results, model_configs.TASK4_PAIR_BLENDER)
 
 
 def write_task4_predictions(first_item_probabilities) -> None:
@@ -457,24 +452,24 @@ def train_task5_popularity_model(task: PairChoiceTask) -> ModelResult:
 
 
 def train_task5_item_cosine_model(task: PairChoiceTask) -> ModelResult:
-    return train_item_cosine_model(task, TASK5_ITEM_COSINE)
+    return train_item_cosine_model(task, model_configs.TASK5_ITEM_COSINE)
 
 
 def train_task5_transition_model(task: PairChoiceTask) -> ModelResult:
-    return train_transition_model(task, TASK5_TRANSITION)
+    return train_transition_model(task, model_configs.TASK5_TRANSITION)
 
 
 # plain and time-weighted EASE share one set of weights (50k books in RAM) -> (ease result, time_ease result)
 def train_task5_ease_models(task: PairChoiceTask) -> tuple[ModelResult, ModelResult]:
-    return train_plain_and_time_weighted_ease(task, TASK5_EASE)
+    return train_plain_and_time_weighted_ease(task, model_configs.TASK5_EASE)
 
 
 def train_task5_mult_vae(task: PairChoiceTask) -> ModelResult:
-    return train_mult_vae(task, TASK5_MULT_VAE)
+    return train_mult_vae(task, model_configs.TASK5_MULT_VAE)
 
 
 def train_task5_sasrec(task: PairChoiceTask) -> ModelResult:
-    return train_sasrec(task, TASK5_SASREC)
+    return train_sasrec(task, model_configs.TASK5_SASREC)
 
 
 def train_task5_models(task: PairChoiceTask) -> dict[str, ModelResult]:
@@ -491,7 +486,7 @@ def train_task5_models(task: PairChoiceTask) -> dict[str, ModelResult]:
 
 
 def train_task5_blender(task: PairChoiceTask, model_results: dict[str, ModelResult]) -> ModelResult:
-    return train_pair_blender(task, model_results, TASK5_PAIR_BLENDER)
+    return train_pair_blender(task, model_results, model_configs.TASK5_PAIR_BLENDER)
 
 
 def write_task5_predictions(first_item_probabilities) -> None:
@@ -526,11 +521,11 @@ def train_task6_median_baseline(task: TimeGapTask) -> ModelResult:
 
 
 def train_task6_linear_gap_model(task: TimeGapTask) -> ModelResult:
-    return train_gap_regressor(task, TASK6_LINEAR_GAP_MODEL)
+    return train_gap_regressor(task, model_configs.TASK6_LINEAR_GAP_MODEL)
 
 
 def train_task6_lightgbm_gap_model(task: TimeGapTask) -> ModelResult:
-    return train_gap_regressor(task, TASK6_LIGHTGBM_GAP_MODEL)
+    return train_gap_regressor(task, model_configs.TASK6_LIGHTGBM_GAP_MODEL)
 
 
 # predicted gaps in seconds, one per test row
@@ -540,7 +535,7 @@ def write_task6_predictions(predicted_gaps) -> None:
 
 def run_task6():
     task = load_task6()
-    gap_model_result = train_gap_regressor(task, TASK6_SUBMITTED_GAP_MODEL)
+    gap_model_result = train_gap_regressor(task, model_configs.TASK6_SUBMITTED_GAP_MODEL)
     write_task6_predictions(gap_model_result.test_predictions)
     return task, gap_model_result
 

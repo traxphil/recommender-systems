@@ -1,0 +1,58 @@
+{
+  "task": "task2",
+  "model": "ease",
+  "metric": "validation pair accuracy (higher is better)",
+  "status": "finished",
+  "started": "2026-11-14 10:44:08",
+  "last_update": "2026-11-14 10:52:19",
+  "runs_finished": "3 / 3",
+  "device": "cuda",
+  "best": {
+    "score": 0.851217,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": null,
+    "swept_values": {
+      "regularization": 1000.0
+    },
+    "parameters": {
+      "regularization": 1000.0,
+      "max_items": 60000,
+      "use_gpu": false,
+      "history_time_decay_days": 0.0,
+      "history_time_decay_floor": 0.0,
+      "items_per_gram_block": 2000,
+      "pairs_per_scoring_chunk": 20000
+    }
+  },
+  "swept_parameters": {
+    "regularization": [
+      250.0,
+      500.0,
+      1000.0
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK2_EASE",
+  "runs": [
+    {
+      "regularization": 250.0,
+      "score": 0.842273,
+      "best_epoch": null,
+      "seconds": 169.5
+    },
+    {
+      "regularization": 500.0,
+      "score": 0.849052,
+      "best_epoch": null,
+      "seconds": 162.4
+    },
+    {
+      "regularization": 1000.0,
+      "score": 0.851217,
+      "best_epoch": null,
+      "seconds": 158.8
+    }
+  ]
+}
