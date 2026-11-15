@@ -1,0 +1,204 @@
+[09:17:35] bias model | valid MSE 0.8218
+[09:17:37] stored bias_model -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task1\bias_model.pt
+RESULT task1 bias_model                           MSE on validation rows > 0 0.58999 (0.0 min)
+[09:17:39] epoch   0 | train MSE 0.5383 | valid MSE 0.8218  (starting point)
+[09:17:45] epoch   1 | train MSE 0.5372 | valid MSE 0.8219
+[09:17:52] epoch   2 | train MSE 0.5316 | valid MSE 0.8206
+[09:17:58] epoch   3 | train MSE 0.5175 | valid MSE 0.8173
+[09:18:05] epoch   4 | train MSE 0.4991 | valid MSE 0.8143
+[09:18:12] epoch   5 | train MSE 0.4787 | valid MSE 0.8123
+[09:18:18] epoch   6 | train MSE 0.4573 | valid MSE 0.8109
+[09:18:25] epoch   7 | train MSE 0.4361 | valid MSE 0.8102
+[09:18:32] epoch   8 | train MSE 0.4158 | valid MSE 0.8101
+[09:18:39] epoch   9 | train MSE 0.3970 | valid MSE 0.8104
+[09:18:45] epoch  10 | train MSE 0.3797 | valid MSE 0.8109
+[09:18:52] epoch  11 | train MSE 0.3641 | valid MSE 0.8116
+[09:18:59] epoch  12 | train MSE 0.3501 | valid MSE 0.8125
+[09:19:06] epoch  13 | train MSE 0.3377 | valid MSE 0.8134
+[09:19:12] epoch  14 | train MSE 0.3266 | valid MSE 0.8143
+[09:19:12] best valid MSE 0.8101 at epoch 8
+[09:19:20] refit epoch   1 | train MSE 0.5447
+[09:19:28] refit epoch   2 | train MSE 0.5427
+[09:19:35] refit epoch   3 | train MSE 0.5331
+[09:19:42] refit epoch   4 | train MSE 0.5173
+[09:19:50] refit epoch   5 | train MSE 0.4985
+[09:19:57] refit epoch   6 | train MSE 0.4779
+[09:20:04] refit epoch   7 | train MSE 0.4567
+[09:20:12] refit epoch   8 | train MSE 0.4359
+[09:20:12] stored svd -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task1\svd.pt
+RESULT task1 svd                                  MSE on validation rows > 0 0.57782 (2.6 min)
+[09:20:13] epoch   0 | train MSE 0.5383 | valid MSE 0.8219  (starting point)
+[09:20:47] epoch   1 | train MSE 0.5084 | valid MSE 0.8152
+[09:21:22] epoch   2 | train MSE 0.4369 | valid MSE 0.8069
+[09:21:56] epoch   3 | train MSE 0.3473 | valid MSE 0.8042
+[09:22:30] epoch   4 | train MSE 0.2740 | valid MSE 0.8064
+[09:23:05] epoch   5 | train MSE 0.2210 | valid MSE 0.8100
+[09:23:39] epoch   6 | train MSE 0.1842 | valid MSE 0.8144
+[09:24:14] epoch   7 | train MSE 0.1591 | valid MSE 0.8180
+[09:24:48] epoch   8 | train MSE 0.1416 | valid MSE 0.8218
+[09:25:23] epoch   9 | train MSE 0.1296 | valid MSE 0.8247
+[09:25:23] best valid MSE 0.8042 at epoch 3
+[09:26:02] refit epoch   1 | train MSE 0.5419
+[09:26:40] refit epoch   2 | train MSE 0.5042
+[09:27:19] refit epoch   3 | train MSE 0.4306
+[09:27:19] stored svdpp -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task1\svdpp.pt
+RESULT task1 svdpp                                MSE on validation rows > 0 0.57210 (7.1 min)
+[09:27:42] item kNN | 5,095,149 neighbour links | valid MSE 0.8144
+[09:28:08] stored item_knn -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task1\item_knn.pt
+RESULT task1 item_knn                             MSE on validation rows > 0 0.58243 (0.8 min)
+[09:28:08] epoch   0 | train MSE 0.5392 | valid MSE 0.8229  (starting point)
+[09:28:23] epoch   1 | train MSE 0.5301 | valid MSE 0.8193
+[09:28:38] epoch   2 | train MSE 0.5145 | valid MSE 0.8158
+[09:28:52] epoch   3 | train MSE 0.4882 | valid MSE 0.8121
+[09:29:07] epoch   4 | train MSE 0.4544 | valid MSE 0.8103
+[09:29:21] epoch   5 | train MSE 0.4190 | valid MSE 0.8098
+[09:29:36] epoch   6 | train MSE 0.3849 | valid MSE 0.8106
+[09:29:50] epoch   7 | train MSE 0.3547 | valid MSE 0.8125
+[09:30:05] epoch   8 | train MSE 0.3288 | valid MSE 0.8153
+[09:30:19] epoch   9 | train MSE 0.3077 | valid MSE 0.8185
+[09:30:34] epoch  10 | train MSE 0.2905 | valid MSE 0.8232
+[09:30:49] epoch  11 | train MSE 0.2770 | valid MSE 0.8255
+[09:30:49] best valid MSE 0.8098 at epoch 5
+[09:31:05] refit epoch   1 | train MSE 0.5484
+[09:31:21] refit epoch   2 | train MSE 0.5402
+[09:31:37] refit epoch   3 | train MSE 0.5222
+[09:31:53] refit epoch   4 | train MSE 0.4959
+[09:32:09] refit epoch   5 | train MSE 0.4647
+[09:32:10] stored factorization_machine -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task1\factorization_machine.pt
+RESULT task1 factorization_machine                MSE on validation rows > 0 0.58059 (4.0 min)
+[09:32:29] epoch   0 | train MSE 0.5392 | valid MSE 0.8229  (starting point)
+[09:34:04] epoch   1 | train MSE 0.5386 | valid MSE 0.8200
+[09:35:39] epoch   2 | train MSE 0.5369 | valid MSE 0.8193
+[09:37:14] epoch   3 | train MSE 0.5249 | valid MSE 0.8139
+[09:38:49] epoch   4 | train MSE 0.5123 | valid MSE 0.8151
+[09:40:24] epoch   5 | train MSE 0.5051 | valid MSE 0.8141
+[09:41:59] epoch   6 | train MSE 0.4945 | valid MSE 0.8193
+[09:41:59] best valid MSE 0.8139 at epoch 3
+[09:43:26] refit epoch   1 | train MSE 0.5495
+[09:44:51] refit epoch   2 | train MSE 0.5494
+[09:46:15] refit epoch   3 | train MSE 0.5456
+[09:46:16] stored rating_transformer -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task1\rating_transformer.pt
+RESULT task1 rating_transformer                   MSE on validation rows > 0 0.58557 (14.1 min)
+[09:46:18] AutoRec epoch   0 | valid MSE 0.8218  (starting point = bias model)
+[09:46:26] AutoRec epoch   1 | train MSE 0.5398 | valid MSE 0.8218
+[09:46:34] AutoRec epoch   2 | train MSE 0.5385 | valid MSE 0.8217
+[09:46:43] AutoRec epoch   3 | train MSE 0.5388 | valid MSE 0.8213
+[09:46:51] AutoRec epoch   4 | train MSE 0.5372 | valid MSE 0.8208
+[09:46:59] AutoRec epoch   5 | train MSE 0.5351 | valid MSE 0.8201
+[09:47:07] AutoRec epoch   6 | train MSE 0.5335 | valid MSE 0.8193
+[09:47:15] AutoRec epoch   7 | train MSE 0.5283 | valid MSE 0.8185
+[09:47:24] AutoRec epoch   8 | train MSE 0.5244 | valid MSE 0.8179
+[09:47:32] AutoRec epoch   9 | train MSE 0.5243 | valid MSE 0.8172
+[09:47:40] AutoRec epoch  10 | train MSE 0.5206 | valid MSE 0.8166
+[09:47:48] AutoRec epoch  11 | train MSE 0.5160 | valid MSE 0.8160
+[09:47:57] AutoRec epoch  12 | train MSE 0.5143 | valid MSE 0.8155
+[09:48:05] AutoRec epoch  13 | train MSE 0.5097 | valid MSE 0.8151
+[09:48:13] AutoRec epoch  14 | train MSE 0.5066 | valid MSE 0.8146
+[09:48:21] AutoRec epoch  15 | train MSE 0.5061 | valid MSE 0.8142
+[09:48:29] AutoRec epoch  16 | train MSE 0.5033 | valid MSE 0.8137
+[09:48:38] AutoRec epoch  17 | train MSE 0.4984 | valid MSE 0.8135
+[09:48:46] AutoRec epoch  18 | train MSE 0.4988 | valid MSE 0.8131
+[09:48:54] AutoRec epoch  19 | train MSE 0.4946 | valid MSE 0.8128
+[09:49:02] AutoRec epoch  20 | train MSE 0.4894 | valid MSE 0.8126
+[09:49:10] AutoRec epoch  21 | train MSE 0.4876 | valid MSE 0.8124
+[09:49:18] AutoRec epoch  22 | train MSE 0.4850 | valid MSE 0.8122
+[09:49:26] AutoRec epoch  23 | train MSE 0.4808 | valid MSE 0.8120
+[09:49:34] AutoRec epoch  24 | train MSE 0.4794 | valid MSE 0.8118
+[09:49:43] AutoRec epoch  25 | train MSE 0.4784 | valid MSE 0.8117
+[09:49:51] AutoRec epoch  26 | train MSE 0.4755 | valid MSE 0.8115
+[09:49:59] AutoRec epoch  27 | train MSE 0.4717 | valid MSE 0.8114
+[09:50:07] AutoRec epoch  28 | train MSE 0.4708 | valid MSE 0.8112
+[09:50:15] AutoRec epoch  29 | train MSE 0.4685 | valid MSE 0.8111
+[09:50:23] AutoRec epoch  30 | train MSE 0.4668 | valid MSE 0.8110
+[09:50:31] AutoRec epoch  31 | train MSE 0.4629 | valid MSE 0.8108
+[09:50:39] AutoRec epoch  32 | train MSE 0.4605 | valid MSE 0.8107
+[09:50:47] AutoRec epoch  33 | train MSE 0.4561 | valid MSE 0.8106
+[09:50:55] AutoRec epoch  34 | train MSE 0.4570 | valid MSE 0.8105
+[09:51:04] AutoRec epoch  35 | train MSE 0.4531 | valid MSE 0.8105
+[09:51:12] AutoRec epoch  36 | train MSE 0.4536 | valid MSE 0.8105
+[09:51:20] AutoRec epoch  37 | train MSE 0.4487 | valid MSE 0.8104
+[09:51:28] AutoRec epoch  38 | train MSE 0.4447 | valid MSE 0.8104
+[09:51:36] AutoRec epoch  39 | train MSE 0.4452 | valid MSE 0.8104
+[09:51:44] AutoRec epoch  40 | train MSE 0.4424 | valid MSE 0.8103
+[09:51:52] AutoRec epoch  41 | train MSE 0.4397 | valid MSE 0.8103
+[09:52:01] AutoRec epoch  42 | train MSE 0.4373 | valid MSE 0.8103
+[09:52:09] AutoRec epoch  43 | train MSE 0.4366 | valid MSE 0.8103
+[09:52:17] AutoRec epoch  44 | train MSE 0.4328 | valid MSE 0.8103
+[09:52:25] AutoRec epoch  45 | train MSE 0.4319 | valid MSE 0.8103
+[09:52:33] AutoRec epoch  46 | train MSE 0.4268 | valid MSE 0.8103
+[09:52:41] AutoRec epoch  47 | train MSE 0.4263 | valid MSE 0.8104
+[09:52:41] AutoRec | best valid MSE 0.8103 at epoch 42
+[09:52:50] AutoRec refit epoch   1 | train MSE 0.5423
+[09:52:56] AutoRec refit epoch   2 | train MSE 0.5414
+[09:53:02] AutoRec refit epoch   3 | train MSE 0.5405
+[09:53:08] AutoRec refit epoch   4 | train MSE 0.5389
+[09:53:14] AutoRec refit epoch   5 | train MSE 0.5370
+[09:53:20] AutoRec refit epoch   6 | train MSE 0.5345
+[09:53:26] AutoRec refit epoch   7 | train MSE 0.5290
+[09:53:32] AutoRec refit epoch   8 | train MSE 0.5261
+[09:53:38] AutoRec refit epoch   9 | train MSE 0.5255
+[09:53:44] AutoRec refit epoch  10 | train MSE 0.5215
+[09:53:50] AutoRec refit epoch  11 | train MSE 0.5175
+[09:53:56] AutoRec refit epoch  12 | train MSE 0.5155
+[09:54:02] AutoRec refit epoch  13 | train MSE 0.5106
+[09:54:08] AutoRec refit epoch  14 | train MSE 0.5083
+[09:54:14] AutoRec refit epoch  15 | train MSE 0.5074
+[09:54:20] AutoRec refit epoch  16 | train MSE 0.5052
+[09:54:26] AutoRec refit epoch  17 | train MSE 0.4997
+[09:54:32] AutoRec refit epoch  18 | train MSE 0.5000
+[09:54:38] AutoRec refit epoch  19 | train MSE 0.4956
+[09:54:44] AutoRec refit epoch  20 | train MSE 0.4910
+[09:54:50] AutoRec refit epoch  21 | train MSE 0.4891
+[09:54:56] AutoRec refit epoch  22 | train MSE 0.4867
+[09:55:02] AutoRec refit epoch  23 | train MSE 0.4833
+[09:55:08] AutoRec refit epoch  24 | train MSE 0.4814
+[09:55:15] AutoRec refit epoch  25 | train MSE 0.4807
+[09:55:21] AutoRec refit epoch  26 | train MSE 0.4773
+[09:55:27] AutoRec refit epoch  27 | train MSE 0.4735
+[09:55:33] AutoRec refit epoch  28 | train MSE 0.4729
+[09:55:39] AutoRec refit epoch  29 | train MSE 0.4706
+[09:55:45] AutoRec refit epoch  30 | train MSE 0.4689
+[09:55:51] AutoRec refit epoch  31 | train MSE 0.4649
+[09:55:57] AutoRec refit epoch  32 | train MSE 0.4629
+[09:56:03] AutoRec refit epoch  33 | train MSE 0.4590
+[09:56:09] AutoRec refit epoch  34 | train MSE 0.4593
+[09:56:15] AutoRec refit epoch  35 | train MSE 0.4555
+[09:56:21] AutoRec refit epoch  36 | train MSE 0.4562
+[09:56:27] AutoRec refit epoch  37 | train MSE 0.4515
+[09:56:33] AutoRec refit epoch  38 | train MSE 0.4476
+[09:56:39] AutoRec refit epoch  39 | train MSE 0.4475
+[09:56:45] AutoRec refit epoch  40 | train MSE 0.4455
+[09:56:51] AutoRec refit epoch  41 | train MSE 0.4415
+[09:56:57] AutoRec refit epoch  42 | train MSE 0.4403
+[09:56:58] stored autorec -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task1\autorec.pt
+RESULT task1 autorec                              MSE on validation rows > 0 0.57751 (10.7 min)
+[09:57:28] epoch   0 | train MSE 0.5383 | valid MSE 0.8218  (starting point)
+[09:58:11] epoch   1 | train MSE 0.4996 | valid MSE 0.8146
+[09:58:54] epoch   2 | train MSE 0.4620 | valid MSE 0.8088
+[09:59:38] epoch   3 | train MSE 0.4292 | valid MSE 0.8046
+[10:00:21] epoch   4 | train MSE 0.4005 | valid MSE 0.8018
+[10:01:04] epoch   5 | train MSE 0.3748 | valid MSE 0.7996
+[10:01:48] epoch   6 | train MSE 0.3518 | valid MSE 0.7981
+[10:02:31] epoch   7 | train MSE 0.3311 | valid MSE 0.7970
+[10:03:14] epoch   8 | train MSE 0.3125 | valid MSE 0.7965
+[10:03:58] epoch   9 | train MSE 0.2955 | valid MSE 0.7962
+[10:04:41] epoch  10 | train MSE 0.2804 | valid MSE 0.7961
+[10:05:23] epoch  11 | train MSE 0.2666 | valid MSE 0.7965
+[10:06:05] epoch  12 | train MSE 0.2542 | valid MSE 0.7969
+[10:06:47] epoch  13 | train MSE 0.2429 | valid MSE 0.7976
+[10:07:30] epoch  14 | train MSE 0.2326 | valid MSE 0.7984
+[10:08:12] epoch  15 | train MSE 0.2233 | valid MSE 0.7993
+[10:08:54] epoch  16 | train MSE 0.2148 | valid MSE 0.8001
+[10:08:54] best valid MSE 0.7961 at epoch 10
+[10:10:04] refit epoch   1 | train MSE 0.5394
+[10:10:45] refit epoch   2 | train MSE 0.5013
+[10:11:26] refit epoch   3 | train MSE 0.4652
+[10:12:07] refit epoch   4 | train MSE 0.4336
+[10:12:47] refit epoch   5 | train MSE 0.4055
+[10:13:28] refit epoch   6 | train MSE 0.3803
+[10:14:09] refit epoch   7 | train MSE 0.3578
+[10:14:50] refit epoch   8 | train MSE 0.3374
+[10:15:31] refit epoch   9 | train MSE 0.3192
+[10:16:12] refit epoch  10 | train MSE 0.3027
+[10:16:12] stored integrated_model -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task1\integrated_model.pt
+RESULT task1 integrated_model                     MSE on validation rows > 0 0.56463 (19.2 min)

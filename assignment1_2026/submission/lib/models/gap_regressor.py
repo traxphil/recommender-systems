@@ -69,6 +69,25 @@ def prepared_features(features: pd.DataFrame, config: GapRegressorConfig):
     return features.to_numpy(dtype=np.float32)
 
 
+# bagging: several regressors with different seeds / random row and feature subsets, predictions averaged (log scale)
+class BaggedRegressor:
+
+    def __init__(self, regressors: list):
+        self.regressors = regressors
+
+    def fit(self, inputs, targets):
+        for regressor in self.regressors:
+            regressor.fit(inputs, targets)
+        return self
+
+    def predict(self, inputs) -> np.ndarray:
+        return np.mean([regressor.predict(inputs) for regressor in self.regressors], axis=0)
+
+    @property
+    def feature_importances_(self) -> np.ndarray:
+        return np.mean([regressor.feature_importances_ for regressor in self.regressors], axis=0)
+
+
 def make_regressor(config: GapRegressorConfig):
     if config.method == "linear_median":
         # median (0.5-quantile) regression = least absolute deviations, no penalty
@@ -78,9 +97,16 @@ def make_regressor(config: GapRegressorConfig):
             from lightgbm import LGBMRegressor
         except ImportError as error:
             raise ImportError("LightGBM is not installed in this environment -> pip install lightgbm") from error
-        return LGBMRegressor(objective="l1", n_estimators=config.lightgbm_n_estimators, learning_rate=config.lightgbm_learning_rate,
-                             num_leaves=config.lightgbm_num_leaves, min_child_samples=config.lightgbm_min_child_samples,
-                             random_state=config.seed, verbose=-1)
+        bagging_fraction, feature_fraction = getattr(config, "bagging_fraction", 1.0), getattr(config, "feature_fraction", 1.0)
+        make_lightgbm = lambda seed: LGBMRegressor(
+            objective="l1", n_estimators=config.lightgbm_n_estimators, learning_rate=config.lightgbm_learning_rate,
+            num_leaves=config.lightgbm_num_leaves, min_child_samples=config.lightgbm_min_child_samples,
+            subsample=bagging_fraction, subsample_freq=1 if bagging_fraction < 1.0 else 0, colsample_bytree=feature_fraction,
+            random_state=seed, verbose=-1)
+        n_bagged_models = getattr(config, "n_bagged_models", 1)
+        if n_bagged_models > 1:
+            return BaggedRegressor([make_lightgbm(config.seed + model_number) for model_number in range(n_bagged_models)])
+        return make_lightgbm(config.seed)
     raise ValueError(f"unknown gap regressor method {config.method!r} -> 'linear_median' or 'lightgbm'")
 
 
@@ -101,6 +127,7 @@ def earlier_gap_rows(task: TimeGapTask, n_cuts: int) -> tuple[pd.DataFrame, np.n
                                      task.n_user_rows, task.n_item_rows))
         targets.append(np.log1p(np.maximum(seconds[next_positions] - seconds[next_positions - 1], 0)))
         user_rows.append(users[next_positions])
+        features[-1]["rows_from_end"] = cut
     return pd.concat(features, ignore_index=True), np.concatenate(targets), np.concatenate(user_rows)
 
 
@@ -111,10 +138,16 @@ def train_gap_regressor(task: TimeGapTask, config: GapRegressorConfig) -> ModelR
                                   task.n_user_rows, task.n_item_rows)
     test_features = gap_features(task.training_and_validation_data, task.training_and_validation_seconds, task.test_user_rows,
                                  task.test_item_rows, task.n_user_rows, task.n_item_rows)
+    use_rows_from_end = getattr(config, "use_rows_from_end_feature", False)
+    if use_rows_from_end:
+        valid_features["rows_from_end"] = 0
+        test_features["rows_from_end"] = 0
     valid_targets = np.log1p(np.maximum(task.validation_gaps, 0))
     valid_inputs = prepared_features(valid_features, config)
     if config.n_earlier_gaps_as_training_rows > 0:
         extra_features, extra_targets, extra_user_rows = earlier_gap_rows(task, config.n_earlier_gaps_as_training_rows)
+        if not use_rows_from_end:
+            extra_features = extra_features.drop(columns="rows_from_end")
         extra_inputs = prepared_features(extra_features, config)
     else:
         extra_inputs, extra_targets, extra_user_rows = valid_inputs[:0], valid_targets[:0], task.validation_user_rows[:0]

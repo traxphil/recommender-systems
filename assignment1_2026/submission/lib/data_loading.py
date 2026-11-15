@@ -104,6 +104,8 @@ def load_rating_prediction_task(training_csv_path, test_csv_path, validation_fra
 # (Koren 2009: N(u) also contained the Netflix Prize qualifying pairs, whose ratings were unknown)
 # the ratings are never part of it (NaN); unknown users / items (row 0) are left out, duplicate pairs appear once
 def known_interaction_pairs(task: RatingTask) -> RatingData:
+    if task.all_known_pairs is not None:        # a rating model's task without the 0-star ratings (assignment1.rating_model_task)
+        return task.all_known_pairs
     user_rows = np.concatenate([task.training_and_validation_data.user_rows, task.test_user_rows])
     item_rows = np.concatenate([task.training_and_validation_data.item_rows, task.test_item_rows])
     is_known = (user_rows > 0) & (item_rows > 0)
@@ -210,7 +212,10 @@ def read_chronological_interactions(training_csv_path) -> ChronologicalInteracti
 # validation pairs the same way ("leave last out"): each user's last training interaction (positive) vs. the book of a random
 # other interaction (negative, popularity-weighted as in Tasks 2 / 4), in random order
 # the test file has no timestamp -> the day of a pair = the day of the user's last known interaction ("now")
-def load_next_item_task(training_csv_path, test_csv_path, split_seed: int = 0) -> PairChoiceTask:
+# negatives_per_positive > 1: every validation positive also comes with further negatives (extra pairs after the original
+# ones, drawn the same way with their own random generator -> the original pairs stay exactly as with 1) -> more pairs for the
+# blender to learn from
+def load_next_item_task(training_csv_path, test_csv_path, split_seed: int = 0, negatives_per_positive: int = 1) -> PairChoiceTask:
 
     chronological = read_chronological_interactions(training_csv_path)
     test_columns = read_csv_columns(test_csv_path)
@@ -233,12 +238,25 @@ def load_next_item_task(training_csv_path, test_csv_path, split_seed: int = 0) -
         negative_item_rows[is_same_item] = item_rows[random_generator.choice(train_indices, is_same_item.sum())]
 
     first_is_positive = random_generator.random(len(valid_indices)) < 0.5
+
+    extra_generator = np.random.default_rng(split_seed + 1)
+    pair_indices, pair_positives, pair_negatives, pair_first_is_positive = [valid_indices], [positive_item_rows], [negative_item_rows], [first_is_positive]
+    for _ in range(negatives_per_positive - 1):
+        extra_negatives = item_rows[extra_generator.choice(train_indices, len(valid_indices))]
+        while np.any(is_same_item := extra_negatives == positive_item_rows):
+            extra_negatives[is_same_item] = item_rows[extra_generator.choice(train_indices, is_same_item.sum())]
+        pair_indices.append(valid_indices)
+        pair_positives.append(positive_item_rows)
+        pair_negatives.append(extra_negatives)
+        pair_first_is_positive.append(extra_generator.random(len(valid_indices)) < 0.5)
+    pair_indices, pair_positives, pair_negatives = np.concatenate(pair_indices), np.concatenate(pair_positives), np.concatenate(pair_negatives)
+    pair_first_is_positive = np.concatenate(pair_first_is_positive)
     validation_pairs = ChoicePairs(
-        user_rows=user_rows[valid_indices],
-        first_item_rows=np.where(first_is_positive, positive_item_rows, negative_item_rows),
-        second_item_rows=np.where(first_is_positive, negative_item_rows, positive_item_rows),
-        days=days[valid_indices - 1],               # "now" = the user's previous (last remaining) interaction
-        first_is_positive=first_is_positive,
+        user_rows=user_rows[pair_indices],
+        first_item_rows=np.where(pair_first_is_positive, pair_positives, pair_negatives),
+        second_item_rows=np.where(pair_first_is_positive, pair_negatives, pair_positives),
+        days=days[pair_indices - 1],                # "now" = the user's previous (last remaining) interaction
+        first_is_positive=pair_first_is_positive,
     )
 
     # test pairs: "now" = the day of the user's last training interaction

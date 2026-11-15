@@ -15,6 +15,9 @@ from lib.custom_types import (AutoRecConfig, BayesianFactorizationMachineConfig,
 
 # Rating Range
 RATING_MIN, RATING_MAX = 0.0, 5.0
+# Tasks 1 / 3: rating models train on the ratings > 0 only (the leaderboard leaves the zeros out, lecture 6 Nov) - see
+# rating_model_task in assignment1.py; the zero models keep the zeros
+TRAIN_RATING_MODELS_WITHOUT_ZERO_RATINGS = True
 
 # GPU if GPU is available / otherwise CPU
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -78,7 +81,8 @@ TASK1_SVD = LatentFactorConfig(
 # best SVD++ of the sweep: mean valid MSE 0.7432 over validation splits 0 / 1 / 2
 TASK1_SVDPP = LatentFactorConfig(
     use_implicit_feedback=True,
-    use_test_pairs_as_implicit_feedback=False,    # True: N(u) + the test pairs; CPU check 14 Nov (k = 32): 0.7508 vs 0.7506 -> no gain
+    use_test_pairs_as_implicit_feedback=True,     # every known pair, 0-star ratings included (assignment1.rating_model_task)
+                                                  # 15 Nov without the 0-star ratings: 0.57210 -> 0.57193 (with them, 14 Nov: no gain)
     n_factors=500,
     learning_rate=2.5e-4,
     user_bias_regularization=1.0,           # own lambdas (independent of TASK1_SHARED_BASELINE_BIASES)
@@ -129,16 +133,19 @@ TASK1_FACTORIZATION_MACHINE = FactorizationMachineConfig(
 )
 
 # ---- Bayesian factorization machine (Gibbs sampling, CPU, needs `pip install myfm`) -------
-# no learning rate / lambda / early stopping to tune; more kept draws = a smoother posterior mean (never overfits)
+# no learning rate / lambda / early stopping to tune; more kept draws = a smoother posterior mean
 # CPU check 14 Nov (rank 32, 20 + 80 draws, no refit): valid MSE 0.7255 (SVD++ k = 32 in the same check: 0.7506)
 # time per draw (CPU check): rank 32 ~6 s, rank 64 ~12 s -> rank 32 to start, the sweep tries larger ranks
 # sweep 14 Nov (20 + 180 draws): rank 32 0.7272, 64 0.72337, 128 0.72022 (~35 min per fit on the PC)
+# 15 Nov without the 0-star ratings (MSE on the validation ratings > 0): 20 + 180 draws 0.54871, 30 + 380 draws 0.55708 (worse);
+# + every known pair as implicit feedback 0.54395 (jobs/cpu_07; Task 1 blend 0.54058 -> 0.53768), at rank 192 0.54084
+# (blend 0.53601; ~2 h per fit on the PC)
 TASK1_BAYESIAN_FACTORIZATION_MACHINE = BayesianFactorizationMachineConfig(
-    rank=128,
+    rank=192,
     n_burn_in_iterations=20,
     n_kept_samples=180,
     use_implicit_feedback=True,
-    use_test_pairs_as_implicit_feedback=False,
+    use_test_pairs_as_implicit_feedback=True,
     refit_on_train_and_valid=True,
     seed=0,
 )
@@ -191,7 +198,8 @@ TASK1_AUTOREC = AutoRecConfig(
 # factors at penalty 24: 120 0.73246, 250 0.73267, 500 0.73290 -> 120 (fastest)
 TASK1_INTEGRATED_MODEL = IntegratedModelConfig(
     n_factors=120,
-    use_test_pairs_as_implicit_feedback=False,
+    use_test_pairs_as_implicit_feedback=True,     # every known pair, 0-star ratings included (assignment1.rating_model_task)
+                                                  # 15 Nov: 0.56463 -> 0.56343; Task 1 blend 0.54116 -> 0.54058 with these two
     n_neighbors=100,
     similarity_shrinkage=100.0,
     max_ratings_per_user_for_similarity=300,
@@ -240,6 +248,7 @@ TASK1_RIDGE_BLENDER = BlenderConfig(
     lightgbm_num_leaves=0,
     lightgbm_min_child_samples=0,
     seed=0,
+    fit_on_nonzero_ratings=True,            # the leaderboard leaves out ratings of 0 (lecture 6 Nov; public Task 1 score 0.5618 ~ our 0.566 without zeros)
 )
 
 # gradient-boosted trees on the sub-model predictions + #ratings of user and item (as the Netflix Prize blends)
@@ -254,6 +263,7 @@ TASK1_LIGHTGBM_BLENDER = BlenderConfig(
     lightgbm_num_leaves=31,
     lightgbm_min_child_samples=200,
     seed=0,
+    fit_on_nonzero_ratings=True,            # the leaderboard leaves out ratings of 0 (lecture 6 Nov; public Task 1 score 0.5618 ~ our 0.566 without zeros)
 )
 
 # the blend that writes output/task_1_predictions.csv
@@ -371,7 +381,8 @@ TASK3_SVD = LatentFactorConfig(
 # sweep 14 Nov: factor penalty 4, learning rate 1e-3 0.88416 (8 / 2e-3: 0.88550)
 TASK3_SVDPP = LatentFactorConfig(
     use_implicit_feedback=True,
-    use_test_pairs_as_implicit_feedback=False,
+    use_test_pairs_as_implicit_feedback=True,     # every known pair, 0-star ratings included (assignment1.rating_model_task)
+                                                  # 15 Nov: 0.71092 -> 0.71022
     n_factors=500,
     learning_rate=1e-3,
     user_bias_regularization=3.0,           # own lambdas (independent of TASK3_SHARED_BASELINE_BIASES)
@@ -427,7 +438,8 @@ TASK3_TIME_BIAS_MODEL = TimeBiasModelConfig(
 # = TASK3_SVDPP on top of the closed-form time-aware bias model (epoch 0 = TASK3_TIME_BIAS_MODEL)
 TASK3_TIME_SVDPP = TimeSVDppConfig(
     use_implicit_feedback=True,
-    use_test_pairs_as_implicit_feedback=False,
+    use_test_pairs_as_implicit_feedback=True,     # every known pair, 0-star ratings included (assignment1.rating_model_task)
+                                                  # 15 Nov: 0.69664 -> 0.69597
     n_factors=500,
     use_factor_drift=False,                 # PML Sec. 7.2.3: biases first; True adds drifting user factors p_u(t)
     time_biases=TASK3_TIME_BIAS_MODEL,
@@ -493,15 +505,18 @@ TASK3_TIME_FACTORIZATION_MACHINE = TimeFactorizationMachineConfig(
 # quick check 14 Nov (CPU, only 3 + 5 draws, no refit): without calendar fields 0.9109, month + year 0.8905
 # sweep 14 Nov (rank 32, 20 + 180 draws): month + year 0.84921, weekday + month + year 0.84878, all four 0.84988;
 # rank 16 0.85255, 64 0.84752, 128 0.84666; rank 64 with 30 + 380 draws 0.84445 (~35 min per fit on the PC)
+# 15 Nov without the 0-star ratings (MSE on the validation ratings > 0): 0.67859; rank 128 0.67760; user periods 365 / 1000
+# days + every known pair 0.67650 (jobs/cpu_06; quick check rank 8: user day / 30 days / book periods no gain)
 TASK3_TIME_BAYESIAN_FACTORIZATION_MACHINE = BayesianFactorizationMachineConfig(
     rank=64,
     n_burn_in_iterations=30,
     n_kept_samples=380,
     use_implicit_feedback=True,
-    use_test_pairs_as_implicit_feedback=False,
+    use_test_pairs_as_implicit_feedback=True,
     refit_on_train_and_valid=True,
     seed=0,
     calendar_fields=("weekday", "month", "year"),
+    user_period_days=(365, 1000),
 )
 
 # ---- rating transformer (attention over the user's rated books; timestamps not used) ------------------------------
@@ -545,7 +560,8 @@ TASK3_AUTOREC = AutoRecConfig(
 # Task 3 sweep 14 Nov: 0.87506 (factor penalty 16 0.87539, 32 0.87531, 48 worse; 200 neighbours 0.87734)
 TASK3_INTEGRATED_MODEL = IntegratedModelConfig(
     n_factors=250,
-    use_test_pairs_as_implicit_feedback=False,
+    use_test_pairs_as_implicit_feedback=True,     # every known pair, 0-star ratings included (assignment1.rating_model_task)
+                                                  # 15 Nov: 0.70264 -> 0.70073; Task 3 blend 0.66804 -> 0.66773 with the three
     n_neighbors=100,
     similarity_shrinkage=100.0,
     max_ratings_per_user_for_similarity=300,
@@ -596,6 +612,7 @@ TASK3_RIDGE_BLENDER = BlenderConfig(
     lightgbm_min_child_samples=0,
     seed=0,
     use_time_features=False,                # a linear blend cannot use "when" features
+    fit_on_nonzero_ratings=True,            # the leaderboard leaves out ratings of 0 (lecture 6 Nov; public Task 1 score 0.5618 ~ our 0.566 without zeros)
 )
 
 # gradient-boosted trees on the sub-model predictions + #ratings of user and item + when the rating happened
@@ -612,6 +629,7 @@ TASK3_LIGHTGBM_BLENDER = BlenderConfig(
     seed=0,
     use_time_features=True,
     activity_window_days=30,
+    fit_on_nonzero_ratings=True,            # the leaderboard leaves out ratings of 0 (lecture 6 Nov; public Task 1 score 0.5618 ~ our 0.566 without zeros)
 )
 
 # the blend that writes output/task_3_predictions.csv
@@ -690,11 +708,12 @@ TASK4_PAIR_BLENDER = PairBlenderConfig(
     use_time_features=True,
     activity_window_days=30,                # "popularity around t" = interactions with the book within +- 30 days
     n_folds=5,
-    lightgbm_n_estimators=400,
-    lightgbm_learning_rate=0.05,
-    lightgbm_num_leaves=31,
-    lightgbm_min_child_samples=200,
+    lightgbm_n_estimators=800,             # 15 Nov grid (with reader timing): 63 leaves / min 100 / 800 trees / 0.03 0.93254 (31 / 200 / 400 / 0.05: 0.93164)
+    lightgbm_learning_rate=0.03,
+    lightgbm_num_leaves=63,
+    lightgbm_min_child_samples=100,
     seed=0,
+    use_reader_timing_features=True,       # 15 Nov: out-of-fold accuracy 0.93077 -> 0.93164 (readers after t, first reader after t, ...)
 )
 
 
@@ -769,6 +788,19 @@ TASK5_SASREC = SasRecConfig(
     seed=0,
 )
 
+# ---- validation pairs: negatives per validation user (1 = as the test; > 1 = extra pairs for the blender to learn from,
+# lib/data_loading.py load_next_item_task)
+# 15 Nov (jobs/gpu_06, accuracy on the original 1-negative pairs): 1 -> 4 negatives 0.92502 -> 0.92688 (without the seed-1
+# SASRec), + the 200-book SASRec 0.92749
+TASK5_NEGATIVES_PER_VALIDATION_USER = 4
+
+# ---- more SASRec runs for the blend (15 Nov): SASRec is the blend's strongest input -> a second seed and a longer history
+TASK5_SASREC_SEED_1 = SasRecConfig(**{**TASK5_SASREC.__dict__, "seed": 1})
+TASK5_SASREC_LONG_HISTORY = SasRecConfig(**{**TASK5_SASREC.__dict__, "max_sequence_length": 100, "seed": 2})
+TASK5_SASREC_LONGER_HISTORY = SasRecConfig(**{**TASK5_SASREC.__dict__, "max_sequence_length": 200, "seed": 3})
+# 15 Nov on their own: seed 1 0.89252 (seed 0: ~0.892), 100-book history 0.89935; blend of 9: 0.92462 (7 models: 0.92332;
+# without the seed-1 run 0.92461, without the 100-book run 0.92405)
+
 # ---- pair blender --------------------------------------------------------------------------
 # which sub-models the blend combines: True = in the blend, False = left out (still trained and stored -> can be switched back on)
 TASK5_PAIR_BLEND_MODEL_FLAGS = {
@@ -779,17 +811,22 @@ TASK5_PAIR_BLEND_MODEL_FLAGS = {
     "time_ease": True,
     "mult_vae": True,
     "sasrec": True,
+    "sasrec_seed_1": False,                 # not retrained in the 4-negatives run (the 200-book run helps more)
+    "sasrec_long_history": True,
+    "sasrec_longer_history": True,          # 200-book history: 0.90261 on its own (100 books 0.89909, 50 books 0.89161)
 }
 TASK5_PAIR_BLENDER = PairBlenderConfig(
     combined_models=tuple(model_name for model_name, is_blended in TASK5_PAIR_BLEND_MODEL_FLAGS.items() if is_blended),
     use_time_features=True,                 # t = the day of the user's last interaction ("now")
     activity_window_days=30,
     n_folds=5,
-    lightgbm_n_estimators=400,
-    lightgbm_learning_rate=0.05,
-    lightgbm_num_leaves=31,
-    lightgbm_min_child_samples=200,
+    lightgbm_n_estimators=800,             # 15 Nov grid (with reader timing): 63 leaves / min 100 / 800 trees / 0.03 0.92332 (31 / 200 / 400 / 0.05: 0.92258)
+    lightgbm_learning_rate=0.03,
+    lightgbm_num_leaves=63,
+    lightgbm_min_child_samples=100,
     seed=0,
+    use_reader_timing_features=True,       # 15 Nov: out-of-fold accuracy 0.92149 -> 0.92258 (readers after t, first reader after t, ...)
+    use_sequence_features=True,            # 15 Nov: what other readers read right after the user's last books: 0.92462 -> 0.92502
 )
 
 
@@ -819,11 +856,15 @@ TASK6_LIGHTGBM_GAP_MODEL = GapRegressorConfig(
     n_folds=5,
     lightgbm_n_estimators=600,
     lightgbm_learning_rate=0.02,
-    lightgbm_num_leaves=63,
+    lightgbm_num_leaves=255,
     lightgbm_min_child_samples=100,
     seed=0,
-    n_earlier_gaps_as_training_rows=1,
+    n_earlier_gaps_as_training_rows=4,
+    use_rows_from_end_feature=True,
 )
+# 15 Nov, later (mean of 2 fold splits): + "rows from end" input 80.96 -> 2 earlier gaps 80.82 -> + 127 leaves 80.52 ->
+# 4 earlier gaps 80.48 -> 255 leaves 80.43; bagging (5 models, rows 0.8 / features 0.7): -0.06 with the old settings, +0.1
+# (worse) with these -> not used (n_bagged_models stays 1)
 
 # the model that writes output/task_6_predictions.csv -> compare the validation MAEs in task6_ensemble.ipynb
 TASK6_SUBMITTED_GAP_MODEL = TASK6_LIGHTGBM_GAP_MODEL

@@ -1,0 +1,61 @@
+cpu_03_retrain_task1_bfm_without_zeros.py finished -> blending
+[11:15:58] bias_model             valid MSE 0.5900  (rows with rating > 0)
+[11:15:58] svd                    valid MSE 0.5778  (rows with rating > 0)
+[11:15:58] svdpp                  valid MSE 0.5721  (rows with rating > 0)
+[11:15:58] item_knn               valid MSE 0.5824  (rows with rating > 0)
+[11:15:58] factorization_machine  valid MSE 0.5806  (rows with rating > 0)
+[11:15:58] bayesian_factorization_machine valid MSE 0.5487  (rows with rating > 0)
+[11:15:58] rating_transformer     valid MSE 0.5856  (rows with rating > 0)
+[11:15:58] autorec                valid MSE 0.5775  (rows with rating > 0)
+[11:15:58] integrated_model       valid MSE 0.5646  (rows with rating > 0)
+[11:15:58] ridge blend                valid MSE 0.5412  (out-of-fold, 5 folds, rows with rating > 0)
+[11:15:58] ridge blend inputs: bias_model -1.87, svd -0.189, svdpp 0.098, item_knn 1.74, zero_model 0.0583, factorization_machine -0.0268, bayesian_factorization_machine 0.684, rating_transformer 0.225, autorec -0.0432, integrated_model 0.386
+[11:15:58] stored ridge_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task1\ridge_blender.pt
+RESULT task 1 ridge    blend, sub-models without zeros: 0.54116 (blend before, submitted ridge: 0.54953)
+RESULT task 1: wrote task_1_predictions.csv
+[11:16:01] bias_model             valid MSE 0.5900  (rows with rating > 0)
+[11:16:01] svd                    valid MSE 0.5778  (rows with rating > 0)
+[11:16:01] svdpp                  valid MSE 0.5721  (rows with rating > 0)
+[11:16:01] item_knn               valid MSE 0.5824  (rows with rating > 0)
+[11:16:01] factorization_machine  valid MSE 0.5806  (rows with rating > 0)
+[11:16:01] bayesian_factorization_machine valid MSE 0.5487  (rows with rating > 0)
+[11:16:01] rating_transformer     valid MSE 0.5856  (rows with rating > 0)
+[11:16:01] autorec                valid MSE 0.5775  (rows with rating > 0)
+[11:16:01] integrated_model       valid MSE 0.5646  (rows with rating > 0)
+[11:16:01] lightgbm blend                valid MSE 0.5430  (out-of-fold, 5 folds, rows with rating > 0)
+[11:16:02] lightgbm blend inputs: bias_model 959, svd 700, svdpp 817, item_knn 606, zero_model 1.08e+03, factorization_machine 859, bayesian_factorization_machine 1.58e+03, rating_transformer 891, autorec 628, integrated_model 1.41e+03, log_user_ratings 1.16e+03, log_item_ratings 1.31e+03
+[11:16:02] stored lightgbm_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task1\lightgbm_blender.pt
+RESULT task 1 lightgbm blend, sub-models without zeros: 0.54303 (blend before, submitted ridge: 0.54953)
+[11:16:05] bias_model             valid MSE 0.7399  (rows with rating > 0)
+[11:16:05] svd                    valid MSE 0.7172  (rows with rating > 0)
+[11:16:05] svdpp                  valid MSE 0.7109  (rows with rating > 0)
+[11:16:05] item_knn               valid MSE 0.7264  (rows with rating > 0)
+[11:16:05] time_bias_model        valid MSE 0.7210  (rows with rating > 0)
+[11:16:05] time_svdpp             valid MSE 0.6966  (rows with rating > 0)
+[11:16:05] time_item_knn          valid MSE 0.7265  (rows with rating > 0)
+[11:16:05] time_factorization_machine valid MSE 0.7277  (rows with rating > 0)
+[11:16:05] time_bayesian_factorization_machine valid MSE 0.6786  (rows with rating > 0)
+[11:16:05] rating_transformer     valid MSE 0.7277  (rows with rating > 0)
+[11:16:05] autorec                valid MSE 0.7207  (rows with rating > 0)
+[11:16:05] integrated_model       valid MSE 0.7026  (rows with rating > 0)
+[11:16:05] ridge blend                valid MSE 0.6687  (out-of-fold, 5 folds, rows with rating > 0)
+[11:16:05] ridge blend inputs: bias_model -1.87, svd -0.228, svdpp -0.147, item_knn -0.201, zero_model 0.0536, time_bias_model 0.0802, time_svdpp 0.264, time_item_knn 2.09, time_zero_model 0.091, time_factorization_machine -0.0485, time_bayesian_factorization_machine 0.643, rating_transformer 0.198, autorec -0.0681, integrated_model 0.267
+[11:16:05] stored ridge_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task3\ridge_blender.pt
+RESULT task 3 ridge    blend, sub-models without zeros: 0.66866 (blend before, submitted ridge: 0.67762)
+RESULT task 3: wrote task_3_predictions.csv
+[11:16:09] bias_model             valid MSE 0.7399  (rows with rating > 0)
+[11:16:09] svd                    valid MSE 0.7172  (rows with rating > 0)
+[11:16:09] svdpp                  valid MSE 0.7109  (rows with rating > 0)
+[11:16:09] item_knn               valid MSE 0.7264  (rows with rating > 0)
+[11:16:09] time_bias_model        valid MSE 0.7210  (rows with rating > 0)
+[11:16:09] time_svdpp             valid MSE 0.6966  (rows with rating > 0)
+[11:16:09] time_item_knn          valid MSE 0.7265  (rows with rating > 0)
+[11:16:09] time_factorization_machine valid MSE 0.7277  (rows with rating > 0)
+[11:16:09] time_bayesian_factorization_machine valid MSE 0.6786  (rows with rating > 0)
+[11:16:09] rating_transformer     valid MSE 0.7277  (rows with rating > 0)
+[11:16:09] autorec                valid MSE 0.7207  (rows with rating > 0)
+[11:16:09] integrated_model       valid MSE 0.7026  (rows with rating > 0)
+[11:16:09] lightgbm blend                valid MSE 0.6726  (out-of-fold, 5 folds, rows with rating > 0)
+[11:16:10] lightgbm blend inputs: bias_model 756, svd 427, svdpp 605, item_knn 320, zero_model 530, time_bias_model 451, time_svdpp 711, time_item_knn 318, time_zero_model 600, time_factorization_machine 488, time_bayesian_factorization_machine 1.03e+03, rating_transformer 644, autorec 389, integrated_model 774, log_user_ratings 579, log_item_ratings 761, log_same_day_ratings 48, log_window_ratings 296, log_earlier_ratings 605, item_age_years 867, years_since_2000 797
+[11:16:10] stored lightgbm_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task3\lightgbm_blender.pt
+RESULT task 3 lightgbm blend, sub-models without zeros: 0.67264 (blend before, submitted ridge: 0.67762)

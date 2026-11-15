@@ -1,0 +1,268 @@
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[08:28:40] popularity             validation accuracy 0.5204
+[08:28:40] item_cosine            validation accuracy 0.7714
+[08:28:40] transition             validation accuracy 0.7467
+[08:28:40] ease                   validation accuracy 0.7009
+[08:28:40] time_ease              validation accuracy 0.7058
+[08:28:40] mult_vae               validation accuracy 0.7189
+[08:28:40] sasrec                 validation accuracy 0.8921
+[08:28:40] pair blend             validation accuracy 0.9226  (out-of-fold, 5 folds)
+[08:28:43] pair blend inputs: sasrec_difference 829, popularity_difference 754, popularity_first 573, popularity_second 572, mult_vae_difference 486, item_cosine_difference 471, transition_difference 421, share_of_readers_after_t_difference 396, item_age_years_at_t_first 375, item_age_years_at_t_second 354, mult_vae_first 321, item_cosine_first 312, time_ease_difference 304, sasrec_second 304, item_cosine_second 301, mult_vae_second 296, time_ease_first 291, sasrec_first 291, item_age_years_at_t_difference 287, time_ease_second 287, log_days_to_first_reader_after_t_first 234, log_days_to_first_reader_after_t_second 221, transition_second 203, transition_first 193, ease_first 189, ease_second 186, log_days_since_last_reader_before_t_first 178, log_days_since_last_reader_before_t_second 174, log_user_interactions 170, log_readers_90_days_after_t_difference 163, log_days_since_last_reader_before_t_difference 158, log_days_to_first_reader_after_t_difference 148, ease_difference 138, share_of_readers_after_t_first 137, share_of_readers_after_t_second 130, already_read_difference 122, log_readers_365_days_after_t_first 119, log_readers_365_days_after_t_difference 117, log_readers_365_days_after_t_second 97, log_readers_30_days_after_t_difference 88, log_readers_30_days_before_t_difference 82, log_interactions_around_t_difference 70, log_readers_90_days_after_t_second 67, log_readers_90_days_after_t_first 60, log_interactions_around_t_second 53, log_interactions_around_t_first 50, log_readers_7_days_after_t_difference 49, log_readers_30_days_after_t_first 48, log_readers_30_days_after_t_second 48, log_readers_30_days_before_t_first 37, log_readers_30_days_before_t_second 32, log_readers_7_days_after_t_first 7, log_readers_7_days_after_t_second 7, already_read_first 0, already_read_second 0
+[08:28:43] stored pair_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task5\pair_blender.pt
+RESULT task 5: blend with reader timing 0.92258 -> wrote task_5_predictions.csv
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[08:28:52] popularity             validation accuracy 0.5204
+[08:28:52] item_cosine            validation accuracy 0.7714
+[08:28:52] transition             validation accuracy 0.7467
+[08:28:52] ease                   validation accuracy 0.7009
+[08:28:52] time_ease              validation accuracy 0.7058
+[08:28:52] mult_vae               validation accuracy 0.7189
+[08:28:52] sasrec                 validation accuracy 0.8921
+[08:28:52] pair blend             validation accuracy 0.9226  (out-of-fold, 5 folds)
+[08:28:54] pair blend inputs: sasrec_difference 829, popularity_difference 754, popularity_first 573, popularity_second 572, mult_vae_difference 486, item_cosine_difference 471, transition_difference 421, share_of_readers_after_t_difference 396, item_age_years_at_t_first 375, item_age_years_at_t_second 354, mult_vae_first 321, item_cosine_first 312, time_ease_difference 304, sasrec_second 304, item_cosine_second 301, mult_vae_second 296, time_ease_first 291, sasrec_first 291, item_age_years_at_t_difference 287, time_ease_second 287, log_days_to_first_reader_after_t_first 234, log_days_to_first_reader_after_t_second 221, transition_second 203, transition_first 193, ease_first 189, ease_second 186, log_days_since_last_reader_before_t_first 178, log_days_since_last_reader_before_t_second 174, log_user_interactions 170, log_readers_90_days_after_t_difference 163, log_days_since_last_reader_before_t_difference 158, log_days_to_first_reader_after_t_difference 148, ease_difference 138, share_of_readers_after_t_first 137, share_of_readers_after_t_second 130, already_read_difference 122, log_readers_365_days_after_t_first 119, log_readers_365_days_after_t_difference 117, log_readers_365_days_after_t_second 97, log_readers_30_days_after_t_difference 88, log_readers_30_days_before_t_difference 82, log_interactions_around_t_difference 70, log_readers_90_days_after_t_second 67, log_readers_90_days_after_t_first 60, log_interactions_around_t_second 53, log_interactions_around_t_first 50, log_readers_7_days_after_t_difference 49, log_readers_30_days_after_t_first 48, log_readers_30_days_after_t_second 48, log_readers_30_days_before_t_first 37, log_readers_30_days_before_t_second 32, log_readers_7_days_after_t_first 7, log_readers_7_days_after_t_second 7, already_read_first 0, already_read_second 0
+GRID task 5: leaves 31 min_child 200 trees 400 rate 0.05 -> 0.92258
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[08:29:06] popularity             validation accuracy 0.5204
+[08:29:06] item_cosine            validation accuracy 0.7714
+[08:29:06] transition             validation accuracy 0.7467
+[08:29:06] ease                   validation accuracy 0.7009
+[08:29:06] time_ease              validation accuracy 0.7058
+[08:29:06] mult_vae               validation accuracy 0.7189
+[08:29:06] sasrec                 validation accuracy 0.8921
+[08:29:06] pair blend             validation accuracy 0.9226  (out-of-fold, 5 folds)
+[08:29:08] pair blend inputs: popularity_difference 1330, sasrec_difference 1206, popularity_first 1002, popularity_second 967, mult_vae_difference 933, item_cosine_difference 885, share_of_readers_after_t_difference 783, item_age_years_at_t_first 780, item_age_years_at_t_second 753, mult_vae_second 707, sasrec_second 700, sasrec_first 678, mult_vae_first 671, transition_difference 670, item_age_years_at_t_difference 651, item_cosine_first 616, item_cosine_second 596, time_ease_difference 581, time_ease_second 575, time_ease_first 554, log_days_to_first_reader_after_t_difference 504, log_days_to_first_reader_after_t_first 501, log_days_to_first_reader_after_t_second 498, ease_first 495, ease_second 473, log_days_since_last_reader_before_t_difference 455, transition_second 430, log_user_interactions 426, log_days_since_last_reader_before_t_second 425, transition_first 421, log_days_since_last_reader_before_t_first 413, ease_difference 400, log_readers_365_days_after_t_difference 354, share_of_readers_after_t_first 339, log_readers_90_days_after_t_difference 327, share_of_readers_after_t_second 307, log_readers_365_days_after_t_first 284, log_readers_365_days_after_t_second 245, log_readers_30_days_after_t_difference 199, log_readers_30_days_before_t_difference 190, log_interactions_around_t_difference 176, log_readers_90_days_after_t_second 151, log_readers_90_days_after_t_first 143, log_readers_30_days_after_t_first 129, log_interactions_around_t_second 124, log_interactions_around_t_first 123, already_read_difference 120, log_readers_30_days_before_t_first 120, log_readers_30_days_before_t_second 105, log_readers_7_days_after_t_difference 104, log_readers_30_days_after_t_second 93, log_readers_7_days_after_t_second 45, log_readers_7_days_after_t_first 42, already_read_second 1, already_read_first 0
+GRID task 5: leaves 63 min_child 200 trees 400 rate 0.05 -> 0.92265
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[08:29:18] popularity             validation accuracy 0.5204
+[08:29:18] item_cosine            validation accuracy 0.7714
+[08:29:18] transition             validation accuracy 0.7467
+[08:29:18] ease                   validation accuracy 0.7009
+[08:29:18] time_ease              validation accuracy 0.7058
+[08:29:18] mult_vae               validation accuracy 0.7189
+[08:29:18] sasrec                 validation accuracy 0.8921
+[08:29:18] pair blend             validation accuracy 0.9227  (out-of-fold, 5 folds)
+[08:29:20] pair blend inputs: sasrec_difference 805, popularity_difference 763, popularity_first 603, popularity_second 567, mult_vae_difference 476, item_cosine_difference 449, share_of_readers_after_t_difference 367, transition_difference 365, item_age_years_at_t_second 345, item_age_years_at_t_first 337, time_ease_difference 325, sasrec_first 311, item_age_years_at_t_difference 299, item_cosine_first 299, mult_vae_first 291, sasrec_second 284, mult_vae_second 282, time_ease_first 278, time_ease_second 278, item_cosine_second 271, log_days_to_first_reader_after_t_first 234, log_days_to_first_reader_after_t_second 223, transition_first 212, transition_second 211, already_read_difference 210, ease_second 194, log_days_to_first_reader_after_t_difference 178, log_readers_90_days_after_t_difference 167, log_user_interactions 167, ease_difference 166, ease_first 164, log_days_since_last_reader_before_t_first 164, log_days_since_last_reader_before_t_second 163, log_days_since_last_reader_before_t_difference 157, log_readers_365_days_after_t_difference 140, share_of_readers_after_t_second 136, share_of_readers_after_t_first 127, log_readers_365_days_after_t_first 112, log_readers_30_days_after_t_difference 110, log_readers_365_days_after_t_second 102, log_readers_30_days_before_t_difference 86, log_interactions_around_t_difference 71, log_readers_90_days_after_t_first 62, log_interactions_around_t_first 61, log_readers_30_days_before_t_first 57, log_readers_30_days_after_t_second 57, log_readers_7_days_after_t_difference 53, log_readers_90_days_after_t_second 52, log_interactions_around_t_second 51, log_readers_30_days_before_t_second 47, log_readers_30_days_after_t_first 42, log_readers_7_days_after_t_first 17, log_readers_7_days_after_t_second 12, already_read_first 0, already_read_second 0
+GRID task 5: leaves 31 min_child 100 trees 400 rate 0.05 -> 0.92271
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[08:29:28] popularity             validation accuracy 0.5204
+[08:29:28] item_cosine            validation accuracy 0.7714
+[08:29:28] transition             validation accuracy 0.7467
+[08:29:28] ease                   validation accuracy 0.7009
+[08:29:28] time_ease              validation accuracy 0.7058
+[08:29:28] mult_vae               validation accuracy 0.7189
+[08:29:28] sasrec                 validation accuracy 0.8921
+[08:29:28] pair blend             validation accuracy 0.9223  (out-of-fold, 5 folds)
+[08:29:30] pair blend inputs: sasrec_difference 554, popularity_difference 408, popularity_first 357, popularity_second 325, mult_vae_difference 251, transition_difference 203, item_cosine_difference 194, share_of_readers_after_t_difference 191, item_age_years_at_t_second 177, item_age_years_at_t_first 172, item_cosine_second 146, time_ease_first 145, mult_vae_first 145, item_cosine_first 144, time_ease_difference 141, time_ease_second 140, mult_vae_second 137, already_read_difference 121, sasrec_second 109, log_days_to_first_reader_after_t_first 102, sasrec_first 101, log_days_to_first_reader_after_t_second 100, transition_first 97, transition_second 90, item_age_years_at_t_difference 79, log_days_since_last_reader_before_t_first 63, log_readers_90_days_after_t_difference 62, log_days_since_last_reader_before_t_second 59, share_of_readers_after_t_first 56, share_of_readers_after_t_second 53, log_readers_30_days_after_t_difference 52, ease_difference 49, ease_first 49, log_interactions_around_t_difference 46, log_days_since_last_reader_before_t_difference 45, ease_second 44, log_user_interactions 41, log_readers_365_days_after_t_difference 40, log_days_to_first_reader_after_t_difference 38, log_readers_365_days_after_t_first 36, log_readers_365_days_after_t_second 35, log_readers_90_days_after_t_second 33, log_readers_30_days_before_t_difference 30, log_readers_90_days_after_t_first 27, log_readers_30_days_after_t_second 26, log_readers_30_days_after_t_first 23, log_readers_30_days_before_t_first 16, log_readers_30_days_before_t_second 13, log_interactions_around_t_first 12, log_interactions_around_t_second 11, log_readers_7_days_after_t_difference 5, log_readers_7_days_after_t_second 4, log_readers_7_days_after_t_first 3, already_read_first 0, already_read_second 0
+GRID task 5: leaves 15 min_child 200 trees 400 rate 0.05 -> 0.92227
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[08:29:46] popularity             validation accuracy 0.5204
+[08:29:46] item_cosine            validation accuracy 0.7714
+[08:29:46] transition             validation accuracy 0.7467
+[08:29:46] ease                   validation accuracy 0.7009
+[08:29:46] time_ease              validation accuracy 0.7058
+[08:29:46] mult_vae               validation accuracy 0.7189
+[08:29:46] sasrec                 validation accuracy 0.8921
+[08:29:46] pair blend             validation accuracy 0.9228  (out-of-fold, 5 folds)
+[08:29:50] pair blend inputs: popularity_difference 1456, sasrec_difference 1435, popularity_first 1090, popularity_second 1076, mult_vae_difference 967, item_cosine_difference 884, share_of_readers_after_t_difference 758, item_age_years_at_t_first 701, transition_difference 698, item_age_years_at_t_second 675, mult_vae_first 667, mult_vae_second 621, item_age_years_at_t_difference 610, sasrec_second 608, item_cosine_first 599, time_ease_difference 586, sasrec_first 586, item_cosine_second 569, time_ease_first 558, time_ease_second 549, log_days_to_first_reader_after_t_first 461, log_days_to_first_reader_after_t_second 460, transition_first 457, log_user_interactions 426, transition_second 416, ease_second 404, log_days_since_last_reader_before_t_first 379, ease_first 378, log_days_since_last_reader_before_t_difference 361, ease_difference 357, log_days_since_last_reader_before_t_second 357, log_days_to_first_reader_after_t_difference 352, log_readers_365_days_after_t_difference 332, log_readers_90_days_after_t_difference 322, share_of_readers_after_t_second 308, share_of_readers_after_t_first 273, log_readers_365_days_after_t_second 233, log_readers_365_days_after_t_first 219, already_read_difference 200, log_readers_30_days_after_t_difference 198, log_readers_30_days_before_t_difference 177, log_interactions_around_t_difference 165, log_readers_90_days_after_t_first 153, log_readers_90_days_after_t_second 151, log_readers_7_days_after_t_difference 110, log_readers_30_days_before_t_first 105, log_interactions_around_t_second 105, log_interactions_around_t_first 104, log_readers_30_days_after_t_first 98, log_readers_30_days_after_t_second 95, log_readers_30_days_before_t_second 83, log_readers_7_days_after_t_first 35, log_readers_7_days_after_t_second 31, already_read_second 2, already_read_first 0
+GRID task 5: leaves 31 min_child 200 trees 800 rate 0.03 -> 0.92282
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[08:30:10] popularity             validation accuracy 0.5204
+[08:30:10] item_cosine            validation accuracy 0.7714
+[08:30:10] transition             validation accuracy 0.7467
+[08:30:10] ease                   validation accuracy 0.7009
+[08:30:10] time_ease              validation accuracy 0.7058
+[08:30:10] mult_vae               validation accuracy 0.7189
+[08:30:10] sasrec                 validation accuracy 0.8921
+[08:30:10] pair blend             validation accuracy 0.9233  (out-of-fold, 5 folds)
+[08:30:15] pair blend inputs: popularity_difference 2489, sasrec_difference 2274, popularity_second 1827, popularity_first 1792, mult_vae_difference 1741, item_cosine_difference 1572, item_age_years_at_t_first 1523, item_age_years_at_t_second 1502, sasrec_first 1480, share_of_readers_after_t_difference 1458, sasrec_second 1451, mult_vae_second 1371, mult_vae_first 1357, item_age_years_at_t_difference 1301, transition_difference 1296, time_ease_first 1211, time_ease_second 1204, item_cosine_first 1199, item_cosine_second 1174, time_ease_difference 1099, log_days_to_first_reader_after_t_second 1067, log_days_to_first_reader_after_t_difference 1056, log_days_to_first_reader_after_t_first 1049, log_days_since_last_reader_before_t_difference 973, log_user_interactions 914, log_days_since_last_reader_before_t_first 906, transition_first 887, transition_second 886, ease_first 854, ease_second 853, log_days_since_last_reader_before_t_second 848, ease_difference 844, log_readers_365_days_after_t_difference 758, share_of_readers_after_t_second 701, log_readers_90_days_after_t_difference 694, share_of_readers_after_t_first 668, log_readers_365_days_after_t_first 554, log_readers_365_days_after_t_second 549, log_readers_30_days_after_t_difference 434, log_interactions_around_t_difference 426, log_readers_30_days_before_t_difference 426, already_read_difference 349, log_readers_90_days_after_t_second 341, log_readers_90_days_after_t_first 314, log_readers_7_days_after_t_difference 285, log_readers_30_days_after_t_first 258, log_interactions_around_t_second 252, log_interactions_around_t_first 250, log_readers_30_days_before_t_second 248, log_readers_30_days_before_t_first 231, log_readers_30_days_after_t_second 215, log_readers_7_days_after_t_first 108, log_readers_7_days_after_t_second 80, already_read_second 1, already_read_first 0
+GRID task 5: leaves 63 min_child 100 trees 800 rate 0.03 -> 0.92332
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[08:30:27] popularity             validation accuracy 0.4975
+[08:30:27] item_cosine            validation accuracy 0.7229
+[08:30:27] ease                   validation accuracy 0.7514
+[08:30:27] time_ease              validation accuracy 0.7872
+[08:30:27] mult_vae               validation accuracy 0.7592
+[08:30:27] pair blend             validation accuracy 0.9316  (out-of-fold, 5 folds)
+[08:30:30] pair blend inputs: popularity_difference 1110, mult_vae_difference 927, time_ease_difference 755, popularity_second 467, popularity_first 465, log_interactions_around_t_difference 432, log_user_interactions 414, time_ease_second 402, time_ease_first 388, item_age_years_at_t_second 367, item_age_years_at_t_first 364, share_of_readers_after_t_second 336, share_of_readers_after_t_first 333, already_read_difference 320, item_age_years_at_t_difference 280, ease_first 260, share_of_readers_after_t_difference 259, mult_vae_first 255, ease_difference 248, mult_vae_second 238, ease_second 236, log_days_since_last_reader_before_t_difference 216, item_cosine_second 211, item_cosine_difference 208, item_cosine_first 198, log_days_since_last_reader_before_t_second 171, log_days_since_last_reader_before_t_first 166, log_readers_7_days_after_t_difference 160, log_days_to_first_reader_after_t_difference 158, log_readers_365_days_after_t_second 156, log_readers_365_days_after_t_first 132, log_readers_30_days_before_t_difference 127, log_days_to_first_reader_after_t_first 122, log_days_to_first_reader_after_t_second 111, log_readers_30_days_after_t_difference 99, log_readers_90_days_after_t_first 89, log_readers_7_days_after_t_first 87, log_readers_7_days_after_t_second 87, log_readers_90_days_after_t_difference 86, log_readers_365_days_after_t_difference 85, log_readers_30_days_before_t_first 83, log_readers_30_days_before_t_second 82, log_interactions_around_t_first 66, log_interactions_around_t_second 66, log_readers_90_days_after_t_second 65, log_readers_30_days_after_t_second 57, log_readers_30_days_after_t_first 55, already_read_second 1, already_read_first 0
+[08:30:30] stored pair_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task4\pair_blender.pt
+RESULT task 4: blend with reader timing 0.93164 -> wrote task_4_predictions.csv
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[08:30:41] popularity             validation accuracy 0.4975
+[08:30:41] item_cosine            validation accuracy 0.7229
+[08:30:41] ease                   validation accuracy 0.7514
+[08:30:41] time_ease              validation accuracy 0.7872
+[08:30:41] mult_vae               validation accuracy 0.7592
+[08:30:41] pair blend             validation accuracy 0.9316  (out-of-fold, 5 folds)
+[08:30:43] pair blend inputs: popularity_difference 1110, mult_vae_difference 927, time_ease_difference 755, popularity_second 467, popularity_first 465, log_interactions_around_t_difference 432, log_user_interactions 414, time_ease_second 402, time_ease_first 388, item_age_years_at_t_second 367, item_age_years_at_t_first 364, share_of_readers_after_t_second 336, share_of_readers_after_t_first 333, already_read_difference 320, item_age_years_at_t_difference 280, ease_first 260, share_of_readers_after_t_difference 259, mult_vae_first 255, ease_difference 248, mult_vae_second 238, ease_second 236, log_days_since_last_reader_before_t_difference 216, item_cosine_second 211, item_cosine_difference 208, item_cosine_first 198, log_days_since_last_reader_before_t_second 171, log_days_since_last_reader_before_t_first 166, log_readers_7_days_after_t_difference 160, log_days_to_first_reader_after_t_difference 158, log_readers_365_days_after_t_second 156, log_readers_365_days_after_t_first 132, log_readers_30_days_before_t_difference 127, log_days_to_first_reader_after_t_first 122, log_days_to_first_reader_after_t_second 111, log_readers_30_days_after_t_difference 99, log_readers_90_days_after_t_first 89, log_readers_7_days_after_t_first 87, log_readers_7_days_after_t_second 87, log_readers_90_days_after_t_difference 86, log_readers_365_days_after_t_difference 85, log_readers_30_days_before_t_first 83, log_readers_30_days_before_t_second 82, log_interactions_around_t_first 66, log_interactions_around_t_second 66, log_readers_90_days_after_t_second 65, log_readers_30_days_after_t_second 57, log_readers_30_days_after_t_first 55, already_read_second 1, already_read_first 0
+GRID task 4: leaves 31 min_child 200 trees 400 rate 0.05 -> 0.93164
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[08:30:56] popularity             validation accuracy 0.4975
+[08:30:56] item_cosine            validation accuracy 0.7229
+[08:30:56] ease                   validation accuracy 0.7514
+[08:30:56] time_ease              validation accuracy 0.7872
+[08:30:56] mult_vae               validation accuracy 0.7592
+[08:30:56] pair blend             validation accuracy 0.9319  (out-of-fold, 5 folds)
+[08:30:59] pair blend inputs: popularity_difference 2063, mult_vae_difference 1489, time_ease_difference 1257, popularity_second 895, popularity_first 894, log_user_interactions 889, time_ease_second 825, time_ease_first 803, log_interactions_around_t_difference 785, item_age_years_at_t_second 726, item_age_years_at_t_first 718, share_of_readers_after_t_first 695, share_of_readers_after_t_second 686, share_of_readers_after_t_difference 627, mult_vae_first 610, mult_vae_second 604, item_age_years_at_t_difference 594, ease_first 584, ease_second 578, ease_difference 555, log_days_since_last_reader_before_t_difference 536, item_cosine_difference 465, item_cosine_first 429, item_cosine_second 423, log_days_to_first_reader_after_t_difference 409, log_readers_30_days_before_t_difference 376, log_days_since_last_reader_before_t_first 370, log_days_since_last_reader_before_t_second 368, log_readers_7_days_after_t_difference 359, log_readers_365_days_after_t_second 350, already_read_difference 337, log_readers_90_days_after_t_difference 330, log_readers_365_days_after_t_first 321, log_readers_30_days_after_t_difference 296, log_days_to_first_reader_after_t_first 292, log_readers_365_days_after_t_difference 279, log_days_to_first_reader_after_t_second 267, log_readers_90_days_after_t_second 209, log_readers_90_days_after_t_first 205, log_readers_30_days_before_t_second 184, log_readers_7_days_after_t_second 179, log_interactions_around_t_second 173, log_interactions_around_t_first 165, log_readers_30_days_before_t_first 163, log_readers_7_days_after_t_first 157, log_readers_30_days_after_t_second 150, log_readers_30_days_after_t_first 130, already_read_second 1, already_read_first 0
+GRID task 4: leaves 63 min_child 200 trees 400 rate 0.05 -> 0.93190
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[08:31:10] popularity             validation accuracy 0.4975
+[08:31:10] item_cosine            validation accuracy 0.7229
+[08:31:10] ease                   validation accuracy 0.7514
+[08:31:10] time_ease              validation accuracy 0.7872
+[08:31:10] mult_vae               validation accuracy 0.7592
+[08:31:10] pair blend             validation accuracy 0.9316  (out-of-fold, 5 folds)
+[08:31:12] pair blend inputs: popularity_difference 1095, mult_vae_difference 942, time_ease_difference 748, popularity_second 470, popularity_first 457, log_interactions_around_t_difference 438, time_ease_second 434, log_user_interactions 411, time_ease_first 394, already_read_difference 354, item_age_years_at_t_second 350, item_age_years_at_t_first 346, share_of_readers_after_t_first 328, share_of_readers_after_t_second 327, share_of_readers_after_t_difference 270, ease_difference 268, item_age_years_at_t_difference 257, ease_first 251, mult_vae_first 246, ease_second 244, mult_vae_second 244, item_cosine_first 221, log_days_since_last_reader_before_t_difference 217, item_cosine_difference 215, item_cosine_second 192, log_days_since_last_reader_before_t_first 172, log_readers_7_days_after_t_difference 164, log_days_since_last_reader_before_t_second 164, log_days_to_first_reader_after_t_difference 154, log_readers_30_days_before_t_difference 150, log_readers_365_days_after_t_second 139, log_readers_30_days_after_t_difference 127, log_days_to_first_reader_after_t_first 119, log_readers_365_days_after_t_first 118, log_days_to_first_reader_after_t_second 110, log_readers_90_days_after_t_difference 100, log_readers_365_days_after_t_difference 87, log_readers_7_days_after_t_second 86, log_readers_7_days_after_t_first 82, log_interactions_around_t_second 76, log_readers_30_days_before_t_second 72, log_readers_30_days_before_t_first 71, log_interactions_around_t_first 68, log_readers_90_days_after_t_second 62, log_readers_90_days_after_t_first 56, log_readers_30_days_after_t_first 53, log_readers_30_days_after_t_second 51, already_read_first 0, already_read_second 0
+GRID task 4: leaves 31 min_child 100 trees 400 rate 0.05 -> 0.93163
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[08:31:22] popularity             validation accuracy 0.4975
+[08:31:22] item_cosine            validation accuracy 0.7229
+[08:31:22] ease                   validation accuracy 0.7514
+[08:31:22] time_ease              validation accuracy 0.7872
+[08:31:22] mult_vae               validation accuracy 0.7592
+[08:31:22] pair blend             validation accuracy 0.9316  (out-of-fold, 5 folds)
+[08:31:24] pair blend inputs: popularity_difference 661, mult_vae_difference 547, time_ease_difference 476, log_interactions_around_t_difference 273, already_read_difference 261, popularity_second 246, popularity_first 245, item_age_years_at_t_first 188, time_ease_second 180, item_age_years_at_t_second 178, time_ease_first 175, share_of_readers_after_t_first 161, share_of_readers_after_t_second 159, log_user_interactions 142, ease_difference 117, item_age_years_at_t_difference 100, share_of_readers_after_t_difference 94, item_cosine_first 92, item_cosine_second 91, mult_vae_first 82, ease_first 81, ease_second 80, log_days_since_last_reader_before_t_second 80, mult_vae_second 79, log_readers_7_days_after_t_difference 77, log_days_since_last_reader_before_t_first 76, log_days_since_last_reader_before_t_difference 60, item_cosine_difference 59, log_readers_30_days_before_t_difference 53, log_readers_365_days_after_t_first 48, log_days_to_first_reader_after_t_difference 45, log_readers_7_days_after_t_second 43, log_readers_7_days_after_t_first 42, log_days_to_first_reader_after_t_second 37, log_readers_365_days_after_t_second 34, log_days_to_first_reader_after_t_first 30, log_readers_30_days_before_t_first 29, log_readers_30_days_after_t_difference 27, log_interactions_around_t_first 23, log_readers_30_days_before_t_second 22, log_readers_90_days_after_t_difference 19, log_readers_90_days_after_t_first 19, log_interactions_around_t_second 19, log_readers_90_days_after_t_second 18, log_readers_30_days_after_t_second 12, log_readers_30_days_after_t_first 11, log_readers_365_days_after_t_difference 8, already_read_second 1, already_read_first 0
+GRID task 4: leaves 15 min_child 200 trees 400 rate 0.05 -> 0.93163
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[08:31:44] popularity             validation accuracy 0.4975
+[08:31:44] item_cosine            validation accuracy 0.7229
+[08:31:44] ease                   validation accuracy 0.7514
+[08:31:44] time_ease              validation accuracy 0.7872
+[08:31:44] mult_vae               validation accuracy 0.7592
+[08:31:44] pair blend             validation accuracy 0.9319  (out-of-fold, 5 folds)
+[08:31:48] pair blend inputs: popularity_difference 1963, mult_vae_difference 1688, time_ease_difference 1358, popularity_second 936, popularity_first 866, log_user_interactions 857, time_ease_second 807, time_ease_first 800, log_interactions_around_t_difference 774, item_age_years_at_t_second 758, item_age_years_at_t_first 714, share_of_readers_after_t_first 700, share_of_readers_after_t_second 672, mult_vae_second 578, item_age_years_at_t_difference 573, share_of_readers_after_t_difference 568, ease_difference 560, already_read_difference 537, ease_second 518, mult_vae_first 497, ease_first 478, item_cosine_difference 454, log_days_since_last_reader_before_t_difference 437, item_cosine_second 404, item_cosine_first 392, log_days_since_last_reader_before_t_second 380, log_days_since_last_reader_before_t_first 341, log_days_to_first_reader_after_t_difference 325, log_readers_7_days_after_t_difference 319, log_readers_365_days_after_t_first 311, log_readers_365_days_after_t_second 309, log_readers_30_days_before_t_difference 302, log_readers_30_days_after_t_difference 257, log_days_to_first_reader_after_t_second 257, log_days_to_first_reader_after_t_first 256, log_readers_365_days_after_t_difference 233, log_readers_90_days_after_t_difference 204, log_readers_7_days_after_t_second 196, log_readers_90_days_after_t_second 185, log_readers_90_days_after_t_first 184, log_readers_7_days_after_t_first 173, log_readers_30_days_before_t_first 161, log_interactions_around_t_second 161, log_interactions_around_t_first 153, log_readers_30_days_before_t_second 145, log_readers_30_days_after_t_first 138, log_readers_30_days_after_t_second 120, already_read_second 1, already_read_first 0
+GRID task 4: leaves 31 min_child 200 trees 800 rate 0.03 -> 0.93190
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[08:32:11] popularity             validation accuracy 0.4975
+[08:32:11] item_cosine            validation accuracy 0.7229
+[08:32:11] ease                   validation accuracy 0.7514
+[08:32:11] time_ease              validation accuracy 0.7872
+[08:32:11] mult_vae               validation accuracy 0.7592
+[08:32:11] pair blend             validation accuracy 0.9325  (out-of-fold, 5 folds)
+[08:32:16] pair blend inputs: popularity_difference 3539, mult_vae_difference 2887, time_ease_difference 2334, time_ease_second 1725, log_user_interactions 1706, popularity_second 1668, time_ease_first 1656, popularity_first 1644, item_age_years_at_t_second 1469, item_age_years_at_t_first 1443, log_interactions_around_t_difference 1425, share_of_readers_after_t_second 1365, share_of_readers_after_t_first 1357, share_of_readers_after_t_difference 1315, mult_vae_first 1264, item_age_years_at_t_difference 1258, mult_vae_second 1245, ease_second 1241, ease_first 1183, log_days_since_last_reader_before_t_difference 1161, ease_difference 1059, item_cosine_difference 959, log_days_to_first_reader_after_t_difference 948, item_cosine_first 916, item_cosine_second 885, log_days_since_last_reader_before_t_second 768, log_days_since_last_reader_before_t_first 742, log_readers_365_days_after_t_second 711, log_readers_30_days_before_t_difference 708, log_days_to_first_reader_after_t_second 700, log_readers_365_days_after_t_first 699, log_days_to_first_reader_after_t_first 695, already_read_difference 674, log_readers_7_days_after_t_difference 638, log_readers_365_days_after_t_difference 636, log_readers_90_days_after_t_difference 633, log_readers_30_days_after_t_difference 621, log_readers_90_days_after_t_first 486, log_readers_90_days_after_t_second 485, log_readers_30_days_before_t_second 395, log_readers_30_days_before_t_first 384, log_interactions_around_t_first 360, log_interactions_around_t_second 349, log_readers_7_days_after_t_second 342, log_readers_7_days_after_t_first 319, log_readers_30_days_after_t_second 305, log_readers_30_days_after_t_first 298, already_read_first 0, already_read_second 0
+GRID task 4: leaves 63 min_child 100 trees 800 rate 0.03 -> 0.93254
+[08:32:25] popularity             validation accuracy 0.4914
+[08:32:25] item_cosine            validation accuracy 0.8696
+[08:32:25] ease                   validation accuracy 0.8512
+[08:32:25] mult_vae               validation accuracy 0.8626
+[08:32:25] pair blend             validation accuracy 0.9369  (out-of-fold, 5 folds)
+[08:32:27] pair blend inputs: popularity_difference 1588, ease_difference 1453, mult_vae_difference 1383, popularity_second 784, ease_first 777, popularity_first 746, ease_second 746, item_cosine_second 736, item_cosine_first 731, item_cosine_difference 727, mult_vae_second 640, mult_vae_first 638, log_user_interactions 549, already_read_difference 502, already_read_first 0, already_read_second 0
+GRID task 2: leaves 31 min_child 200 trees 400 rate 0.05 -> 0.93689
+[08:32:34] popularity             validation accuracy 0.4914
+[08:32:34] item_cosine            validation accuracy 0.8696
+[08:32:34] ease                   validation accuracy 0.8512
+[08:32:34] mult_vae               validation accuracy 0.8626
+[08:32:34] pair blend             validation accuracy 0.9368  (out-of-fold, 5 folds)
+[08:32:36] pair blend inputs: popularity_difference 2957, ease_difference 2636, mult_vae_difference 2291, ease_second 1721, ease_first 1712, popularity_first 1707, popularity_second 1691, item_cosine_first 1628, item_cosine_second 1628, mult_vae_second 1624, mult_vae_first 1551, log_user_interactions 1531, item_cosine_difference 1487, already_read_difference 633, already_read_second 3, already_read_first 0
+GRID task 2: leaves 63 min_child 200 trees 400 rate 0.05 -> 0.93685
+[08:32:43] popularity             validation accuracy 0.4914
+[08:32:43] item_cosine            validation accuracy 0.8696
+[08:32:43] ease                   validation accuracy 0.8512
+[08:32:43] mult_vae               validation accuracy 0.8626
+[08:32:43] pair blend             validation accuracy 0.9370  (out-of-fold, 5 folds)
+[08:32:44] pair blend inputs: popularity_difference 1550, ease_difference 1455, mult_vae_difference 1400, popularity_first 780, popularity_second 779, item_cosine_first 771, ease_second 749, ease_first 711, item_cosine_second 702, item_cosine_difference 697, mult_vae_second 649, mult_vae_first 633, already_read_difference 567, log_user_interactions 556, already_read_second 1, already_read_first 0
+GRID task 2: leaves 31 min_child 100 trees 400 rate 0.05 -> 0.93696
+[08:32:50] popularity             validation accuracy 0.4914
+[08:32:50] item_cosine            validation accuracy 0.8696
+[08:32:50] ease                   validation accuracy 0.8512
+[08:32:50] mult_vae               validation accuracy 0.8626
+[08:32:50] pair blend             validation accuracy 0.9368  (out-of-fold, 5 folds)
+[08:32:52] pair blend inputs: ease_difference 832, mult_vae_difference 831, popularity_difference 793, already_read_difference 382, item_cosine_difference 326, ease_first 322, popularity_first 314, ease_second 314, item_cosine_second 308, item_cosine_first 305, popularity_second 301, mult_vae_second 223, mult_vae_first 216, log_user_interactions 131, already_read_second 2, already_read_first 0
+GRID task 2: leaves 15 min_child 200 trees 400 rate 0.05 -> 0.93681
+[08:33:04] popularity             validation accuracy 0.4914
+[08:33:04] item_cosine            validation accuracy 0.8696
+[08:33:04] ease                   validation accuracy 0.8512
+[08:33:04] mult_vae               validation accuracy 0.8626
+[08:33:04] pair blend             validation accuracy 0.9369  (out-of-fold, 5 folds)
+[08:33:06] pair blend inputs: popularity_difference 3002, ease_difference 2732, mult_vae_difference 2591, popularity_first 1621, popularity_second 1595, ease_first 1580, item_cosine_first 1541, ease_second 1519, item_cosine_second 1515, item_cosine_difference 1452, mult_vae_first 1422, mult_vae_second 1383, log_user_interactions 1184, already_read_difference 862, already_read_second 1, already_read_first 0
+GRID task 2: leaves 31 min_child 200 trees 800 rate 0.03 -> 0.93687
+[08:33:21] popularity             validation accuracy 0.4914
+[08:33:21] item_cosine            validation accuracy 0.8696
+[08:33:21] ease                   validation accuracy 0.8512
+[08:33:21] mult_vae               validation accuracy 0.8626
+[08:33:21] pair blend             validation accuracy 0.9369  (out-of-fold, 5 folds)
+[08:33:24] pair blend inputs: popularity_difference 5544, ease_difference 4932, mult_vae_difference 4396, popularity_second 3618, popularity_first 3514, item_cosine_first 3402, ease_second 3358, item_cosine_second 3348, ease_first 3336, mult_vae_second 3312, mult_vae_first 3210, log_user_interactions 3209, item_cosine_difference 3112, already_read_difference 1303, already_read_second 6, already_read_first 0
+GRID task 2: leaves 63 min_child 100 trees 800 rate 0.03 -> 0.93687

@@ -14,6 +14,9 @@ from lib.temporal_features import ItemTimeline, first_day_per_row
 # - scored out-of-fold: each validation pair is decided by a blender that never saw it
 
 DAYS_PER_YEAR = 365.25
+KEY_STRIDE = np.int64(1) << 32              # > every span of days -> one sortable key per (item, day)
+READER_WINDOWS_DAYS = (7, 30, 90, 365)
+SEQUENCE_WINDOW = 5                         # "within 5 books after"
 
 
 class PairFeatureBuilder:
@@ -28,10 +31,82 @@ class PairFeatureBuilder:
         if config.use_time_features:
             self.item_timeline = ItemTimeline(reference.item_rows, reference.days)
             self.first_day_of_item = first_day_per_row(reference.item_rows, reference.days, n_item_rows)
+        if getattr(config, "use_reader_timing_features", False):    # getattr: configs stored before the field existed
+            # one sorted key per interaction: item * KEY_STRIDE + (day - earliest day) -> readers of an item before / after a
+            # day by binary search for every pair at once
+            order = np.lexsort((reference.days, reference.item_rows))
+            self.earliest_day = int(reference.days.min())
+            self.sorted_days = reference.days[order].astype(np.int64)
+            self.reader_keys = reference.item_rows[order].astype(np.int64) * KEY_STRIDE + (self.sorted_days - self.earliest_day)
+            self.readers_per_item = np.bincount(reference.item_rows, minlength=n_item_rows)
+        if getattr(config, "use_sequence_features", False):
+            self.build_sequence_counts(reference, n_user_rows, n_item_rows)
 
     def item_feature_names(self) -> list[str]:
         time_feature_names = ["log_interactions_around_t", "item_age_years_at_t"] if self.config.use_time_features else []
+        if getattr(self.config, "use_reader_timing_features", False):
+            time_feature_names += [f"log_readers_{days}_days_after_t" for days in READER_WINDOWS_DAYS] + [
+                "log_readers_30_days_before_t", "share_of_readers_after_t", "log_days_to_first_reader_after_t",
+                "log_days_since_last_reader_before_t"]
+        if getattr(self.config, "use_sequence_features", False):
+            time_feature_names += ["log_next_after_last_book", f"log_within_{SEQUENCE_WINDOW}_after_last_book",
+                                   "share_of_last_book_followers", f"log_within_{SEQUENCE_WINDOW}_after_2nd_3rd_last",
+                                   f"log_within_{SEQUENCE_WINDOW}_before_last_book"]
         return list(self.config.combined_models) + ["already_read"] + time_feature_names
+
+    # reference rows are in reading order within each user (lib/data_loading.py) -> item x item counts of "read d books later"
+    def build_sequence_counts(self, reference: RatingData, n_user_rows: int, n_item_rows: int):
+        users, items = reference.user_rows, reference.item_rows
+        next_rows, next_columns, within_rows, within_columns = [], [], [], []
+        for distance in range(1, SEQUENCE_WINDOW + 1):
+            same_user = users[:-distance] == users[distance:]
+            earlier, later = items[:-distance][same_user], items[distance:][same_user]
+            within_rows.append(earlier)
+            within_columns.append(later)
+            if distance == 1:
+                next_rows, next_columns = earlier, later
+        within_rows, within_columns = np.concatenate(within_rows), np.concatenate(within_columns)
+        self.next_counts = sparse_matrix_from_entries(next_rows, next_columns, n_item_rows, n_item_rows).tocsr()
+        self.within_counts = sparse_matrix_from_entries(within_rows, within_columns, n_item_rows, n_item_rows).tocsr()
+        self.followers_per_item = np.asarray(self.within_counts.sum(axis=1)).ravel()
+        # the user's last three books (0 = none)
+        is_last = np.append(users[1:] != users[:-1], True)
+        last_positions = np.flatnonzero(is_last)
+        self.last_books = np.zeros((3, n_user_rows), dtype=np.int64)
+        for back in range(3):
+            positions = last_positions - back
+            valid = (positions >= 0) & (users[np.maximum(positions, 0)] == users[last_positions])
+            self.last_books[back, users[last_positions[valid]]] = items[positions[valid]]
+
+    def sequence_columns(self, user_rows: np.ndarray, item_rows: np.ndarray) -> list[np.ndarray]:
+        lookup = lambda matrix, rows, columns: np.asarray(matrix[rows, columns]).ravel().astype(np.float64)
+        last, second, third = self.last_books[0][user_rows], self.last_books[1][user_rows], self.last_books[2][user_rows]
+        after_last = lookup(self.within_counts, last, item_rows)
+        return [np.log1p(lookup(self.next_counts, last, item_rows)),
+                np.log1p(after_last),
+                after_last / np.maximum(self.followers_per_item[last], 1),
+                np.log1p(lookup(self.within_counts, second, item_rows) + lookup(self.within_counts, third, item_rows)),
+                np.log1p(lookup(self.within_counts, item_rows, last))]
+
+    # readers of each item after t (+ an offset in days): position of the first interaction later than t + offset_days
+    def reader_position_after(self, item_rows: np.ndarray, days: np.ndarray, offset_days: int) -> np.ndarray:
+        offsets = np.clip(days.astype(np.int64) + offset_days - self.earliest_day, -1, KEY_STRIDE - 1)
+        return np.searchsorted(self.reader_keys, item_rows.astype(np.int64) * KEY_STRIDE + offsets, side="right")
+
+    def reader_timing_columns(self, item_rows: np.ndarray, days: np.ndarray) -> list[np.ndarray]:
+        item_rows = item_rows.astype(np.int64)
+        segment_starts = np.searchsorted(self.reader_keys, item_rows * KEY_STRIDE, side="left")
+        segment_ends = np.searchsorted(self.reader_keys, (item_rows + 1) * KEY_STRIDE, side="left")
+        first_after = self.reader_position_after(item_rows, days, 0)
+        columns = [np.log1p(self.reader_position_after(item_rows, days, window) - first_after) for window in READER_WINDOWS_DAYS]
+        columns.append(np.log1p(first_after - self.reader_position_after(item_rows, days, -30)))
+        n_readers = self.readers_per_item[item_rows]
+        columns.append(np.where(n_readers > 0, (segment_ends - first_after) / np.maximum(n_readers, 1), np.nan))
+        has_after, has_before = first_after < segment_ends, first_after > segment_starts
+        last = len(self.sorted_days) - 1
+        columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+        columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+        return columns
 
     def feature_names(self) -> list[str]:
         return [f"{name}_{part}" for part in ("difference", "first", "second") for name in self.item_feature_names()] + ["log_user_interactions"]
@@ -48,6 +123,10 @@ class PairFeatureBuilder:
                 raise ValueError("time features need the day of every pair -> the test file has no timestamp column")
             interactions_around_day, _ = self.item_timeline.window_counts(item_rows, days, self.config.activity_window_days)
             columns += [np.log1p(interactions_around_day), (days - self.first_day_of_item[item_rows]) / DAYS_PER_YEAR]
+        if getattr(self.config, "use_reader_timing_features", False):
+            columns += self.reader_timing_columns(item_rows, days)
+        if getattr(self.config, "use_sequence_features", False):
+            columns += self.sequence_columns(user_rows, item_rows)
 
         return np.column_stack(columns).astype(np.float32)
 
@@ -112,8 +191,16 @@ def train_pair_blender(task: PairChoiceTask, model_results: dict[str, ModelResul
 
     # 2) honest score of the blend: out-of-fold P(first is real) on the validation pairs
     out_of_fold_probabilities = np.empty(len(first_is_positive), dtype=np.float32)
-    folds = KFold(n_splits=config.n_folds, shuffle=True, random_state=config.seed)
-    for fold_train_positions, fold_held_out_positions in folds.split(valid_features):
+    folds = list(KFold(n_splits=config.n_folds, shuffle=True, random_state=config.seed).split(valid_features))
+    # several pairs with the same user and positive (Task 5 with more negatives per positive) -> whole users per fold, so no
+    # positive is both learned from and scored
+    pairs = task.validation_pairs
+    positive_item_rows = np.where(pairs.first_is_positive, pairs.first_item_rows, pairs.second_item_rows)
+    if len(np.unique(pairs.user_rows.astype(np.int64) * (int(positive_item_rows.max()) + 1) + positive_item_rows)) < len(positive_item_rows):
+        fold_of_user = np.random.default_rng(config.seed).integers(0, config.n_folds, int(pairs.user_rows.max()) + 1)
+        fold_of_pair = fold_of_user[pairs.user_rows]
+        folds = [(np.flatnonzero(fold_of_pair != fold), np.flatnonzero(fold_of_pair == fold)) for fold in range(config.n_folds)]
+    for fold_train_positions, fold_held_out_positions in folds:
         classifier = fit_on_both_orders(config, valid_features[fold_train_positions], valid_swapped_features[fold_train_positions],
                                         first_is_positive[fold_train_positions])
         out_of_fold_probabilities[fold_held_out_positions] = first_item_probability(

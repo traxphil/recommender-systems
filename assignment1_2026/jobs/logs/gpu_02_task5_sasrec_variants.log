@@ -1,0 +1,244 @@
+[08:54:40] SASRec epoch   1 | train loss 1.3410 | validation accuracy 0.7345
+[08:54:46] SASRec epoch   2 | train loss 1.2054 | validation accuracy 0.7984
+[08:54:52] SASRec epoch   3 | train loss 1.1217 | validation accuracy 0.8185
+[08:54:58] SASRec epoch   4 | train loss 1.0626 | validation accuracy 0.8307
+[08:55:04] SASRec epoch   5 | train loss 1.0174 | validation accuracy 0.8395
+[08:55:10] SASRec epoch   6 | train loss 0.9773 | validation accuracy 0.8470
+[08:55:16] SASRec epoch   7 | train loss 0.9405 | validation accuracy 0.8533
+[08:55:22] SASRec epoch   8 | train loss 0.9090 | validation accuracy 0.8579
+[08:55:28] SASRec epoch   9 | train loss 0.8792 | validation accuracy 0.8629
+[08:55:34] SASRec epoch  10 | train loss 0.8536 | validation accuracy 0.8655
+[08:55:40] SASRec epoch  11 | train loss 0.8313 | validation accuracy 0.8691
+[08:55:46] SASRec epoch  12 | train loss 0.8102 | validation accuracy 0.8715
+[08:55:52] SASRec epoch  13 | train loss 0.7889 | validation accuracy 0.8748
+[08:55:58] SASRec epoch  14 | train loss 0.7708 | validation accuracy 0.8772
+[08:56:04] SASRec epoch  15 | train loss 0.7551 | validation accuracy 0.8784
+[08:56:10] SASRec epoch  16 | train loss 0.7393 | validation accuracy 0.8800
+[08:56:16] SASRec epoch  17 | train loss 0.7249 | validation accuracy 0.8816
+[08:56:22] SASRec epoch  18 | train loss 0.7123 | validation accuracy 0.8828
+[08:56:28] SASRec epoch  19 | train loss 0.6990 | validation accuracy 0.8847
+[08:56:34] SASRec epoch  20 | train loss 0.6863 | validation accuracy 0.8851
+[08:56:40] SASRec epoch  21 | train loss 0.6768 | validation accuracy 0.8861
+[08:56:46] SASRec epoch  22 | train loss 0.6654 | validation accuracy 0.8870
+[08:56:52] SASRec epoch  23 | train loss 0.6548 | validation accuracy 0.8871
+[08:56:58] SASRec epoch  24 | train loss 0.6465 | validation accuracy 0.8877
+[08:57:04] SASRec epoch  25 | train loss 0.6367 | validation accuracy 0.8888
+[08:57:10] SASRec epoch  26 | train loss 0.6287 | validation accuracy 0.8893
+[08:57:16] SASRec epoch  27 | train loss 0.6196 | validation accuracy 0.8899
+[08:57:22] SASRec epoch  28 | train loss 0.6115 | validation accuracy 0.8908
+[08:57:28] SASRec epoch  29 | train loss 0.6034 | validation accuracy 0.8908
+[08:57:34] SASRec epoch  30 | train loss 0.5970 | validation accuracy 0.8901
+[08:57:40] SASRec epoch  31 | train loss 0.5897 | validation accuracy 0.8908
+[08:57:46] SASRec epoch  32 | train loss 0.5826 | validation accuracy 0.8915
+[08:57:52] SASRec epoch  33 | train loss 0.5765 | validation accuracy 0.8912
+[08:57:58] SASRec epoch  34 | train loss 0.5694 | validation accuracy 0.8916
+[08:58:04] SASRec epoch  35 | train loss 0.5637 | validation accuracy 0.8918
+[08:58:10] SASRec epoch  36 | train loss 0.5573 | validation accuracy 0.8917
+[08:58:16] SASRec epoch  37 | train loss 0.5505 | validation accuracy 0.8921
+[08:58:22] SASRec epoch  38 | train loss 0.5448 | validation accuracy 0.8925
+[08:58:28] SASRec epoch  39 | train loss 0.5397 | validation accuracy 0.8920
+[08:58:34] SASRec epoch  40 | train loss 0.5336 | validation accuracy 0.8920
+[08:58:40] SASRec epoch  41 | train loss 0.5304 | validation accuracy 0.8916
+[08:58:46] SASRec epoch  42 | train loss 0.5251 | validation accuracy 0.8916
+[08:58:52] SASRec epoch  43 | train loss 0.5205 | validation accuracy 0.8917
+[08:58:58] SASRec epoch  44 | train loss 0.5156 | validation accuracy 0.8921
+[08:59:04] SASRec epoch  45 | train loss 0.5113 | validation accuracy 0.8918
+[08:59:10] SASRec epoch  46 | train loss 0.5079 | validation accuracy 0.8917
+[08:59:16] SASRec epoch  47 | train loss 0.5029 | validation accuracy 0.8914
+[08:59:22] SASRec epoch  48 | train loss 0.4989 | validation accuracy 0.8913
+[08:59:22] SASRec | best validation accuracy 0.8925 at epoch 38
+[08:59:28] SASRec refit epoch   1 | train loss 1.3378
+[08:59:34] SASRec refit epoch   2 | train loss 1.2032
+[08:59:39] SASRec refit epoch   3 | train loss 1.1205
+[08:59:44] SASRec refit epoch   4 | train loss 1.0624
+[08:59:50] SASRec refit epoch   5 | train loss 1.0155
+[08:59:55] SASRec refit epoch   6 | train loss 0.9757
+[09:00:00] SASRec refit epoch   7 | train loss 0.9402
+[09:00:05] SASRec refit epoch   8 | train loss 0.9064
+[09:00:11] SASRec refit epoch   9 | train loss 0.8788
+[09:00:16] SASRec refit epoch  10 | train loss 0.8520
+[09:00:21] SASRec refit epoch  11 | train loss 0.8281
+[09:00:26] SASRec refit epoch  12 | train loss 0.8071
+[09:00:32] SASRec refit epoch  13 | train loss 0.7870
+[09:00:37] SASRec refit epoch  14 | train loss 0.7700
+[09:00:42] SASRec refit epoch  15 | train loss 0.7528
+[09:00:47] SASRec refit epoch  16 | train loss 0.7384
+[09:00:53] SASRec refit epoch  17 | train loss 0.7240
+[09:00:58] SASRec refit epoch  18 | train loss 0.7120
+[09:01:03] SASRec refit epoch  19 | train loss 0.6999
+[09:01:08] SASRec refit epoch  20 | train loss 0.6873
+[09:01:14] SASRec refit epoch  21 | train loss 0.6756
+[09:01:19] SASRec refit epoch  22 | train loss 0.6666
+[09:01:24] SASRec refit epoch  23 | train loss 0.6564
+[09:01:30] SASRec refit epoch  24 | train loss 0.6476
+[09:01:35] SASRec refit epoch  25 | train loss 0.6383
+[09:01:40] SASRec refit epoch  26 | train loss 0.6317
+[09:01:45] SASRec refit epoch  27 | train loss 0.6217
+[09:01:51] SASRec refit epoch  28 | train loss 0.6161
+[09:01:56] SASRec refit epoch  29 | train loss 0.6069
+[09:02:01] SASRec refit epoch  30 | train loss 0.5994
+[09:02:06] SASRec refit epoch  31 | train loss 0.5925
+[09:02:12] SASRec refit epoch  32 | train loss 0.5865
+[09:02:17] SASRec refit epoch  33 | train loss 0.5772
+[09:02:22] SASRec refit epoch  34 | train loss 0.5727
+[09:02:27] SASRec refit epoch  35 | train loss 0.5680
+[09:02:33] SASRec refit epoch  36 | train loss 0.5633
+[09:02:38] SASRec refit epoch  37 | train loss 0.5541
+[09:02:43] SASRec refit epoch  38 | train loss 0.5496
+[09:02:44] stored sasrec_seed_1 -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task5\sasrec_seed_1.pt
+RESULT task5 sasrec_seed_1: validation accuracy on its own 0.89252 (8.2 min)
+[09:02:54] SASRec epoch   1 | train loss 1.3388 | validation accuracy 0.7512
+[09:03:04] SASRec epoch   2 | train loss 1.1948 | validation accuracy 0.8030
+[09:03:13] SASRec epoch   3 | train loss 1.1126 | validation accuracy 0.8208
+[09:03:22] SASRec epoch   4 | train loss 1.0556 | validation accuracy 0.8312
+[09:03:31] SASRec epoch   5 | train loss 1.0107 | validation accuracy 0.8409
+[09:03:40] SASRec epoch   6 | train loss 0.9683 | validation accuracy 0.8491
+[09:03:49] SASRec epoch   7 | train loss 0.9331 | validation accuracy 0.8570
+[09:03:59] SASRec epoch   8 | train loss 0.8977 | validation accuracy 0.8623
+[09:04:08] SASRec epoch   9 | train loss 0.8683 | validation accuracy 0.8664
+[09:04:17] SASRec epoch  10 | train loss 0.8429 | validation accuracy 0.8691
+[09:04:26] SASRec epoch  11 | train loss 0.8189 | validation accuracy 0.8722
+[09:04:35] SASRec epoch  12 | train loss 0.7981 | validation accuracy 0.8738
+[09:04:45] SASRec epoch  13 | train loss 0.7779 | validation accuracy 0.8764
+[09:04:54] SASRec epoch  14 | train loss 0.7606 | validation accuracy 0.8798
+[09:05:03] SASRec epoch  15 | train loss 0.7435 | validation accuracy 0.8815
+[09:05:12] SASRec epoch  16 | train loss 0.7290 | validation accuracy 0.8835
+[09:05:21] SASRec epoch  17 | train loss 0.7145 | validation accuracy 0.8849
+[09:05:30] SASRec epoch  18 | train loss 0.7020 | validation accuracy 0.8869
+[09:05:40] SASRec epoch  19 | train loss 0.6888 | validation accuracy 0.8877
+[09:05:49] SASRec epoch  20 | train loss 0.6780 | validation accuracy 0.8887
+[09:05:58] SASRec epoch  21 | train loss 0.6672 | validation accuracy 0.8902
+[09:06:07] SASRec epoch  22 | train loss 0.6564 | validation accuracy 0.8907
+[09:06:16] SASRec epoch  23 | train loss 0.6470 | validation accuracy 0.8920
+[09:06:25] SASRec epoch  24 | train loss 0.6379 | validation accuracy 0.8938
+[09:06:34] SASRec epoch  25 | train loss 0.6278 | validation accuracy 0.8954
+[09:06:44] SASRec epoch  26 | train loss 0.6209 | validation accuracy 0.8956
+[09:06:53] SASRec epoch  27 | train loss 0.6126 | validation accuracy 0.8958
+[09:07:02] SASRec epoch  28 | train loss 0.6046 | validation accuracy 0.8961
+[09:07:11] SASRec epoch  29 | train loss 0.5976 | validation accuracy 0.8964
+[09:07:20] SASRec epoch  30 | train loss 0.5896 | validation accuracy 0.8973
+[09:07:29] SASRec epoch  31 | train loss 0.5827 | validation accuracy 0.8973
+[09:07:39] SASRec epoch  32 | train loss 0.5764 | validation accuracy 0.8974
+[09:07:48] SASRec epoch  33 | train loss 0.5712 | validation accuracy 0.8981
+[09:07:57] SASRec epoch  34 | train loss 0.5639 | validation accuracy 0.8988
+[09:08:06] SASRec epoch  35 | train loss 0.5583 | validation accuracy 0.8981
+[09:08:15] SASRec epoch  36 | train loss 0.5521 | validation accuracy 0.8985
+[09:08:25] SASRec epoch  37 | train loss 0.5461 | validation accuracy 0.8987
+[09:08:34] SASRec epoch  38 | train loss 0.5412 | validation accuracy 0.8986
+[09:08:43] SASRec epoch  39 | train loss 0.5352 | validation accuracy 0.8989
+[09:08:52] SASRec epoch  40 | train loss 0.5317 | validation accuracy 0.8991
+[09:09:01] SASRec epoch  41 | train loss 0.5263 | validation accuracy 0.8994
+[09:09:11] SASRec epoch  42 | train loss 0.5212 | validation accuracy 0.8980
+[09:09:20] SASRec epoch  43 | train loss 0.5173 | validation accuracy 0.8988
+[09:09:29] SASRec epoch  44 | train loss 0.5136 | validation accuracy 0.8986
+[09:09:38] SASRec epoch  45 | train loss 0.5078 | validation accuracy 0.8986
+[09:09:47] SASRec epoch  46 | train loss 0.5037 | validation accuracy 0.8980
+[09:09:56] SASRec epoch  47 | train loss 0.5000 | validation accuracy 0.8990
+[09:10:06] SASRec epoch  48 | train loss 0.4975 | validation accuracy 0.8988
+[09:10:15] SASRec epoch  49 | train loss 0.4918 | validation accuracy 0.8987
+[09:10:24] SASRec epoch  50 | train loss 0.4886 | validation accuracy 0.8982
+[09:10:33] SASRec epoch  51 | train loss 0.4850 | validation accuracy 0.8982
+[09:10:33] SASRec | best validation accuracy 0.8994 at epoch 41
+[09:10:43] SASRec refit epoch   1 | train loss 1.3367
+[09:10:51] SASRec refit epoch   2 | train loss 1.1922
+[09:10:58] SASRec refit epoch   3 | train loss 1.1107
+[09:11:06] SASRec refit epoch   4 | train loss 1.0544
+[09:11:14] SASRec refit epoch   5 | train loss 1.0079
+[09:11:21] SASRec refit epoch   6 | train loss 0.9663
+[09:11:29] SASRec refit epoch   7 | train loss 0.9284
+[09:11:37] SASRec refit epoch   8 | train loss 0.8949
+[09:11:44] SASRec refit epoch   9 | train loss 0.8656
+[09:11:52] SASRec refit epoch  10 | train loss 0.8403
+[09:12:00] SASRec refit epoch  11 | train loss 0.8165
+[09:12:08] SASRec refit epoch  12 | train loss 0.7964
+[09:12:15] SASRec refit epoch  13 | train loss 0.7767
+[09:12:23] SASRec refit epoch  14 | train loss 0.7597
+[09:12:31] SASRec refit epoch  15 | train loss 0.7445
+[09:12:38] SASRec refit epoch  16 | train loss 0.7295
+[09:12:46] SASRec refit epoch  17 | train loss 0.7142
+[09:12:54] SASRec refit epoch  18 | train loss 0.7017
+[09:13:01] SASRec refit epoch  19 | train loss 0.6896
+[09:13:09] SASRec refit epoch  20 | train loss 0.6793
+[09:13:17] SASRec refit epoch  21 | train loss 0.6674
+[09:13:25] SASRec refit epoch  22 | train loss 0.6591
+[09:13:32] SASRec refit epoch  23 | train loss 0.6490
+[09:13:40] SASRec refit epoch  24 | train loss 0.6394
+[09:13:48] SASRec refit epoch  25 | train loss 0.6303
+[09:13:55] SASRec refit epoch  26 | train loss 0.6231
+[09:14:03] SASRec refit epoch  27 | train loss 0.6132
+[09:14:11] SASRec refit epoch  28 | train loss 0.6078
+[09:14:18] SASRec refit epoch  29 | train loss 0.6001
+[09:14:26] SASRec refit epoch  30 | train loss 0.5930
+[09:14:34] SASRec refit epoch  31 | train loss 0.5857
+[09:14:42] SASRec refit epoch  32 | train loss 0.5782
+[09:14:49] SASRec refit epoch  33 | train loss 0.5734
+[09:14:57] SASRec refit epoch  34 | train loss 0.5659
+[09:15:05] SASRec refit epoch  35 | train loss 0.5604
+[09:15:12] SASRec refit epoch  36 | train loss 0.5543
+[09:15:20] SASRec refit epoch  37 | train loss 0.5503
+[09:15:28] SASRec refit epoch  38 | train loss 0.5462
+[09:15:35] SASRec refit epoch  39 | train loss 0.5391
+[09:15:43] SASRec refit epoch  40 | train loss 0.5345
+[09:15:51] SASRec refit epoch  41 | train loss 0.5294
+[09:15:53] stored sasrec_long_history -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task5\sasrec_long_history.pt
+RESULT task5 sasrec_long_history: validation accuracy on its own 0.89935 (13.1 min)
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[09:16:23] popularity             validation accuracy 0.5204
+[09:16:23] item_cosine            validation accuracy 0.7714
+[09:16:23] transition             validation accuracy 0.7467
+[09:16:23] ease                   validation accuracy 0.7009
+[09:16:23] time_ease              validation accuracy 0.7058
+[09:16:23] mult_vae               validation accuracy 0.7189
+[09:16:23] sasrec                 validation accuracy 0.8921
+[09:16:23] sasrec_seed_1          validation accuracy 0.8925
+[09:16:23] sasrec_long_history    validation accuracy 0.8994
+[09:16:23] pair blend             validation accuracy 0.9246  (out-of-fold, 5 folds)
+[09:16:28] pair blend inputs: popularity_difference 2185, popularity_second 1777, sasrec_long_history_difference 1734, popularity_first 1721, item_cosine_difference 1496, mult_vae_difference 1491, share_of_readers_after_t_difference 1478, item_age_years_at_t_first 1359, item_age_years_at_t_second 1345, transition_difference 1191, item_age_years_at_t_difference 1191, mult_vae_first 1188, time_ease_second 1144, mult_vae_second 1143, item_cosine_first 1129, time_ease_first 1117, item_cosine_second 1086, time_ease_difference 1056, log_days_to_first_reader_after_t_difference 1012, sasrec_long_history_second 995, log_days_to_first_reader_after_t_second 990, sasrec_seed_1_difference 977, log_days_to_first_reader_after_t_first 965, sasrec_long_history_first 937, sasrec_difference 930, sasrec_first 876, sasrec_second 850, ease_first 848, transition_second 824, sasrec_seed_1_second 820, transition_first 813, log_days_since_last_reader_before_t_first 811, log_days_since_last_reader_before_t_difference 792, sasrec_seed_1_first 782, ease_second 768, log_user_interactions 767, log_days_since_last_reader_before_t_second 766, ease_difference 720, log_readers_90_days_after_t_difference 677, share_of_readers_after_t_first 673, log_readers_365_days_after_t_difference 657, share_of_readers_after_t_second 654, log_readers_365_days_after_t_second 502, log_readers_365_days_after_t_first 490, log_readers_30_days_before_t_difference 395, log_interactions_around_t_difference 376, log_readers_30_days_after_t_difference 364, already_read_difference 336, log_readers_90_days_after_t_second 330, log_readers_90_days_after_t_first 302, log_interactions_around_t_first 255, log_interactions_around_t_second 246, log_readers_30_days_before_t_second 236, log_readers_7_days_after_t_difference 233, log_readers_30_days_after_t_first 217, log_readers_30_days_before_t_first 215, log_readers_30_days_after_t_second 206, log_readers_7_days_after_t_second 85, log_readers_7_days_after_t_first 75, already_read_second 2, already_read_first 0
+RESULT task5 blend of 9 sub-models: 0.92462 (stored blend: 0.92332)
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[09:16:50] popularity             validation accuracy 0.5204
+[09:16:50] item_cosine            validation accuracy 0.7714
+[09:16:50] transition             validation accuracy 0.7467
+[09:16:50] ease                   validation accuracy 0.7009
+[09:16:50] time_ease              validation accuracy 0.7058
+[09:16:50] mult_vae               validation accuracy 0.7189
+[09:16:50] sasrec                 validation accuracy 0.8921
+[09:16:50] sasrec_long_history    validation accuracy 0.8994
+[09:16:50] pair blend             validation accuracy 0.9246  (out-of-fold, 5 folds)
+[09:16:56] pair blend inputs: popularity_difference 2261, sasrec_long_history_difference 1971, popularity_second 1785, popularity_first 1766, mult_vae_difference 1598, item_cosine_difference 1589, share_of_readers_after_t_difference 1551, item_age_years_at_t_first 1349, item_age_years_at_t_second 1344, transition_difference 1256, mult_vae_second 1244, mult_vae_first 1239, sasrec_difference 1227, item_age_years_at_t_difference 1225, time_ease_first 1198, item_cosine_second 1167, time_ease_second 1139, sasrec_long_history_second 1128, item_cosine_first 1117, time_ease_difference 1048, sasrec_long_history_first 1043, log_days_to_first_reader_after_t_difference 1042, sasrec_first 1016, log_days_to_first_reader_after_t_first 1011, sasrec_second 1005, log_days_to_first_reader_after_t_second 967, log_days_since_last_reader_before_t_difference 901, ease_first 889, ease_second 844, transition_second 838, log_days_since_last_reader_before_t_first 816, transition_first 778, log_user_interactions 776, log_days_since_last_reader_before_t_second 770, ease_difference 748, share_of_readers_after_t_second 680, log_readers_365_days_after_t_difference 675, log_readers_90_days_after_t_difference 668, share_of_readers_after_t_first 647, log_readers_365_days_after_t_second 544, log_readers_365_days_after_t_first 536, log_interactions_around_t_difference 428, log_readers_30_days_before_t_difference 394, log_readers_30_days_after_t_difference 374, log_readers_90_days_after_t_first 349, already_read_difference 337, log_readers_90_days_after_t_second 336, log_interactions_around_t_first 276, log_interactions_around_t_second 268, log_readers_30_days_after_t_second 261, log_readers_7_days_after_t_difference 258, log_readers_30_days_before_t_first 244, log_readers_30_days_before_t_second 239, log_readers_30_days_after_t_first 227, log_readers_7_days_after_t_second 112, log_readers_7_days_after_t_first 101, already_read_first 0, already_read_second 0
+RESULT task5 blend without sasrec_seed_1: 0.92461
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:66: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:67: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[09:17:18] popularity             validation accuracy 0.5204
+[09:17:18] item_cosine            validation accuracy 0.7714
+[09:17:18] transition             validation accuracy 0.7467
+[09:17:18] ease                   validation accuracy 0.7009
+[09:17:18] time_ease              validation accuracy 0.7058
+[09:17:18] mult_vae               validation accuracy 0.7189
+[09:17:18] sasrec                 validation accuracy 0.8921
+[09:17:18] sasrec_seed_1          validation accuracy 0.8925
+[09:17:18] pair blend             validation accuracy 0.9241  (out-of-fold, 5 folds)
+[09:17:23] pair blend inputs: popularity_difference 2190, popularity_second 1827, popularity_first 1809, mult_vae_difference 1651, item_cosine_difference 1605, sasrec_difference 1512, share_of_readers_after_t_difference 1505, sasrec_seed_1_difference 1471, item_age_years_at_t_second 1415, item_age_years_at_t_first 1394, item_age_years_at_t_difference 1271, mult_vae_first 1260, transition_difference 1224, mult_vae_second 1206, time_ease_first 1170, item_cosine_first 1159, item_cosine_second 1139, time_ease_second 1132, sasrec_seed_1_second 1082, sasrec_first 1058, log_days_to_first_reader_after_t_difference 1056, time_ease_difference 1054, sasrec_seed_1_first 1016, log_days_to_first_reader_after_t_first 1015, log_days_to_first_reader_after_t_second 972, sasrec_second 962, ease_first 919, log_user_interactions 896, log_days_since_last_reader_before_t_second 888, log_days_since_last_reader_before_t_difference 880, ease_second 852, transition_second 826, transition_first 810, log_days_since_last_reader_before_t_first 798, log_readers_365_days_after_t_difference 770, ease_difference 741, share_of_readers_after_t_first 676, share_of_readers_after_t_second 668, log_readers_90_days_after_t_difference 653, log_readers_365_days_after_t_first 557, log_readers_365_days_after_t_second 520, log_interactions_around_t_difference 398, log_readers_30_days_after_t_difference 380, log_readers_30_days_before_t_difference 372, log_readers_90_days_after_t_first 349, log_readers_90_days_after_t_second 348, already_read_difference 339, log_interactions_around_t_first 271, log_interactions_around_t_second 270, log_readers_30_days_before_t_second 233, log_readers_7_days_after_t_difference 229, log_readers_30_days_before_t_first 223, log_readers_30_days_after_t_second 214, log_readers_30_days_after_t_first 200, log_readers_7_days_after_t_first 86, log_readers_7_days_after_t_second 78, already_read_second 1, already_read_first 0
+RESULT task5 blend without sasrec_long_history: 0.92405
+[09:17:23] stored pair_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task5\pair_blender.pt
+RESULT task5: wrote task_5_predictions.csv

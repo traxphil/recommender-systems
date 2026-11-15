@@ -26,7 +26,12 @@ class Blender:
         self.regressor = regressor
 
     def predict(self, blend_features: np.ndarray) -> np.ndarray:
-        return np.clip(self.regressor.predict(blend_features), RATING_MIN, RATING_MAX).astype(np.float32)
+        return np.clip(self.regressor.predict(blend_features), lowest_rating(self.config), RATING_MAX).astype(np.float32)
+
+
+# blends for the leaderboard without zero ratings predict from 1 up (getattr: blenders stored before the field existed)
+def lowest_rating(config: BlenderConfig) -> float:
+    return 1.0 if getattr(config, "fit_on_nonzero_ratings", False) else RATING_MIN
 
 
 # when a rating happens relative to the reference ratings (a row's own rating is never among them -> nothing to leave out):
@@ -109,19 +114,25 @@ def train_blender(task: RatingTask, model_results: dict[str, ModelResult], confi
                                    task.test_user_rows, task.test_item_rows, task.test_days, task.training_and_validation_data,
                                    task.n_user_rows, task.n_item_rows, config)
 
-    # 2) honest score of the blend: out-of-fold predictions on the validation rows
+    # 2) honest score of the blend: out-of-fold predictions on the validation rows (only those with a rating > 0 if the
+    #    leaderboard leaves the zeros out; the zero rows then get the final blender's predictions, unscored)
+    fit_rows = valid_ratings > 0 if config.fit_on_nonzero_ratings else np.ones(len(valid_ratings), dtype=bool)
     folds = KFold(n_splits=config.n_folds, shuffle=True, random_state=config.seed)
-    out_of_fold_predictions = np.clip(cross_val_predict(make_regressor(config), valid_features, valid_ratings, cv=folds),
-                                      RATING_MIN, RATING_MAX).astype(np.float32)
+    out_of_fold_predictions = np.empty(len(valid_ratings), dtype=np.float32)
+    out_of_fold_predictions[fit_rows] = np.clip(cross_val_predict(make_regressor(config), valid_features[fit_rows], valid_ratings[fit_rows],
+                                                                  cv=folds), lowest_rating(config), RATING_MAX)
 
+    scored_rows = "rows with rating > 0" if config.fit_on_nonzero_ratings else "all rows"
     for model_name in config.blended_models:
         if model_name not in PROBABILITY_SUB_MODELS:
-            log(f"{model_name:<22} valid MSE {mse(model_results[model_name].valid_predictions, valid_ratings):.4f}")
-    log(f"{config.method} blend {'':<14} valid MSE {mse(out_of_fold_predictions, valid_ratings):.4f}  (out-of-fold, {config.n_folds} folds)")
+            log(f"{model_name:<22} valid MSE {mse(model_results[model_name].valid_predictions[fit_rows], valid_ratings[fit_rows]):.4f}  ({scored_rows})")
+    log(f"{config.method} blend {'':<14} valid MSE {mse(out_of_fold_predictions[fit_rows], valid_ratings[fit_rows]):.4f}  "
+        f"(out-of-fold, {config.n_folds} folds, {scored_rows})")
 
-    # 3) final blender on all validation rows -> test predictions
-    blender = Blender(config, make_regressor(config).fit(valid_features, valid_ratings))
+    # 3) final blender on the validation rows -> test predictions
+    blender = Blender(config, make_regressor(config).fit(valid_features[fit_rows], valid_ratings[fit_rows]))
     test_predictions = blender.predict(test_features)
+    out_of_fold_predictions[~fit_rows] = blender.predict(valid_features[~fit_rows])
 
     # what the blend relies on: ridge weights / LightGBM split counts
     importances = blender.regressor.coef_ if config.method == "ridge" else blender.regressor.feature_importances_

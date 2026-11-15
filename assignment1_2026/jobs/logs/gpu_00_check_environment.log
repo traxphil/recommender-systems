@@ -1,0 +1,4 @@
+python c:\Dateien\Workspace\UCSD\Recommender_Systems\_env_recommender_systems\Scripts\python.exe
+torch 2.14.1+cu130 | CUDA True NVIDIA GeForce RTX 5080
+working directory c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission
+trained models C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models | task 1 blender: ridge

@@ -1,0 +1,200 @@
+[13:38:02] epoch   0 | train MSE 0.5383 | valid MSE 0.8219  (starting point)
+[13:38:38] epoch   1 | train MSE 0.5076 | valid MSE 0.8151
+[13:39:14] epoch   2 | train MSE 0.4360 | valid MSE 0.8069
+[13:39:51] epoch   3 | train MSE 0.3467 | valid MSE 0.8044
+[13:40:27] epoch   4 | train MSE 0.2739 | valid MSE 0.8065
+[13:41:03] epoch   5 | train MSE 0.2212 | valid MSE 0.8099
+[13:41:39] epoch   6 | train MSE 0.1844 | valid MSE 0.8141
+[13:42:15] epoch   7 | train MSE 0.1592 | valid MSE 0.8176
+[13:42:51] epoch   8 | train MSE 0.1415 | valid MSE 0.8211
+[13:43:27] epoch   9 | train MSE 0.1293 | valid MSE 0.8238
+[13:43:27] best valid MSE 0.8044 at epoch 3
+[13:44:08] refit epoch   1 | train MSE 0.5419
+[13:44:48] refit epoch   2 | train MSE 0.5042
+[13:45:27] refit epoch   3 | train MSE 0.4306
+[13:45:28] stored svdpp_known_pairs -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_known_pairs_candidates\task1\svdpp_known_pairs.pt
+RESULT task1 svdpp with known pairs: 0.57193 (stored: 0.57210) (7.5 min)
+[13:46:00] epoch   0 | train MSE 0.5383 | valid MSE 0.8218  (starting point)
+[13:46:44] epoch   1 | train MSE 0.4991 | valid MSE 0.8145
+[13:47:26] epoch   2 | train MSE 0.4614 | valid MSE 0.8086
+[13:48:09] epoch   3 | train MSE 0.4284 | valid MSE 0.8045
+[13:48:52] epoch   4 | train MSE 0.3997 | valid MSE 0.8016
+[13:49:35] epoch   5 | train MSE 0.3740 | valid MSE 0.7995
+[13:50:19] epoch   6 | train MSE 0.3510 | valid MSE 0.7979
+[13:51:02] epoch   7 | train MSE 0.3304 | valid MSE 0.7968
+[13:51:45] epoch   8 | train MSE 0.3118 | valid MSE 0.7963
+[13:52:28] epoch   9 | train MSE 0.2949 | valid MSE 0.7960
+[13:53:11] epoch  10 | train MSE 0.2798 | valid MSE 0.7959
+[13:53:55] epoch  11 | train MSE 0.2660 | valid MSE 0.7962
+[13:54:38] epoch  12 | train MSE 0.2536 | valid MSE 0.7966
+[13:55:21] epoch  13 | train MSE 0.2424 | valid MSE 0.7973
+[13:56:04] epoch  14 | train MSE 0.2321 | valid MSE 0.7981
+[13:56:47] epoch  15 | train MSE 0.2227 | valid MSE 0.7990
+[13:57:30] epoch  16 | train MSE 0.2143 | valid MSE 0.7998
+[13:57:30] best valid MSE 0.7959 at epoch 10
+[13:58:48] refit epoch   1 | train MSE 0.5393
+[13:59:38] refit epoch   2 | train MSE 0.5012
+[14:00:27] refit epoch   3 | train MSE 0.4652
+[14:01:17] refit epoch   4 | train MSE 0.4336
+[14:02:06] refit epoch   5 | train MSE 0.4055
+[14:02:55] refit epoch   6 | train MSE 0.3803
+[14:03:45] refit epoch   7 | train MSE 0.3577
+[14:04:34] refit epoch   8 | train MSE 0.3374
+[14:05:23] refit epoch   9 | train MSE 0.3191
+[14:06:13] refit epoch  10 | train MSE 0.3027
+[14:06:13] stored integrated_model_known_pairs -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_known_pairs_candidates\task1\integrated_model_known_pairs.pt
+RESULT task1 integrated_model with known pairs: 0.56343 (stored: 0.56463) (20.8 min)
+[14:06:34] epoch   0 | train MSE 0.5392 | valid MSE 0.8229  (starting point)
+[14:08:12] epoch   1 | train MSE 0.5386 | valid MSE 0.8207
+[14:09:50] epoch   2 | train MSE 0.5357 | valid MSE 0.8184
+[14:11:27] epoch   3 | train MSE 0.5242 | valid MSE 0.8139
+[14:13:05] epoch   4 | train MSE 0.5112 | valid MSE 0.8140
+[14:14:43] epoch   5 | train MSE 0.5026 | valid MSE 0.8138
+[14:16:20] epoch   6 | train MSE 0.4924 | valid MSE 0.8220
+[14:17:58] epoch   7 | train MSE 0.4841 | valid MSE 0.8212
+[14:19:36] epoch   8 | train MSE 0.4795 | valid MSE 0.8243
+[14:19:36] best valid MSE 0.8138 at epoch 5
+[14:21:05] refit epoch   1 | train MSE 0.5495
+[14:22:32] refit epoch   2 | train MSE 0.5495
+[14:23:59] refit epoch   3 | train MSE 0.5463
+[14:25:26] refit epoch   4 | train MSE 0.5372
+[14:26:54] refit epoch   5 | train MSE 0.5296
+[14:26:54] stored rating_transformer_known_pairs -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_known_pairs_candidates\task1\rating_transformer_known_pairs.pt
+RESULT task1 rating_transformer with known pairs: 0.58870 (stored: 0.58557) (20.7 min)
+[14:26:57] epoch   0 | train MSE 0.6861 | valid MSE 0.9849  (starting point)
+[14:26:58] epoch   1 | train MSE 0.6524 | valid MSE 0.9770
+[14:26:59] epoch   2 | train MSE 0.5636 | valid MSE 0.9629
+[14:27:01] epoch   3 | train MSE 0.4358 | valid MSE 0.9559
+[14:27:02] epoch   4 | train MSE 0.3101 | valid MSE 0.9583
+[14:27:03] epoch   5 | train MSE 0.2132 | valid MSE 0.9653
+[14:27:04] epoch   6 | train MSE 0.1476 | valid MSE 0.9745
+[14:27:05] epoch   7 | train MSE 0.1056 | valid MSE 0.9822
+[14:27:06] epoch   8 | train MSE 0.0789 | valid MSE 0.9893
+[14:27:08] epoch   9 | train MSE 0.0620 | valid MSE 0.9949
+[14:27:08] best valid MSE 0.9559 at epoch 3
+[14:27:09] refit epoch   1 | train MSE 0.6879
+[14:27:10] refit epoch   2 | train MSE 0.6388
+[14:27:12] refit epoch   3 | train MSE 0.5377
+[14:27:12] stored svdpp_known_pairs -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_known_pairs_candidates\task3\svdpp_known_pairs.pt
+RESULT task3 svdpp with known pairs: 0.71022 (stored: 0.71092) (0.3 min)
+[14:27:17] epoch   0 | train MSE 0.5459 | valid MSE 0.9660  (starting point)
+[14:27:18] epoch   1 | train MSE 0.5199 | valid MSE 0.9596
+[14:27:20] epoch   2 | train MSE 0.4487 | valid MSE 0.9475
+[14:27:21] epoch   3 | train MSE 0.3431 | valid MSE 0.9416
+[14:27:22] epoch   4 | train MSE 0.2408 | valid MSE 0.9440
+[14:27:24] epoch   5 | train MSE 0.1647 | valid MSE 0.9503
+[14:27:25] epoch   6 | train MSE 0.1147 | valid MSE 0.9581
+[14:27:26] epoch   7 | train MSE 0.0835 | valid MSE 0.9647
+[14:27:28] epoch   8 | train MSE 0.0639 | valid MSE 0.9708
+[14:27:29] epoch   9 | train MSE 0.0515 | valid MSE 0.9753
+[14:27:29] best valid MSE 0.9416 at epoch 3
+[14:27:35] refit epoch   1 | train MSE 0.5490
+[14:27:37] refit epoch   2 | train MSE 0.5111
+[14:27:38] refit epoch   3 | train MSE 0.4294
+[14:27:38] stored time_svdpp_known_pairs -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_known_pairs_candidates\task3\time_svdpp_known_pairs.pt
+RESULT task3 time_svdpp with known pairs: 0.69597 (stored: 0.69664) (0.4 min)
+[14:27:51] epoch   0 | train MSE 0.6828 | valid MSE 0.9861  (starting point)
+[14:28:22] epoch   1 | train MSE 0.6392 | valid MSE 0.9718
+[14:28:52] epoch   2 | train MSE 0.6009 | valid MSE 0.9620
+[14:29:23] epoch   3 | train MSE 0.5687 | valid MSE 0.9555
+[14:29:53] epoch   4 | train MSE 0.5404 | valid MSE 0.9515
+[14:30:24] epoch   5 | train MSE 0.5144 | valid MSE 0.9489
+[14:30:55] epoch   6 | train MSE 0.4900 | valid MSE 0.9474
+[14:31:25] epoch   7 | train MSE 0.4674 | valid MSE 0.9465
+[14:31:56] epoch   8 | train MSE 0.4459 | valid MSE 0.9465
+[14:32:26] epoch   9 | train MSE 0.4259 | valid MSE 0.9466
+[14:32:57] epoch  10 | train MSE 0.4071 | valid MSE 0.9474
+[14:33:27] epoch  11 | train MSE 0.3897 | valid MSE 0.9488
+[14:33:58] epoch  12 | train MSE 0.3735 | valid MSE 0.9501
+[14:34:29] epoch  13 | train MSE 0.3585 | valid MSE 0.9515
+[14:34:59] epoch  14 | train MSE 0.3450 | valid MSE 0.9531
+[14:34:59] best valid MSE 0.9465 at epoch 8
+[14:35:39] refit epoch   1 | train MSE 0.6790
+[14:36:10] refit epoch   2 | train MSE 0.6394
+[14:36:40] refit epoch   3 | train MSE 0.6052
+[14:37:10] refit epoch   4 | train MSE 0.5754
+[14:37:40] refit epoch   5 | train MSE 0.5485
+[14:38:10] refit epoch   6 | train MSE 0.5238
+[14:38:40] refit epoch   7 | train MSE 0.5007
+[14:39:10] refit epoch   8 | train MSE 0.4790
+[14:39:10] stored integrated_model_known_pairs -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_known_pairs_candidates\task3\integrated_model_known_pairs.pt
+RESULT task3 integrated_model with known pairs: 0.70073 (stored: 0.70264) (11.5 min)
+[14:39:26] epoch   0 | train MSE 0.6848 | valid MSE 0.9845  (starting point)
+[14:40:41] epoch   1 | train MSE 0.6844 | valid MSE 0.9843
+[14:41:56] epoch   2 | train MSE 0.6770 | valid MSE 0.9831
+[14:43:11] epoch   3 | train MSE 0.6671 | valid MSE 0.9772
+[14:44:26] epoch   4 | train MSE 0.6615 | valid MSE 0.9757
+[14:45:41] epoch   5 | train MSE 0.6580 | valid MSE 0.9741
+[14:46:56] epoch   6 | train MSE 0.6483 | valid MSE 0.9728
+[14:48:11] epoch   7 | train MSE 0.6400 | valid MSE 0.9723
+[14:49:26] epoch   8 | train MSE 0.6334 | valid MSE 0.9861
+[14:50:41] epoch   9 | train MSE 0.6229 | valid MSE 0.9833
+[14:51:56] epoch  10 | train MSE 0.6181 | valid MSE 0.9848
+[14:51:56] best valid MSE 0.9723 at epoch 7
+[14:53:05] refit epoch   1 | train MSE 0.6943
+[14:54:11] refit epoch   2 | train MSE 0.6936
+[14:55:18] refit epoch   3 | train MSE 0.6870
+[14:56:25] refit epoch   4 | train MSE 0.6796
+[14:57:32] refit epoch   5 | train MSE 0.6742
+[14:58:39] refit epoch   6 | train MSE 0.6688
+[14:59:46] refit epoch   7 | train MSE 0.6630
+[14:59:46] stored rating_transformer_known_pairs -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_known_pairs_candidates\task3\rating_transformer_known_pairs.pt
+RESULT task3 rating_transformer with known pairs: 0.72910 (stored: 0.72767) (20.6 min)
+[17:22:47] bias_model             valid MSE 0.5900  (rows with rating > 0)
+[17:22:47] svd                    valid MSE 0.5778  (rows with rating > 0)
+[17:22:47] svdpp                  valid MSE 0.5719  (rows with rating > 0)
+[17:22:47] item_knn               valid MSE 0.5824  (rows with rating > 0)
+[17:22:47] factorization_machine  valid MSE 0.5806  (rows with rating > 0)
+[17:22:47] bayesian_factorization_machine valid MSE 0.5487  (rows with rating > 0)
+[17:22:47] rating_transformer     valid MSE 0.5856  (rows with rating > 0)
+[17:22:47] autorec                valid MSE 0.5775  (rows with rating > 0)
+[17:22:47] integrated_model       valid MSE 0.5634  (rows with rating > 0)
+[17:22:47] ridge blend                valid MSE 0.5406  (out-of-fold, 5 folds, rows with rating > 0)
+[17:22:47] ridge blend inputs: bias_model -1.82, svd -0.197, svdpp 0.111, item_knn 1.68, zero_model 0.0482, factorization_machine -0.0287, bayesian_factorization_machine 0.677, rating_transformer 0.207, autorec -0.0457, integrated_model 0.415
+RESULT task1 ridge blend with ['integrated_model', 'svdpp'] known pairs: 0.54058 (stored submitted blend: 0.54116)
+[17:22:48] stored ridge_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task1\ridge_blender.pt
+RESULT task1: adopted ['integrated_model', 'svdpp'] with known pairs, wrote task_1_predictions.csv
+[17:22:51] bias_model             valid MSE 0.5900  (rows with rating > 0)
+[17:22:51] svd                    valid MSE 0.5778  (rows with rating > 0)
+[17:22:51] svdpp                  valid MSE 0.5719  (rows with rating > 0)
+[17:22:51] item_knn               valid MSE 0.5824  (rows with rating > 0)
+[17:22:51] factorization_machine  valid MSE 0.5806  (rows with rating > 0)
+[17:22:51] bayesian_factorization_machine valid MSE 0.5487  (rows with rating > 0)
+[17:22:51] rating_transformer     valid MSE 0.5856  (rows with rating > 0)
+[17:22:51] autorec                valid MSE 0.5775  (rows with rating > 0)
+[17:22:51] integrated_model       valid MSE 0.5634  (rows with rating > 0)
+[17:22:51] lightgbm blend                valid MSE 0.5423  (out-of-fold, 5 folds, rows with rating > 0)
+[17:22:52] lightgbm blend inputs: bias_model 951, svd 688, svdpp 847, item_knn 626, zero_model 1.05e+03, factorization_machine 869, bayesian_factorization_machine 1.58e+03, rating_transformer 884, autorec 670, integrated_model 1.38e+03, log_user_ratings 1.11e+03, log_item_ratings 1.34e+03
+RESULT task1 lightgbm blend with ['integrated_model', 'svdpp'] known pairs: 0.54233 (stored submitted blend: 0.54116)
+[17:22:52] bias_model             valid MSE 0.7399  (rows with rating > 0)
+[17:22:52] svd                    valid MSE 0.7172  (rows with rating > 0)
+[17:22:52] svdpp                  valid MSE 0.7102  (rows with rating > 0)
+[17:22:52] item_knn               valid MSE 0.7264  (rows with rating > 0)
+[17:22:52] time_bias_model        valid MSE 0.7210  (rows with rating > 0)
+[17:22:52] time_svdpp             valid MSE 0.6960  (rows with rating > 0)
+[17:22:52] time_item_knn          valid MSE 0.7265  (rows with rating > 0)
+[17:22:52] time_factorization_machine valid MSE 0.7277  (rows with rating > 0)
+[17:22:52] time_bayesian_factorization_machine valid MSE 0.6765  (rows with rating > 0)
+[17:22:52] rating_transformer     valid MSE 0.7277  (rows with rating > 0)
+[17:22:52] autorec                valid MSE 0.7207  (rows with rating > 0)
+[17:22:52] integrated_model       valid MSE 0.7007  (rows with rating > 0)
+[17:22:52] ridge blend                valid MSE 0.6677  (out-of-fold, 5 folds, rows with rating > 0)
+[17:22:53] ridge blend inputs: bias_model -1.65, svd -0.217, svdpp -0.0735, item_knn 0.0354, zero_model 0.057, time_bias_model 0.0293, time_svdpp 0.178, time_item_knn 1.6, time_zero_model 0.0706, time_factorization_machine -0.017, time_bayesian_factorization_machine 0.623, rating_transformer 0.224, autorec -0.0687, integrated_model 0.308
+RESULT task3 ridge blend with ['integrated_model', 'svdpp', 'time_svdpp'] known pairs: 0.66773 (stored submitted blend: 0.66804)
+[17:22:53] stored ridge_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task3\ridge_blender.pt
+RESULT task3: adopted ['integrated_model', 'svdpp', 'time_svdpp'] with known pairs, wrote task_3_predictions.csv
+[17:22:58] bias_model             valid MSE 0.7399  (rows with rating > 0)
+[17:22:58] svd                    valid MSE 0.7172  (rows with rating > 0)
+[17:22:58] svdpp                  valid MSE 0.7102  (rows with rating > 0)
+[17:22:58] item_knn               valid MSE 0.7264  (rows with rating > 0)
+[17:22:58] time_bias_model        valid MSE 0.7210  (rows with rating > 0)
+[17:22:58] time_svdpp             valid MSE 0.6960  (rows with rating > 0)
+[17:22:58] time_item_knn          valid MSE 0.7265  (rows with rating > 0)
+[17:22:58] time_factorization_machine valid MSE 0.7277  (rows with rating > 0)
+[17:22:58] time_bayesian_factorization_machine valid MSE 0.6765  (rows with rating > 0)
+[17:22:58] rating_transformer     valid MSE 0.7277  (rows with rating > 0)
+[17:22:58] autorec                valid MSE 0.7207  (rows with rating > 0)
+[17:22:58] integrated_model       valid MSE 0.7007  (rows with rating > 0)
+[17:22:58] lightgbm blend                valid MSE 0.6711  (out-of-fold, 5 folds, rows with rating > 0)
+[17:22:59] lightgbm blend inputs: bias_model 659, svd 418, svdpp 536, item_knn 285, zero_model 515, time_bias_model 497, time_svdpp 577, time_item_knn 283, time_zero_model 586, time_factorization_machine 460, time_bayesian_factorization_machine 1.03e+03, rating_transformer 655, autorec 440, integrated_model 900, log_user_ratings 669, log_item_ratings 890, log_same_day_ratings 38, log_window_ratings 322, log_earlier_ratings 538, item_age_years 907, years_since_2000 791
+RESULT task3 lightgbm blend with ['integrated_model', 'svdpp', 'time_svdpp'] known pairs: 0.67107 (stored submitted blend: 0.66804)

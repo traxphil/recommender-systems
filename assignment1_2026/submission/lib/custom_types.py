@@ -39,6 +39,8 @@ class RatingTask(NamedTuple):
     test_days: np.ndarray | None = None     # (N_test,)  int    values: 0-6575  // day of the test row / None if the test file has no timestamp (Task 1)
     test_timestamps: np.ndarray | None = None  # (N_test,) int unix seconds     // timestamp of the test row / None as test_days
     # N(u) for SVD++ is not stored here: the pipeline builds it from the ratings a model trains on (no test data)
+    all_known_pairs: RatingData | None = None  # set by assignment1.rating_model_task: every known pair, the 0-star ratings
+                                               # left out of training included (ratings NaN) -> known_interaction_pairs
     
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -169,6 +171,8 @@ class BayesianFactorizationMachineConfig:
     seed: int
     calendar_fields: tuple[str, ...] = ()   # time-aware variant (Task 3): one-hot calendar fields of the timestamp, as in
                                             # TimeFactorizationMachineConfig ("hour_of_day", "weekday", "month", "year"); () = none
+    user_period_days: tuple[int, ...] = ()  # time-aware variant: one-hot (user, day // period) for every period length, e.g.
+                                            # (1, 30) = the user's day and 30-day window of the rating; () = none
 
 
 # set transformer over the user's rated books, asked about one more book
@@ -244,6 +248,9 @@ class BlenderConfig:
     # defaults -> the Task 1 configs and the stored Task 1 blenders stay valid without these fields
     use_time_features: bool = False
     activity_window_days: int = 30          # "user activity around t" = the user's ratings within +- this many days
+    # the leaderboard leaves out ratings of 0 (lecture 6 Nov: "the leaderboard does not include the zero ratings") ->
+    # True: blend fit and scored on the validation rows with a rating > 0, predictions clipped to [1, 5]
+    fit_on_nonzero_ratings: bool = False
 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -387,6 +394,12 @@ class GapRegressorConfig:
     seed: int
     n_earlier_gaps_as_training_rows: int = 0  # extra training rows per user: the gaps before the held-out one (features from
                                               # the history before each), 0 = only the held-out gap
+    n_bagged_models: int = 1                  # > 1: average (log scale) of LightGBMs with different seeds, each on a random
+    bagging_fraction: float = 1.0             #      share of the rows (per tree) and of the features (per tree)
+    feature_fraction: float = 1.0
+    use_rows_from_end_feature: bool = False   # True: input "how many gaps before the user's latest one" (0 for the validation and
+                                              # test rows, k for the k-th earlier gap) -> older, shorter gaps do not pull the
+                                              # predictions for the latest gap down
 
 
 # LightGBM classifier: P(first item is the real one) from the sub-models' scores of both items + meta-features
@@ -401,3 +414,10 @@ class PairBlenderConfig:
     lightgbm_num_leaves: int
     lightgbm_min_child_samples: int
     seed: int
+    # Tasks 4 / 5: when the other readers read the item relative to t (the pair's day; Task 5: the user's last day) -
+    # readers within 7 / 30 / 90 / 365 days after t, within 30 days before, share after, days to the first reader after t
+    # and since the last one before (the real next book is read right after t, the negative comes from a random time)
+    use_reader_timing_features: bool = False
+    # Task 5: what other readers read right after the user's last books (their reading orders in the reference): how often the
+    # item came next / within 5 books after the user's last book, within 5 after the 2nd / 3rd last, and before the last book
+    use_sequence_features: bool = False

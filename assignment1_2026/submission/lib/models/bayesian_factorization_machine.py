@@ -21,6 +21,10 @@ from lib.temporal_features import CALENDAR_FIELD_SIZES, calendar_field_rows, fir
 # time-aware variant (Task 3, config.calendar_fields): + one-hot calendar fields of the rating's timestamp, one prior group
 #   per field, as in the time-aware factorization machine (lib/models/time_factorization_machine.py, lib/temporal_features.py)
 #   -> <v_item, v_month> = a book's seasonal popularity, <v_item, v_year> = how its ratings drift over the years, ...
+# user periods (config.user_period_days, Task 3): + one-hot (user, day // period) for every period length, one prior group
+#   each -> a bias and a factor vector for the user's day / month of the rating (the day-specific user bias b_ut of
+#   timeSVD++, Koren 2009, here also interacting with the book); only the periods with a training rating get a column,
+#   an asked row in a period without one gets none (= no period effect)
 # relation blocks (Rendle 2013, "Scaling Factorization Machines to Relational Data"): the features of a user / an item are
 # stored once, every rating only points at its user's and its item's row -> N(u) is not copied into every rating;
 # the calendar fields differ per rating -> they are the direct feature matrix X (myFM orders the features X, then the blocks)
@@ -59,6 +63,33 @@ def direct_features(n_rows: int, timestamps: np.ndarray | None, calendar_fields:
                          shape=(n_rows, sum(field_sizes)))
 
 
+# key of the (user, period) of every row: user * USER_PERIOD_KEY_STRIDE + day // period_days (days < 2^32 -> no overlap)
+USER_PERIOD_KEY_STRIDE = 1 << 32
+
+
+def user_period_keys(user_rows: np.ndarray, days: np.ndarray, period_days: int) -> np.ndarray:
+    return user_rows.astype(np.int64) * USER_PERIOD_KEY_STRIDE + days.astype(np.int64) // period_days
+
+
+# the sorted (user, period) keys with a training rating, one array per period length = the columns of the user-period groups
+def known_user_periods(training_ratings: RatingData, user_period_days: tuple[int, ...]) -> list[np.ndarray]:
+    return [np.unique(user_period_keys(training_ratings.user_rows, training_ratings.days, period_days))
+            for period_days in user_period_days]
+
+
+# (n, sum of known periods) one-hot (user, period) of every row; a row whose period has no training rating gets no 1 there
+def user_period_features(user_rows: np.ndarray, days: np.ndarray, user_period_days: tuple[int, ...],
+                         known_periods: list[np.ndarray]) -> sp.csr_matrix:
+    blocks = []
+    for period_days, keys in zip(user_period_days, known_periods):
+        row_keys = user_period_keys(user_rows, days, period_days)
+        columns = np.minimum(np.searchsorted(keys, row_keys), len(keys) - 1)
+        is_known = keys[columns] == row_keys
+        blocks.append(sp.csr_matrix((np.ones(is_known.sum()), (np.flatnonzero(is_known), columns[is_known])),
+                                    shape=(len(user_rows), len(keys))))
+    return sp.hstack(blocks, format="csr", dtype=np.float64)
+
+
 # Gibbs sampling on training_ratings -> the posterior mean prediction of every asked row set (e.g. [validation, test rows])
 # asked_rows: (user rows, item rows, timestamps or None) per set; implicit_feedback_pairs = the (user, item) pairs of
 # N(u) / N(i): the ratings it trains on, or every known pair
@@ -66,25 +97,35 @@ def direct_features(n_rows: int, timestamps: np.ndarray | None, calendar_fields:
 # store each one in RAM (features x (rank + 1) float64: ~43 MB at rank 32 -> ~7.8 GB for 180 draws, more for larger ranks)
 def posterior_mean_predictions(training_ratings: RatingData, implicit_feedback_pairs: RatingData, n_user_rows: int,
                                n_item_rows: int, config: BayesianFactorizationMachineConfig,
-                               asked_rows: list[tuple[np.ndarray, np.ndarray, np.ndarray | None]]) -> list[np.ndarray]:
+                               asked_rows: list[tuple[np.ndarray, np.ndarray, np.ndarray | None, np.ndarray | None]]) -> list[np.ndarray]:
 
     # 1) one feature row per user and per item (+ the size of every prior group, in column order: X first, then the blocks)
     user_rows, item_rows = implicit_feedback_pairs.user_rows, implicit_feedback_pairs.item_rows
     user_features = feature_block(user_rows, item_rows, n_user_rows, n_item_rows, config.use_implicit_feedback)
     item_features = feature_block(item_rows, user_rows, n_item_rows, n_user_rows, config.use_implicit_feedback)
     year_range = first_and_last_year(training_ratings.timestamps) if config.calendar_fields else None
+    known_periods = known_user_periods(training_ratings, config.user_period_days) if config.user_period_days else []
     group_shapes = ((calendar_field_sizes(config.calendar_fields, year_range) if config.calendar_fields else [])
+                    + [len(keys) for keys in known_periods]
                     + ([n_user_rows, n_item_rows, n_item_rows, n_user_rows] if config.use_implicit_feedback
                        else [n_user_rows, n_item_rows]))
+
+    # direct features X of every rating / asked row: calendar fields | user periods
+    def row_features(users: np.ndarray, timestamps: np.ndarray | None, days: np.ndarray | None) -> sp.csr_matrix:
+        calendar = direct_features(len(users), timestamps, config.calendar_fields, year_range)
+        if not config.user_period_days:
+            return calendar
+        return sp.hstack([calendar, user_period_features(users, days, config.user_period_days, known_periods)],
+                         format="csr", dtype=np.float64)
 
     # every rating / asked row only points at its user's and its item's feature row
     def relation_blocks(users: np.ndarray, items: np.ndarray) -> list:
         return [myfm.RelationBlock(users, user_features), myfm.RelationBlock(items, item_features)]
 
     # 2) called by myFM after every draw (iteration 0, 1, ...): the draws after the burn-in add their predictions
-    asked_inputs = [(direct_features(len(users), timestamps, config.calendar_fields, year_range), relation_blocks(users, items))
-                    for users, items, timestamps in asked_rows]
-    prediction_sums = [np.zeros(len(users)) for users, _, _ in asked_rows]
+    asked_inputs = [(row_features(users, timestamps, days), relation_blocks(users, items))
+                    for users, items, timestamps, days in asked_rows]
+    prediction_sums = [np.zeros(len(users)) for users, *_ in asked_rows]
 
     def add_kept_draw(iteration, draw, hyperparameters, history):
         if iteration >= config.n_burn_in_iterations:
@@ -94,7 +135,7 @@ def posterior_mean_predictions(training_ratings: RatingData, implicit_feedback_p
 
     # 3) Gibbs sampling: burn-in draws, then n_kept_samples draws (myFM itself keeps only its last draw)
     sampler = myfm.MyFMRegressor(rank=config.rank, random_seed=config.seed)
-    sampler.fit(direct_features(len(training_ratings.ratings), training_ratings.timestamps, config.calendar_fields, year_range),
+    sampler.fit(row_features(training_ratings.user_rows, training_ratings.timestamps, training_ratings.days),
                 training_ratings.ratings,
                 X_rel=relation_blocks(training_ratings.user_rows, training_ratings.item_rows),
                 n_iter=config.n_burn_in_iterations + config.n_kept_samples, n_kept_samples=1,
@@ -104,11 +145,11 @@ def posterior_mean_predictions(training_ratings: RatingData, implicit_feedback_p
 
 
 def train_bayesian_factorization_machine(task: RatingTask, config: BayesianFactorizationMachineConfig) -> ModelResult:
-    if config.calendar_fields:
+    if config.calendar_fields or config.user_period_days:
         require_test_timestamps(task, "time-aware Bayesian factorization machine")
     validation = task.validation_data
-    validation_rows = (validation.user_rows, validation.item_rows, validation.timestamps)
-    test_rows = (task.test_user_rows, task.test_item_rows, task.test_timestamps)
+    validation_rows = (validation.user_rows, validation.item_rows, validation.timestamps, validation.days)
+    test_rows = (task.test_user_rows, task.test_item_rows, task.test_timestamps, task.test_days)
 
     # N(u) / N(i): the ratings the model trains on, or every known pair of the training + test file (ratings never used)
     def implicit_feedback_pairs(training_ratings: RatingData) -> RatingData:
@@ -119,7 +160,8 @@ def train_bayesian_factorization_machine(task: RatingTask, config: BayesianFacto
     predictions = posterior_mean_predictions(task.training_data, implicit_feedback_pairs(task.training_data),
                                              task.n_user_rows, task.n_item_rows, config, asked_rows)
     valid_predictions = predictions[0]
-    calendar_text = f", calendar fields {'/'.join(config.calendar_fields)}" if config.calendar_fields else ""
+    calendar_text = (f", calendar fields {'/'.join(config.calendar_fields)}" if config.calendar_fields else "") + \
+                    (f", user periods {'/'.join(map(str, config.user_period_days))} days" if config.user_period_days else "")
     log(f"Bayesian factorization machine | rank {config.rank}, {config.n_burn_in_iterations} + {config.n_kept_samples} draws"
         f"{calendar_text} | valid MSE {mse(valid_predictions, validation.ratings):.4f}")
 

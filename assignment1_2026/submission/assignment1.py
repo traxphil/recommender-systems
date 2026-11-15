@@ -125,6 +125,26 @@ TASK1_TEST_FILE = DATA_DIR / "task_1_test.csv"
 TASK1_PREDICTION_FILE = OUTPUT_DIR / "task_1_predictions.csv"
 
 
+# the leaderboard leaves out ratings of 0 (lecture 6 Nov: "the leaderboard does not include the zero ratings for the assignment",
+# "for the assignment, you should probably not train on the zeros") -> with TRAIN_RATING_MODELS_WITHOUT_ZERO_RATINGS every
+# Task 1 / Task 3 rating model trains (and refits) on the ratings > 0 only; the zero models (P(rating = 0), a blend input) still
+# see the zeros; the validation rows stay complete, the blends are fit on the rows > 0 (lib/models/blender.py)
+# (checked 15 Nov, MSE on the validation rows > 0: Task 1 bias model 0.6134 -> 0.5900, item kNN 0.6056 -> 0.5824)
+# all_known_pairs keeps "who read what" with the 0-star pairs (and the validation / test pairs, ratings never used) for the
+# models with use_test_pairs_as_implicit_feedback
+def rating_model_task(task: RatingTask) -> RatingTask:
+    if not model_configs.TRAIN_RATING_MODELS_WITHOUT_ZERO_RATINGS:
+        return task
+
+    def nonzero_part(data: RatingData) -> RatingData:
+        keep = data.ratings > 0
+        return RatingData(*[None if field is None else field[keep] for field in data])
+
+    return task._replace(training_data=nonzero_part(task.training_data),
+                         training_and_validation_data=nonzero_part(task.training_and_validation_data),
+                         all_known_pairs=known_interaction_pairs(task))
+
+
 # the test file has no timestamps -> the task has no time data at all (days / timestamps None): no Task 1 model can use time
 def load_task1() -> RatingTask:
     return load_rating_prediction_task(TASK1_TRAINING_FILE, TASK1_TEST_FILE, VALIDATION_FRACTION, SPLIT_SEED)
@@ -133,19 +153,19 @@ def load_task1() -> RatingTask:
 # one function per sub-model, so each can be trained on its own from the notebook
 # hyperparameters live in lib/config.py (Task 1 section), so this file reproduces the submitted predictions
 def train_task1_bias_model(task: RatingTask) -> ModelResult:
-    return train_bias_model(task, model_configs.TASK1_BIAS_MODEL)
+    return train_bias_model(rating_model_task(task), model_configs.TASK1_BIAS_MODEL)
 
 
 def train_task1_svd(task: RatingTask) -> ModelResult:
-    return train_latent_factor_model(task, **asdict(model_configs.TASK1_SVD))
+    return train_latent_factor_model(rating_model_task(task), **asdict(model_configs.TASK1_SVD))
 
 
 def train_task1_svdpp(task: RatingTask) -> ModelResult:
-    return train_latent_factor_model(task, **asdict(model_configs.TASK1_SVDPP))
+    return train_latent_factor_model(rating_model_task(task), **asdict(model_configs.TASK1_SVDPP))
 
 
 def train_task1_item_knn(task: RatingTask) -> ModelResult:
-    return train_item_knn(task, model_configs.TASK1_ITEM_KNN)
+    return train_item_knn(rating_model_task(task), model_configs.TASK1_ITEM_KNN)
 
 
 def train_task1_zero_model(task: RatingTask) -> ModelResult:
@@ -153,23 +173,23 @@ def train_task1_zero_model(task: RatingTask) -> ModelResult:
 
 
 def train_task1_factorization_machine(task: RatingTask) -> ModelResult:
-    return train_factorization_machine(task, model_configs.TASK1_FACTORIZATION_MACHINE)
+    return train_factorization_machine(rating_model_task(task), model_configs.TASK1_FACTORIZATION_MACHINE)
 
 
 def train_task1_bayesian_factorization_machine(task: RatingTask) -> ModelResult:
-    return train_bayesian_factorization_machine(task, model_configs.TASK1_BAYESIAN_FACTORIZATION_MACHINE)
+    return train_bayesian_factorization_machine(rating_model_task(task), model_configs.TASK1_BAYESIAN_FACTORIZATION_MACHINE)
 
 
 def train_task1_rating_transformer(task: RatingTask) -> ModelResult:
-    return train_rating_transformer(task, model_configs.TASK1_RATING_TRANSFORMER)
+    return train_rating_transformer(rating_model_task(task), model_configs.TASK1_RATING_TRANSFORMER)
 
 
 def train_task1_autorec(task: RatingTask) -> ModelResult:
-    return train_autorec(task, model_configs.TASK1_AUTOREC)
+    return train_autorec(rating_model_task(task), model_configs.TASK1_AUTOREC)
 
 
 def train_task1_integrated_model(task: RatingTask) -> ModelResult:
-    return train_integrated_model(task, model_configs.TASK1_INTEGRATED_MODEL)
+    return train_integrated_model(rating_model_task(task), model_configs.TASK1_INTEGRATED_MODEL)
 
 
 # sub-model name (as in the blender configs and in trained_models/) -> its training function
@@ -291,19 +311,19 @@ def load_task3() -> RatingTask:
 # one function per sub-model, so each can be trained on its own from the notebook
 # hyperparameters live in lib/config.py (Task 3 section)
 def train_task3_bias_model(task: RatingTask) -> ModelResult:
-    return train_bias_model(task, model_configs.TASK3_BIAS_MODEL)
+    return train_bias_model(rating_model_task(task), model_configs.TASK3_BIAS_MODEL)
 
 
 def train_task3_svd(task: RatingTask) -> ModelResult:
-    return train_latent_factor_model(task, **asdict(model_configs.TASK3_SVD))
+    return train_latent_factor_model(rating_model_task(task), **asdict(model_configs.TASK3_SVD))
 
 
 def train_task3_svdpp(task: RatingTask) -> ModelResult:
-    return train_latent_factor_model(task, **asdict(model_configs.TASK3_SVDPP))
+    return train_latent_factor_model(rating_model_task(task), **asdict(model_configs.TASK3_SVDPP))
 
 
 def train_task3_item_knn(task: RatingTask) -> ModelResult:
-    return train_item_knn(task, model_configs.TASK3_ITEM_KNN)
+    return train_item_knn(rating_model_task(task), model_configs.TASK3_ITEM_KNN)
 
 
 def train_task3_zero_model(task: RatingTask) -> ModelResult:
@@ -311,15 +331,15 @@ def train_task3_zero_model(task: RatingTask) -> ModelResult:
 
 
 def train_task3_time_bias_model(task: RatingTask) -> ModelResult:
-    return train_time_bias_model(task, model_configs.TASK3_TIME_BIAS_MODEL)
+    return train_time_bias_model(rating_model_task(task), model_configs.TASK3_TIME_BIAS_MODEL)
 
 
 def train_task3_time_svdpp(task: RatingTask) -> ModelResult:
-    return train_time_svdpp(task, model_configs.TASK3_TIME_SVDPP)
+    return train_time_svdpp(rating_model_task(task), model_configs.TASK3_TIME_SVDPP)
 
 
 def train_task3_time_item_knn(task: RatingTask) -> ModelResult:
-    return train_time_item_knn(task, model_configs.TASK3_TIME_ITEM_KNN)
+    return train_time_item_knn(rating_model_task(task), model_configs.TASK3_TIME_ITEM_KNN)
 
 
 def train_task3_time_zero_model(task: RatingTask) -> ModelResult:
@@ -327,24 +347,24 @@ def train_task3_time_zero_model(task: RatingTask) -> ModelResult:
 
 
 def train_task3_time_factorization_machine(task: RatingTask) -> ModelResult:
-    return train_time_factorization_machine(task, model_configs.TASK3_TIME_FACTORIZATION_MACHINE)
+    return train_time_factorization_machine(rating_model_task(task), model_configs.TASK3_TIME_FACTORIZATION_MACHINE)
 
 
 # the Task 1 models added 14 Nov: the Bayesian FM with the calendar fields, the other three without timestamps
 def train_task3_time_bayesian_factorization_machine(task: RatingTask) -> ModelResult:
-    return train_bayesian_factorization_machine(task, model_configs.TASK3_TIME_BAYESIAN_FACTORIZATION_MACHINE)
+    return train_bayesian_factorization_machine(rating_model_task(task), model_configs.TASK3_TIME_BAYESIAN_FACTORIZATION_MACHINE)
 
 
 def train_task3_rating_transformer(task: RatingTask) -> ModelResult:
-    return train_rating_transformer(task, model_configs.TASK3_RATING_TRANSFORMER)
+    return train_rating_transformer(rating_model_task(task), model_configs.TASK3_RATING_TRANSFORMER)
 
 
 def train_task3_autorec(task: RatingTask) -> ModelResult:
-    return train_autorec(task, model_configs.TASK3_AUTOREC)
+    return train_autorec(rating_model_task(task), model_configs.TASK3_AUTOREC)
 
 
 def train_task3_integrated_model(task: RatingTask) -> ModelResult:
-    return train_integrated_model(task, model_configs.TASK3_INTEGRATED_MODEL)
+    return train_integrated_model(rating_model_task(task), model_configs.TASK3_INTEGRATED_MODEL)
 
 
 # sub-model name (as in the blender configs and in trained_models/) -> its training function
@@ -465,7 +485,7 @@ TASK5_PREDICTION_FILE = OUTPUT_DIR / "task_5_predictions.csv"
 
 # validation pairs = each user's last training interaction vs. a popularity-drawn negative ("leave last out")
 def load_task5() -> PairChoiceTask:
-    return load_next_item_task(TASK5_TRAINING_FILE, TASK5_TEST_FILE, SPLIT_SEED)
+    return load_next_item_task(TASK5_TRAINING_FILE, TASK5_TEST_FILE, SPLIT_SEED, model_configs.TASK5_NEGATIVES_PER_VALIDATION_USER)
 
 
 def train_task5_popularity_model(task: PairChoiceTask) -> ModelResult:
@@ -493,6 +513,18 @@ def train_task5_sasrec(task: PairChoiceTask) -> ModelResult:
     return train_sasrec(task, model_configs.TASK5_SASREC)
 
 
+def train_task5_sasrec_seed_1(task: PairChoiceTask) -> ModelResult:
+    return train_sasrec(task, model_configs.TASK5_SASREC_SEED_1)
+
+
+def train_task5_sasrec_long_history(task: PairChoiceTask) -> ModelResult:
+    return train_sasrec(task, model_configs.TASK5_SASREC_LONG_HISTORY)
+
+
+def train_task5_sasrec_longer_history(task: PairChoiceTask) -> ModelResult:
+    return train_sasrec(task, model_configs.TASK5_SASREC_LONGER_HISTORY)
+
+
 def train_task5_models(task: PairChoiceTask) -> dict[str, ModelResult]:
     ease_result, time_ease_result = train_task5_ease_models(task)
     return {
@@ -503,6 +535,9 @@ def train_task5_models(task: PairChoiceTask) -> dict[str, ModelResult]:
         "time_ease": time_ease_result,
         "mult_vae": train_task5_mult_vae(task),
         "sasrec": train_task5_sasrec(task),
+        "sasrec_seed_1": train_task5_sasrec_seed_1(task),
+        "sasrec_long_history": train_task5_sasrec_long_history(task),
+        "sasrec_longer_history": train_task5_sasrec_longer_history(task),
     }
 
 
