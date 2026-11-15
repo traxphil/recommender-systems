@@ -167,6 +167,8 @@ class BayesianFactorizationMachineConfig:
     use_test_pairs_as_implicit_feedback: bool  # N(u) / N(i) = every known pair of the training + test file
     refit_on_train_and_valid: bool
     seed: int
+    calendar_fields: tuple[str, ...] = ()   # time-aware variant (Task 3): one-hot calendar fields of the timestamp, as in
+                                            # TimeFactorizationMachineConfig ("hour_of_day", "weekday", "month", "year"); () = none
 
 
 # set transformer over the user's rated books, asked about one more book
@@ -383,6 +385,8 @@ class GapRegressorConfig:
     lightgbm_num_leaves: int
     lightgbm_min_child_samples: int
     seed: int
+    n_earlier_gaps_as_training_rows: int = 0  # extra training rows per user: the gaps before the held-out one (features from
+                                              # the history before each), 0 = only the held-out gap
 
 
 # LightGBM classifier: P(first item is the real one) from the sub-models' scores of both items + meta-features

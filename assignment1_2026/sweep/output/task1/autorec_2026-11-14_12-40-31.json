@@ -1,0 +1,91 @@
+{
+  "task": "task1",
+  "model": "autorec",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-14 12:40:31",
+  "last_update": "2026-11-14 12:57:37",
+  "runs_finished": "6 / 6",
+  "device": "cuda",
+  "best": {
+    "score": 0.749502,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": 30,
+    "swept_values": {
+      "learning_rate": 3e-05,
+      "regularization": 16.0
+    },
+    "parameters": {
+      "hidden_dimension": 500,
+      "regularization": 16.0,
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0,
+      "masked_fraction": 0.25,
+      "learning_rate": 3e-05,
+      "books_per_batch": 256,
+      "max_epochs": 1000,
+      "early_stopping_patience": 5,
+      "refit_on_train_and_valid": true,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "learning_rate": [
+      3e-05,
+      0.0001,
+      0.0003
+    ],
+    "regularization": [
+      16.0,
+      64.0
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK1_AUTOREC",
+  "runs": [
+    {
+      "learning_rate": 3e-05,
+      "regularization": 16.0,
+      "score": 0.749502,
+      "best_epoch": 30,
+      "seconds": 281.0
+    },
+    {
+      "learning_rate": 3e-05,
+      "regularization": 64.0,
+      "score": 0.750007,
+      "best_epoch": 33,
+      "seconds": 306.7
+    },
+    {
+      "learning_rate": 0.0001,
+      "regularization": 16.0,
+      "score": 0.751079,
+      "best_epoch": 10,
+      "seconds": 123.3
+    },
+    {
+      "learning_rate": 0.0001,
+      "regularization": 64.0,
+      "score": 0.75142,
+      "best_epoch": 10,
+      "seconds": 125.0
+    },
+    {
+      "learning_rate": 0.0003,
+      "regularization": 16.0,
+      "score": 0.759756,
+      "best_epoch": 4,
+      "seconds": 81.4
+    },
+    {
+      "learning_rate": 0.0003,
+      "regularization": 64.0,
+      "score": 0.758804,
+      "best_epoch": 6,
+      "seconds": 108.1
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+2026-11-14 11:37:09 overnight sweep started, overall end 2026-11-14 18:00
+2026-11-14 11:37:09 start    T6 LightGBM 1 tree shape | task6 / lightgbm_gap_model | until 11:45
+2026-11-14 11:40:32 finished T6 LightGBM 1 tree shape | finished | 30 / 30 runs | best 83.56642 with {"lightgbm_num_leaves": 31, "lightgbm_min_child_samples": 50} | task6/lightgbm_gap_model_2026-11-14_11-37-09.json
+2026-11-14 11:40:32 start    T6 LightGBM 2 boosting | task6 / lightgbm_gap_model | until 11:52
+2026-11-14 11:46:53 finished T6 LightGBM 2 boosting | finished | 25 / 25 runs | best 83.53235 with {"lightgbm_learning_rate": 0.02, "lightgbm_n_estimators": 600} | task6/lightgbm_gap_model_2026-11-14_11-40-32.json
+2026-11-14 11:46:53 start    T6 LightGBM 3 shape again | task6 / lightgbm_gap_model | until 11:52
+2026-11-14 11:48:22 finished T6 LightGBM 3 shape again | finished | 12 / 12 runs | best 83.57799 with {"lightgbm_num_leaves": 63, "lightgbm_min_child_samples": 100} | task6/lightgbm_gap_model_2026-11-14_11-46-53.json
+2026-11-14 11:48:22 start    T6 LightGBM 4 seed check | task6 / lightgbm_gap_model | until 11:51
+2026-11-14 11:49:02 finished T6 LightGBM 4 seed check | finished | 5 / 5 runs | best 83.47736 with {"seed": 1} | task6/lightgbm_gap_model_2026-11-14_11-48-22.json
+2026-11-14 11:49:02 start    T5 transition 1 counts | task5 / transition | until 11:59
+2026-11-14 11:52:11 finished T5 transition 1 counts | finished | 48 / 48 runs | best 0.74354 with {"steps_ahead": 50, "step_decay": 0.85, "shrinkage": 1.0} | task5/transition_2026-11-14_11-49-02.json
+2026-11-14 11:52:11 start    T5 transition 2 context | task5 / transition | until 12:00
+2026-11-14 11:55:47 finished T5 transition 2 context | finished | 26 / 26 runs | best 0.74309 with {"context_length": 20, "context_decay": 0.7} | task5/transition_2026-11-14_11-52-11.json
+2026-11-14 11:55:47 start    T2 item cosine | task2 / item_cosine | until 12:20
+2026-11-14 12:20:58 finished T2 item cosine | stopped at the deadline | 35 / 54 runs | best 0.86959 with {"n_neighbors": 1600, "max_interactions_per_user_for_similarity": 1000, "similarity_shrinkage": 0.0} | task2/item_cosine_2026-11-14_11-55-47.json
+2026-11-14 12:20:58 start    T4 item cosine | task4 / item_cosine | until 12:32
+2026-11-14 12:29:17 finished T4 item cosine | finished | 54 / 54 runs | best 0.70498 with {"n_neighbors": 200, "max_interactions_per_user_for_similarity": 2000, "similarity_shrinkage": 0.0} | task4/item_cosine_2026-11-14_12-20-58.json
+2026-11-14 12:29:17 start    T5 item cosine | task5 / item_cosine | until 12:54
+2026-11-14 12:54:29 finished T5 item cosine | stopped at the deadline | 38 / 54 runs | best 0.75829 with {"n_neighbors": 1600, "max_interactions_per_user_for_similarity": 1000, "similarity_shrinkage": 0.0} | task5/item_cosine_2026-11-14_12-29-17.json
+2026-11-14 12:54:29 start    T4 EASE | task4 / ease | until 12:58
+2026-11-14 12:55:05 finished T4 EASE | finished | 13 / 13 runs | best 0.75115 with {"regularization": 500.0} | task4/ease_2026-11-14_12-54-29.json
+2026-11-14 12:55:05 start    T4 time EASE 1 decay | task4 / time_ease | until 13:03
+2026-11-14 12:56:24 finished T4 time EASE 1 decay | finished | 25 / 25 runs | best 0.78782 with {"regularization": 1000.0, "history_time_decay_days": 180.0} | task4/time_ease_2026-11-14_12-55-05.json
+2026-11-14 12:56:24 start    T4 time EASE 2 floor | task4 / time_ease | until 12:59
+2026-11-14 12:56:40 finished T4 time EASE 2 floor | finished | 5 / 5 runs | best 0.78782 with {"history_time_decay_floor": 0.0} | task4/time_ease_2026-11-14_12-56-24.json
+2026-11-14 12:56:40 start    T2 EASE | task2 / ease | until 13:09
+2026-11-14 13:08:32 finished T2 EASE | finished | 4 / 4 runs | best 0.84586 with {"regularization": 2000.0} | task2/ease_2026-11-14_12-56-40.json
+2026-11-14 13:08:32 start    T5 EASE 1 regularization | task5 / ease | until 13:26
+2026-11-14 13:21:43 finished T5 EASE 1 regularization | finished | 5 / 5 runs | best 0.70087 with {"regularization": 2000.0} | task5/ease_2026-11-14_13-08-32.json
+2026-11-14 13:21:43 start    T5 time EASE 2 decay | task5 / time_ease | until 13:36
+2026-11-14 13:32:05 finished T5 time EASE 2 decay | finished | 4 / 4 runs | best 0.70580 with {"history_time_decay_days": 730.0} | task5/time_ease_2026-11-14_13-21-43.json
+2026-11-14 13:32:05 start    T2 Mult-VAE 1 dropout / KL | task2 / mult_vae | until 13:57
+2026-11-14 13:58:29 finished T2 Mult-VAE 1 dropout / KL | finished | 9 / 9 runs | best 0.86013 with {"input_dropout": 0.1, "kl_weight_max": 0.5} | task2/mult_vae_2026-11-14_13-32-05.json
+2026-11-14 13:58:29 start    T2 Mult-VAE 2 capacity | task2 / mult_vae | until 14:10
+2026-11-14 14:08:43 finished T2 Mult-VAE 2 capacity | finished | 4 / 4 runs | best 0.86258 with {"hidden_dimension": 1000, "latent_dimension": 200} | task2/mult_vae_2026-11-14_13-58-29.json
+2026-11-14 14:08:43 start    T2 Mult-VAE 3 learning rate / annealing | task2 / mult_vae | until 14:18
+2026-11-14 14:19:02 finished T2 Mult-VAE 3 learning rate / annealing | stopped at the deadline | 3 / 4 runs | best 0.86141 with {"learning_rate": 0.0005, "kl_annealing_epochs": 10} | task2/mult_vae_2026-11-14_14-08-43.json
+2026-11-14 14:19:02 start    T4 Mult-VAE 1 dropout / KL | task4 / mult_vae | until 14:37
+2026-11-14 14:35:15 finished T4 Mult-VAE 1 dropout / KL | finished | 9 / 9 runs | best 0.75496 with {"input_dropout": 0.1, "kl_weight_max": 0.2} | task4/mult_vae_2026-11-14_14-19-02.json
+2026-11-14 14:35:15 start    T4 Mult-VAE 2 capacity | task4 / mult_vae | until 14:45
+2026-11-14 14:40:38 finished T4 Mult-VAE 2 capacity | finished | 4 / 4 runs | best 0.75819 with {"hidden_dimension": 1000, "latent_dimension": 200} | task4/mult_vae_2026-11-14_14-35-15.json
+2026-11-14 14:40:38 start    T5 Mult-VAE dropout / KL | task5 / mult_vae | until 15:05
+2026-11-14 15:05:55 finished T5 Mult-VAE dropout / KL | finished | 4 / 4 runs | best 0.71778 with {"input_dropout": 0.3, "kl_weight_max": 0.2} | task5/mult_vae_2026-11-14_14-40-38.json
+2026-11-14 15:05:55 start    T5 SASRec 1 width / dropout | task5 / sasrec | until 15:33
+2026-11-14 15:19:12 finished T5 SASRec 1 width / dropout | finished | 4 / 4 runs | best 0.88718 with {"hidden_dimension": 128, "dropout": 0.5} | task5/sasrec_2026-11-14_15-05-55.json
+2026-11-14 15:19:12 start    T5 SASRec 2 learning rate | task5 / sasrec | until 15:33
+2026-11-14 15:27:13 finished T5 SASRec 2 learning rate | finished | 2 / 2 runs | best 0.88853 with {"learning_rate": 0.0005} | task5/sasrec_2026-11-14_15-19-12.json
+2026-11-14 15:27:13 start    queue: T4 item cosine fewer neighbours | task4 / item_cosine | until 15:33
+2026-11-14 15:29:23 finished queue: T4 item cosine fewer neighbours | finished | 16 / 16 runs | best 0.71971 with {"n_neighbors": 50, "similarity_shrinkage": 1.0} | task4/item_cosine_2026-11-14_15-27-13.json
+2026-11-14 15:29:23 start    queue: T5 transition longer range | task5 / transition | until 15:39
+2026-11-14 15:33:57 finished queue: T5 transition longer range | finished | 30 / 30 runs | best 0.74596 with {"steps_ahead": 100, "step_decay": 0.95, "context_decay": 0.8} | task5/transition_2026-11-14_15-29-23.json
+2026-11-14 15:33:57 start    queue: T2 item cosine more neighbours | task2 / item_cosine | until 15:45
+2026-11-14 15:40:14 finished queue: T2 item cosine more neighbours | finished | 9 / 9 runs | best 0.86895 with {"n_neighbors": 1600} | task2/item_cosine_2026-11-14_15-33-57.json
+2026-11-14 15:40:14 start    queue: T5 item cosine more neighbours | task5 / item_cosine | until 15:52
+2026-11-14 15:46:07 finished queue: T5 item cosine more neighbours | finished | 9 / 9 runs | best 0.77172 with {"n_neighbors": 3200} | task5/item_cosine_2026-11-14_15-40-14.json
+2026-11-14 15:46:07 start    queue: T4 Mult-VAE wider / less regularised | task4 / mult_vae | until 15:58
+2026-11-14 15:55:54 finished queue: T4 Mult-VAE wider / less regularised | finished | 8 / 8 runs | best 0.75923 with {"input_dropout": 0.05, "kl_weight_max": 0.1, "hidden_dimension": 1500} | task4/mult_vae_2026-11-14_15-46-07.json
+2026-11-14 15:55:54 start    queue: T2 Mult-VAE wider | task2 / mult_vae | until 16:09
+2026-11-14 16:06:35 finished queue: T2 Mult-VAE wider | finished | 4 / 4 runs | best 0.86293 with {"hidden_dimension": 1500, "latent_dimension": 100} | task2/mult_vae_2026-11-14_15-55-54.json
+2026-11-14 16:06:35 start    queue: T4 item cosine even fewer neighbours | task4 / item_cosine | until 16:11
+2026-11-14 16:08:59 finished queue: T4 item cosine even fewer neighbours | finished | 18 / 18 runs | best 0.72333 with {"n_neighbors": 20, "similarity_shrinkage": 5.0} | task4/item_cosine_2026-11-14_16-06-35.json
+2026-11-14 16:08:59 start    queue: T5 transition even longer range | task5 / transition | until 16:16
+2026-11-14 16:13:11 finished queue: T5 transition even longer range | finished | 20 / 20 runs | best 0.74606 with {"steps_ahead": 200, "step_decay": 0.95, "context_length": 20, "context_decay": 0.8} | task5/transition_2026-11-14_16-08-59.json
+2026-11-14 16:13:11 start    queue: T5 item cosine 4800 neighbours | task5 / item_cosine | until 16:16
+2026-11-14 16:13:53 finished queue: T5 item cosine 4800 neighbours | finished | 1 / 1 runs | best 0.77050 with {} | task5/item_cosine_2026-11-14_16-13-11.json
+2026-11-14 16:13:53 start    queue: T5 SASRec wider | task5 / sasrec | until 16:27
+2026-11-14 16:24:25 finished queue: T5 SASRec wider | finished | 2 / 2 runs | best 0.89161 with {"learning_rate": 0.00025} | task5/sasrec_2026-11-14_16-13-53.json
+2026-11-14 16:24:25 start    queue: T5 SASRec slower learning rate | task5 / sasrec | until 16:30
+2026-11-14 16:29:36 finished queue: T5 SASRec slower learning rate | finished | 1 / 1 runs | best 0.89078 with {} | task5/sasrec_2026-11-14_16-24-25.json
+2026-11-14 16:29:36 start    queue: T5 Mult-VAE as in Tasks 2 / 4 | task5 / mult_vae | until 16:41
+2026-11-14 16:40:03 finished queue: T5 Mult-VAE as in Tasks 2 / 4 | finished | 2 / 2 runs | best 0.71890 with {"kl_weight_max": 0.1} | task5/mult_vae_2026-11-14_16-29-36.json
+2026-11-14 16:40:03 start    queue: T5 item cosine 6400 neighbours | task5 / item_cosine | until 16:43
+2026-11-14 16:40:45 finished queue: T5 item cosine 6400 neighbours | finished | 1 / 1 runs | best 0.76665 with {} | task5/item_cosine_2026-11-14_16-40-03.json
+2026-11-14 16:40:45 start    queue: T1 integrated model factor penalty | task1 / integrated_model | until 17:10
+2026-11-14 17:17:14 finished queue: T1 integrated model factor penalty | finished | 2 / 2 runs | best 0.73267 with {"factor_regularization": 24.0} | task1/integrated_model_2026-11-14_16-40-45.json
+2026-11-14 17:17:14 start    queue: T4 item cosine more shrinkage | task4 / item_cosine | until 17:21
+2026-11-14 17:18:45 finished queue: T4 item cosine more shrinkage | finished | 13 / 13 runs | best 0.72333 with {"n_neighbors": 20, "similarity_shrinkage": 5.0} | task4/item_cosine_2026-11-14_17-17-14.json
+2026-11-14 17:18:45 start    queue: T5 SASRec 256 slower learning rate | task5 / sasrec | until 17:28
+2026-11-14 17:23:21 finished queue: T5 SASRec 256 slower learning rate | finished | 1 / 1 runs | best 0.89214 with {} | task5/sasrec_2026-11-14_17-18-45.json
+2026-11-14 17:23:21 start    queue: T5 SASRec 512 | task5 / sasrec | until 17:33
+2026-11-14 17:28:21 finished queue: T5 SASRec 512 | finished | 1 / 1 runs | best 0.89176 with {} | task5/sasrec_2026-11-14_17-23-21.json
+2026-11-14 17:28:21 start    queue: T5 time EASE longer decay | task5 / time_ease | until 17:35
+2026-11-14 17:33:30 finished queue: T5 time EASE longer decay | finished | 2 / 2 runs | best 0.70575 with {"history_time_decay_days": 1000.0} | task5/time_ease_2026-11-14_17-28-21.json
+2026-11-14 17:33:30 start    queue: T2 EASE around 1000 | task2 / ease | until 17:43
+2026-11-14 17:42:09 finished queue: T2 EASE around 1000 | finished | 3 / 3 runs | best 0.85083 with {"regularization": 750.0} | task2/ease_2026-11-14_17-33-30.json
+2026-11-14 17:59:09 overnight sweep finished

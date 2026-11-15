@@ -1,0 +1,228 @@
+{
+  "task": "task6",
+  "model": "lightgbm_gap_model",
+  "metric": "validation MAE in days (lower is better)",
+  "status": "finished",
+  "started": "2026-11-14 11:40:32",
+  "last_update": "2026-11-14 11:46:53",
+  "runs_finished": "25 / 25",
+  "device": "cuda",
+  "best": {
+    "score": 83.532352,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": null,
+    "swept_values": {
+      "lightgbm_learning_rate": 0.02,
+      "lightgbm_n_estimators": 600
+    },
+    "parameters": {
+      "method": "lightgbm",
+      "n_folds": 5,
+      "lightgbm_n_estimators": 600,
+      "lightgbm_learning_rate": 0.02,
+      "lightgbm_num_leaves": 31,
+      "lightgbm_min_child_samples": 50,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "lightgbm_learning_rate": [
+      0.01,
+      0.02,
+      0.03,
+      0.05,
+      0.1
+    ],
+    "lightgbm_n_estimators": [
+      300,
+      600,
+      1200,
+      2400,
+      4800
+    ]
+  },
+  "constant_parameters": {
+    "lightgbm_num_leaves": 31,
+    "lightgbm_min_child_samples": 50
+  },
+  "base_config": "TASK6_LIGHTGBM_GAP_MODEL",
+  "runs": [
+    {
+      "lightgbm_learning_rate": 0.05,
+      "lightgbm_n_estimators": 4800,
+      "score": 84.997637,
+      "best_epoch": null,
+      "seconds": 36.8
+    },
+    {
+      "lightgbm_learning_rate": 0.01,
+      "lightgbm_n_estimators": 4800,
+      "score": 83.744693,
+      "best_epoch": null,
+      "seconds": 37.5
+    },
+    {
+      "lightgbm_learning_rate": 0.03,
+      "lightgbm_n_estimators": 300,
+      "score": 83.59022,
+      "best_epoch": null,
+      "seconds": 3.2
+    },
+    {
+      "lightgbm_learning_rate": 0.03,
+      "lightgbm_n_estimators": 600,
+      "score": 83.56642,
+      "best_epoch": null,
+      "seconds": 6.0
+    },
+    {
+      "lightgbm_learning_rate": 0.1,
+      "lightgbm_n_estimators": 4800,
+      "score": 85.947244,
+      "best_epoch": null,
+      "seconds": 39.1
+    },
+    {
+      "lightgbm_learning_rate": 0.01,
+      "lightgbm_n_estimators": 1200,
+      "score": 83.5614,
+      "best_epoch": null,
+      "seconds": 10.8
+    },
+    {
+      "lightgbm_learning_rate": 0.1,
+      "lightgbm_n_estimators": 2400,
+      "score": 85.433656,
+      "best_epoch": null,
+      "seconds": 19.4
+    },
+    {
+      "lightgbm_learning_rate": 0.02,
+      "lightgbm_n_estimators": 600,
+      "score": 83.532352,
+      "best_epoch": null,
+      "seconds": 5.7
+    },
+    {
+      "lightgbm_learning_rate": 0.05,
+      "lightgbm_n_estimators": 600,
+      "score": 83.891487,
+      "best_epoch": null,
+      "seconds": 5.4
+    },
+    {
+      "lightgbm_learning_rate": 0.1,
+      "lightgbm_n_estimators": 1200,
+      "score": 84.900018,
+      "best_epoch": null,
+      "seconds": 9.8
+    },
+    {
+      "lightgbm_learning_rate": 0.01,
+      "lightgbm_n_estimators": 2400,
+      "score": 83.613904,
+      "best_epoch": null,
+      "seconds": 20.1
+    },
+    {
+      "lightgbm_learning_rate": 0.1,
+      "lightgbm_n_estimators": 600,
+      "score": 84.471542,
+      "best_epoch": null,
+      "seconds": 5.3
+    },
+    {
+      "lightgbm_learning_rate": 0.02,
+      "lightgbm_n_estimators": 2400,
+      "score": 83.824542,
+      "best_epoch": null,
+      "seconds": 19.4
+    },
+    {
+      "lightgbm_learning_rate": 0.01,
+      "lightgbm_n_estimators": 300,
+      "score": 87.704075,
+      "best_epoch": null,
+      "seconds": 3.4
+    },
+    {
+      "lightgbm_learning_rate": 0.1,
+      "lightgbm_n_estimators": 300,
+      "score": 84.070766,
+      "best_epoch": null,
+      "seconds": 3.0
+    },
+    {
+      "lightgbm_learning_rate": 0.03,
+      "lightgbm_n_estimators": 1200,
+      "score": 83.700927,
+      "best_epoch": null,
+      "seconds": 10.0
+    },
+    {
+      "lightgbm_learning_rate": 0.05,
+      "lightgbm_n_estimators": 2400,
+      "score": 84.557987,
+      "best_epoch": null,
+      "seconds": 19.2
+    },
+    {
+      "lightgbm_learning_rate": 0.03,
+      "lightgbm_n_estimators": 2400,
+      "score": 84.002107,
+      "best_epoch": null,
+      "seconds": 19.9
+    },
+    {
+      "lightgbm_learning_rate": 0.02,
+      "lightgbm_n_estimators": 1200,
+      "score": 83.64812,
+      "best_epoch": null,
+      "seconds": 10.0
+    },
+    {
+      "lightgbm_learning_rate": 0.02,
+      "lightgbm_n_estimators": 300,
+      "score": 83.730815,
+      "best_epoch": null,
+      "seconds": 3.4
+    },
+    {
+      "lightgbm_learning_rate": 0.05,
+      "lightgbm_n_estimators": 1200,
+      "score": 84.188704,
+      "best_epoch": null,
+      "seconds": 9.9
+    },
+    {
+      "lightgbm_learning_rate": 0.03,
+      "lightgbm_n_estimators": 4800,
+      "score": 84.362466,
+      "best_epoch": null,
+      "seconds": 35.7
+    },
+    {
+      "lightgbm_learning_rate": 0.02,
+      "lightgbm_n_estimators": 4800,
+      "score": 84.084573,
+      "best_epoch": null,
+      "seconds": 37.6
+    },
+    {
+      "lightgbm_learning_rate": 0.01,
+      "lightgbm_n_estimators": 600,
+      "score": 83.800246,
+      "best_epoch": null,
+      "seconds": 5.8
+    },
+    {
+      "lightgbm_learning_rate": 0.05,
+      "lightgbm_n_estimators": 300,
+      "score": 83.712973,
+      "best_epoch": null,
+      "seconds": 3.3
+    }
+  ]
+}

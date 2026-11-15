@@ -299,6 +299,11 @@ SWEEP_TASKS = {
             "time_item_knn": SweepableModel("TASK3_TIME_ITEM_KNN", validate_time_item_knn),
             "time_zero_model": SweepableModel("TASK3_TIME_ZERO_MODEL", validate_time_zero_model, ZERO_LOG_LOSS),
             "time_factorization_machine": SweepableModel("TASK3_TIME_FACTORIZATION_MACHINE", validate_time_factorization_machine),
+            "time_bayesian_factorization_machine": SweepableModel("TASK3_TIME_BAYESIAN_FACTORIZATION_MACHINE",
+                                                                  validate_bayesian_factorization_machine),
+            "rating_transformer": SweepableModel("TASK3_RATING_TRANSFORMER", validate_rating_transformer),
+            "autorec": SweepableModel("TASK3_AUTOREC", validate_autorec),
+            "integrated_model": SweepableModel("TASK3_INTEGRATED_MODEL", validate_integrated_model),
         },
     ),
     "task4": SweepTask(

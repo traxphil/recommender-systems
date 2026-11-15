@@ -1,0 +1,63 @@
+{
+  "task": "task3",
+  "model": "svd",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-14 23:00:27",
+  "last_update": "2026-11-14 23:06:28",
+  "runs_finished": "3 / 3",
+  "device": "cuda",
+  "best": {
+    "score": 0.889642,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": 4,
+    "swept_values": {
+      "factor_regularization": 8.0
+    },
+    "parameters": {
+      "use_implicit_feedback": false,
+      "use_test_pairs_as_implicit_feedback": false,
+      "n_factors": 500,
+      "learning_rate": 0.00025,
+      "user_bias_regularization": 3.0,
+      "item_bias_regularization": 5.0,
+      "factor_regularization": 8.0,
+      "ratings_per_batch": 512,
+      "max_epochs": 1000,
+      "early_stopping_patience": 6,
+      "refit_on_train_and_valid": true,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "factor_regularization": [
+      4.0,
+      8.0,
+      16.0
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK3_SVD",
+  "runs": [
+    {
+      "factor_regularization": 16.0,
+      "score": 0.893561,
+      "best_epoch": 6,
+      "seconds": 135.1
+    },
+    {
+      "factor_regularization": 4.0,
+      "score": 0.890151,
+      "best_epoch": 4,
+      "seconds": 112.3
+    },
+    {
+      "factor_regularization": 8.0,
+      "score": 0.889642,
+      "best_epoch": 4,
+      "seconds": 112.3
+    }
+  ]
+}

@@ -1,0 +1,357 @@
+{
+  "task": "task5",
+  "model": "item_cosine",
+  "metric": "validation pair accuracy (higher is better)",
+  "status": "stopped at the deadline",
+  "started": "2026-11-14 12:29:17",
+  "last_update": "2026-11-14 12:54:29",
+  "runs_finished": "38 / 54",
+  "device": "cuda",
+  "best": {
+    "score": 0.758291,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": null,
+    "swept_values": {
+      "n_neighbors": 1600,
+      "max_interactions_per_user_for_similarity": 1000,
+      "similarity_shrinkage": 0.0
+    },
+    "parameters": {
+      "n_neighbors": 1600,
+      "similarity_shrinkage": 0.0,
+      "max_interactions_per_user_for_similarity": 1000,
+      "items_per_similarity_block": 2000,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "n_neighbors": [
+      200,
+      400,
+      800,
+      1600
+    ],
+    "max_interactions_per_user_for_similarity": [
+      1000,
+      2000,
+      5000
+    ],
+    "similarity_shrinkage": [
+      0.0,
+      2.0,
+      5.0,
+      10.0
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK5_ITEM_COSINE",
+  "runs": [
+    {
+      "n_neighbors": 200,
+      "max_interactions_per_user_for_similarity": 2000,
+      "similarity_shrinkage": 0.0,
+      "score": 0.703927,
+      "best_epoch": null,
+      "seconds": 37.2
+    },
+    {
+      "n_neighbors": 400,
+      "max_interactions_per_user_for_similarity": 2000,
+      "similarity_shrinkage": 5.0,
+      "score": 0.744947,
+      "best_epoch": null,
+      "seconds": 38.6
+    },
+    {
+      "n_neighbors": 200,
+      "max_interactions_per_user_for_similarity": 1000,
+      "similarity_shrinkage": 5.0,
+      "score": 0.736282,
+      "best_epoch": null,
+      "seconds": 35.2
+    },
+    {
+      "n_neighbors": 1600,
+      "max_interactions_per_user_for_similarity": 2000,
+      "similarity_shrinkage": 10.0,
+      "score": 0.737544,
+      "best_epoch": null,
+      "seconds": 43.0
+    },
+    {
+      "n_neighbors": 400,
+      "max_interactions_per_user_for_similarity": 5000,
+      "similarity_shrinkage": 2.0,
+      "score": 0.743115,
+      "best_epoch": null,
+      "seconds": 38.9
+    },
+    {
+      "n_neighbors": 800,
+      "max_interactions_per_user_for_similarity": 5000,
+      "similarity_shrinkage": 5.0,
+      "score": 0.748289,
+      "best_epoch": null,
+      "seconds": 39.6
+    },
+    {
+      "n_neighbors": 400,
+      "max_interactions_per_user_for_similarity": 5000,
+      "similarity_shrinkage": 0.0,
+      "score": 0.719085,
+      "best_epoch": null,
+      "seconds": 38.5
+    },
+    {
+      "n_neighbors": 200,
+      "max_interactions_per_user_for_similarity": 5000,
+      "similarity_shrinkage": 10.0,
+      "score": 0.736334,
+      "best_epoch": null,
+      "seconds": 38.4
+    },
+    {
+      "n_neighbors": 200,
+      "max_interactions_per_user_for_similarity": 1000,
+      "similarity_shrinkage": 2.0,
+      "score": 0.731984,
+      "best_epoch": null,
+      "seconds": 35.2
+    },
+    {
+      "n_neighbors": 400,
+      "max_interactions_per_user_for_similarity": 2000,
+      "similarity_shrinkage": 10.0,
+      "score": 0.741254,
+      "best_epoch": null,
+      "seconds": 39.1
+    },
+    {
+      "n_neighbors": 200,
+      "max_interactions_per_user_for_similarity": 5000,
+      "similarity_shrinkage": 5.0,
+      "score": 0.736323,
+      "best_epoch": null,
+      "seconds": 38.1
+    },
+    {
+      "n_neighbors": 400,
+      "max_interactions_per_user_for_similarity": 5000,
+      "similarity_shrinkage": 5.0,
+      "score": 0.74497,
+      "best_epoch": null,
+      "seconds": 39.3
+    },
+    {
+      "n_neighbors": 800,
+      "max_interactions_per_user_for_similarity": 2000,
+      "similarity_shrinkage": 0.0,
+      "score": 0.738143,
+      "best_epoch": null,
+      "seconds": 39.7
+    },
+    {
+      "n_neighbors": 200,
+      "max_interactions_per_user_for_similarity": 2000,
+      "similarity_shrinkage": 5.0,
+      "score": 0.736248,
+      "best_epoch": null,
+      "seconds": 38.5
+    },
+    {
+      "n_neighbors": 800,
+      "max_interactions_per_user_for_similarity": 2000,
+      "similarity_shrinkage": 5.0,
+      "score": 0.748312,
+      "best_epoch": null,
+      "seconds": 40.2
+    },
+    {
+      "n_neighbors": 200,
+      "max_interactions_per_user_for_similarity": 1000,
+      "similarity_shrinkage": 10.0,
+      "score": 0.736202,
+      "best_epoch": null,
+      "seconds": 35.7
+    },
+    {
+      "n_neighbors": 1600,
+      "max_interactions_per_user_for_similarity": 1000,
+      "similarity_shrinkage": 0.0,
+      "score": 0.758291,
+      "best_epoch": null,
+      "seconds": 39.8
+    },
+    {
+      "n_neighbors": 1600,
+      "max_interactions_per_user_for_similarity": 5000,
+      "similarity_shrinkage": 0.0,
+      "score": 0.757766,
+      "best_epoch": null,
+      "seconds": 42.9
+    },
+    {
+      "n_neighbors": 400,
+      "max_interactions_per_user_for_similarity": 2000,
+      "similarity_shrinkage": 0.0,
+      "score": 0.719131,
+      "best_epoch": null,
+      "seconds": 40.0
+    },
+    {
+      "n_neighbors": 800,
+      "max_interactions_per_user_for_similarity": 5000,
+      "similarity_shrinkage": 10.0,
+      "score": 0.74175,
+      "best_epoch": null,
+      "seconds": 42.7
+    },
+    {
+      "n_neighbors": 1600,
+      "max_interactions_per_user_for_similarity": 5000,
+      "similarity_shrinkage": 2.0,
+      "score": 0.755306,
+      "best_epoch": null,
+      "seconds": 43.5
+    },
+    {
+      "n_neighbors": 400,
+      "max_interactions_per_user_for_similarity": 5000,
+      "similarity_shrinkage": 10.0,
+      "score": 0.741266,
+      "best_epoch": null,
+      "seconds": 39.9
+    },
+    {
+      "n_neighbors": 800,
+      "max_interactions_per_user_for_similarity": 1000,
+      "similarity_shrinkage": 10.0,
+      "score": 0.741629,
+      "best_epoch": null,
+      "seconds": 38.7
+    },
+    {
+      "n_neighbors": 200,
+      "max_interactions_per_user_for_similarity": 5000,
+      "similarity_shrinkage": 0.0,
+      "score": 0.703869,
+      "best_epoch": null,
+      "seconds": 39.6
+    },
+    {
+      "n_neighbors": 1600,
+      "max_interactions_per_user_for_similarity": 1000,
+      "similarity_shrinkage": 2.0,
+      "score": 0.755433,
+      "best_epoch": null,
+      "seconds": 40.5
+    },
+    {
+      "n_neighbors": 1600,
+      "max_interactions_per_user_for_similarity": 5000,
+      "similarity_shrinkage": 5.0,
+      "score": 0.746514,
+      "best_epoch": null,
+      "seconds": 45.2
+    },
+    {
+      "n_neighbors": 400,
+      "max_interactions_per_user_for_similarity": 2000,
+      "similarity_shrinkage": 2.0,
+      "score": 0.743144,
+      "best_epoch": null,
+      "seconds": 40.5
+    },
+    {
+      "n_neighbors": 200,
+      "max_interactions_per_user_for_similarity": 1000,
+      "similarity_shrinkage": 0.0,
+      "score": 0.703875,
+      "best_epoch": null,
+      "seconds": 35.8
+    },
+    {
+      "n_neighbors": 800,
+      "max_interactions_per_user_for_similarity": 1000,
+      "similarity_shrinkage": 0.0,
+      "score": 0.739048,
+      "best_epoch": null,
+      "seconds": 38.6
+    },
+    {
+      "n_neighbors": 800,
+      "max_interactions_per_user_for_similarity": 1000,
+      "similarity_shrinkage": 2.0,
+      "score": 0.75318,
+      "best_epoch": null,
+      "seconds": 39.0
+    },
+    {
+      "n_neighbors": 800,
+      "max_interactions_per_user_for_similarity": 5000,
+      "similarity_shrinkage": 0.0,
+      "score": 0.738258,
+      "best_epoch": null,
+      "seconds": 42.0
+    },
+    {
+      "n_neighbors": 800,
+      "max_interactions_per_user_for_similarity": 1000,
+      "similarity_shrinkage": 5.0,
+      "score": 0.748202,
+      "best_epoch": null,
+      "seconds": 40.3
+    },
+    {
+      "n_neighbors": 1600,
+      "max_interactions_per_user_for_similarity": 2000,
+      "similarity_shrinkage": 5.0,
+      "score": 0.746428,
+      "best_epoch": null,
+      "seconds": 44.1
+    },
+    {
+      "n_neighbors": 200,
+      "max_interactions_per_user_for_similarity": 5000,
+      "similarity_shrinkage": 2.0,
+      "score": 0.7318,
+      "best_epoch": null,
+      "seconds": 39.5
+    },
+    {
+      "n_neighbors": 1600,
+      "max_interactions_per_user_for_similarity": 1000,
+      "similarity_shrinkage": 5.0,
+      "score": 0.746353,
+      "best_epoch": null,
+      "seconds": 41.3
+    },
+    {
+      "n_neighbors": 1600,
+      "max_interactions_per_user_for_similarity": 2000,
+      "similarity_shrinkage": 0.0,
+      "score": 0.757766,
+      "best_epoch": null,
+      "seconds": 44.2
+    },
+    {
+      "n_neighbors": 400,
+      "max_interactions_per_user_for_similarity": 1000,
+      "similarity_shrinkage": 2.0,
+      "score": 0.74319,
+      "best_epoch": null,
+      "seconds": 38.5
+    },
+    {
+      "n_neighbors": 400,
+      "max_interactions_per_user_for_similarity": 1000,
+      "similarity_shrinkage": 0.0,
+      "score": 0.719344,
+      "best_epoch": null,
+      "seconds": 37.8
+    }
+  ],
+  "finalists": []
+}

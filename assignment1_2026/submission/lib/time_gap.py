@@ -12,10 +12,16 @@ from lib.temporal_features import ItemTimeline
 #   - the next book (given in the test file): popularity, when it first / typically appears relative to the user's last
 #     interaction, and how much of its readership comes after that day
 #     (19 % of the Task 6 test books were first read by anyone only after the user's last interaction -> a lower bound for the gap)
+#   - how soon after the user's last interaction the other readers of the next book read it (first / 10 % / 25 % / half of
+#     the later readers, share within a week / month / year) and how long before it the last earlier reader read it
+#   - book-to-book timing: readers of both the user's last book and the next book -> how many, how often the next book came
+#     second, the median time between the two
+#     (checked 15 Nov, out-of-fold MAE averaged over 3 fold splits: 83.62 days -> 81.7 with both groups)
 # gaps enter as g = log(1 + seconds): the gaps span seconds to years
 
 SECONDS_PER_DAY = 86_400
 DAYS_PER_YEAR = 365.25
+KEY_STRIDE = np.int64(1) << 37              # > every span of timestamps (year 25 ... 3645) -> one sortable key per (book, second)
 
 # the columns the linear autoregression uses (the in-book model); LightGBM gets every column
 AUTOREGRESSIVE_FEATURES = ["last_log_gap", "second_last_log_gap", "third_last_log_gap", "median_log_gap", "mean_log_gap",
@@ -84,7 +90,99 @@ def gap_features(reference: RatingData, reference_seconds: np.ndarray, user_rows
         "book_first_day_minus_last_day": first_day_of_item[item_rows] - users_last_day,
         "book_median_day_minus_last_day": median_day_of_item[item_rows] - users_last_day,
         "book_share_read_after_last_day": np.where(item_popularity > 0, 1.0 - item_interactions_until_day / np.maximum(item_popularity, 1), np.nan),
+        **next_book_reader_timing(reference.item_rows, reference_seconds, item_rows, last_seconds),
+        **book_to_book_timing(reference, reference_seconds, user_rows, item_rows, n_user_rows),
     })
+
+
+# when the other readers of the next book read it, relative to the user's last interaction t (log(1 + seconds))
+#   one sorted key per interaction: book * KEY_STRIDE + (seconds - earliest second) -> position of t inside the book's
+#   readers by one binary search for every row at once
+def next_book_reader_timing(reference_item_rows: np.ndarray, reference_seconds: np.ndarray, item_rows: np.ndarray,
+                            last_seconds: np.ndarray) -> dict:
+    order = np.lexsort((reference_seconds, reference_item_rows))
+    sorted_items = reference_item_rows[order].astype(np.int64)
+    earliest_second = int(reference_seconds.min())
+    sorted_offsets = reference_seconds[order].astype(np.int64) - earliest_second
+    keys = sorted_items * KEY_STRIDE + sorted_offsets
+    item_rows = item_rows.astype(np.int64)
+    has_last = ~np.isnan(last_seconds)
+    last_offsets = np.nan_to_num(last_seconds, nan=earliest_second) - earliest_second
+
+    # first position in the book's readers after t + seconds_after
+    def position_after(seconds_after: float) -> np.ndarray:
+        offsets = np.clip(last_offsets + seconds_after, 0, KEY_STRIDE - 1).astype(np.int64)
+        return np.searchsorted(keys, item_rows * KEY_STRIDE + offsets, side="right")
+
+    segment_starts = np.searchsorted(keys, item_rows * KEY_STRIDE, side="left")
+    segment_ends = np.searchsorted(keys, (item_rows + 1) * KEY_STRIDE, side="left")
+    n_readers = segment_ends - segment_starts
+    first_after = position_after(0.0)
+    n_after = segment_ends - first_after
+    has_after = has_last & (n_after > 0)
+    has_before = has_last & (first_after > segment_starts)
+
+    # quantile of the later readers' times (linear interpolation like np.quantile), as seconds after t
+    def later_reader_quantile(share: float) -> np.ndarray:
+        index = share * np.maximum(n_after - 1, 0)
+        lower = np.minimum(first_after + np.floor(index).astype(np.int64), len(keys) - 1)
+        upper = np.minimum(first_after + np.ceil(index).astype(np.int64), len(keys) - 1)
+        offsets = sorted_offsets[lower] + (index - np.floor(index)) * (sorted_offsets[upper] - sorted_offsets[lower])
+        return np.where(has_after, np.log1p(np.maximum(offsets - last_offsets, 0)), np.nan)
+
+    last_before_offsets = sorted_offsets[np.maximum(first_after - 1, 0)]
+    features = {
+        "book_first_reader_after": later_reader_quantile(0.0),
+        "book_readers_10_percent_after": later_reader_quantile(0.1),
+        "book_readers_25_percent_after": later_reader_quantile(0.25),
+        "book_readers_median_after": later_reader_quantile(0.5),
+        "book_last_reader_before": np.where(has_before, np.log1p(np.maximum(last_offsets - last_before_offsets, 0)), np.nan),
+    }
+    for name, days in (("week", 7), ("month", 30), ("year", 365)):
+        n_within = position_after(days * SECONDS_PER_DAY) - first_after
+        features[f"book_share_read_within_{name}_after"] = np.where(has_last & (n_readers > 0), n_within / np.maximum(n_readers, 1), np.nan)
+    return features
+
+
+# readers of both the user's last book and the next book (the user excluded): how many, how often the next book came
+# second, and the median log(1 + seconds) from the last book to the next one among those who read it second
+# (first read per reader and book; one set intersection per row)
+def book_to_book_timing(reference: RatingData, reference_seconds: np.ndarray, user_rows: np.ndarray, item_rows: np.ndarray,
+                        n_user_rows: int) -> dict:
+    is_last_of_user = np.append(reference.user_rows[1:] != reference.user_rows[:-1], True)   # reference is chronological per user
+    last_item_of_user = np.zeros(n_user_rows, dtype=np.int64)
+    last_item_of_user[reference.user_rows[is_last_of_user]] = reference.item_rows[is_last_of_user]
+
+    first_reads = (pd.DataFrame({"item": reference.item_rows, "user": reference.user_rows, "seconds": reference_seconds})
+                   .sort_values(["item", "user", "seconds"]).drop_duplicates(["item", "user"]))
+    readers, read_seconds = first_reads["user"].to_numpy(), first_reads["seconds"].to_numpy(dtype=np.float64)
+    item_of_read = first_reads["item"].to_numpy()
+    n_items = int(max(item_of_read.max(), item_rows.max())) + 2
+    segment_starts = np.searchsorted(item_of_read, np.arange(n_items), side="left")
+    segment_ends = np.searchsorted(item_of_read, np.arange(n_items), side="right")
+
+    n_co_readers = np.zeros(len(user_rows))
+    share_next_second = np.full(len(user_rows), np.nan)
+    median_log_gap = np.full(len(user_rows), np.nan)
+    for row, (user, next_item) in enumerate(zip(user_rows, item_rows)):
+        last_item = last_item_of_user[user]
+        if segment_ends[last_item] == segment_starts[last_item] or segment_ends[next_item] == segment_starts[next_item]:
+            continue
+        last_slice = slice(segment_starts[last_item], segment_ends[last_item])
+        next_slice = slice(segment_starts[next_item], segment_ends[next_item])
+        common, last_positions, next_positions = np.intersect1d(readers[last_slice], readers[next_slice], assume_unique=True,
+                                                                return_indices=True)
+        is_other = common != user
+        if not is_other.any():
+            continue
+        seconds_between = read_seconds[next_slice][next_positions[is_other]] - read_seconds[last_slice][last_positions[is_other]]
+        n_co_readers[row] = is_other.sum()
+        share_next_second[row] = np.mean(seconds_between > 0)
+        if (seconds_between > 0).any():
+            median_log_gap[row] = np.median(np.log1p(seconds_between[seconds_between > 0]))
+    return {"log_co_readers_of_last_and_next_book": np.log1p(n_co_readers),
+            "co_readers_share_next_book_second": share_next_second,
+            "co_readers_median_log_gap": median_log_gap}
 
 
 def mean_absolute_error_seconds(predicted_gaps: np.ndarray, true_gaps: np.ndarray) -> float:

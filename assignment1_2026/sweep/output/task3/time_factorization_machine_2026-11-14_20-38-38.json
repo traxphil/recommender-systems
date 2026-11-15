@@ -1,0 +1,94 @@
+{
+  "task": "task3",
+  "model": "time_factorization_machine",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-14 20:38:38",
+  "last_update": "2026-11-14 20:45:04",
+  "runs_finished": "6 / 6",
+  "device": "cuda",
+  "best": {
+    "score": 0.894107,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": 2,
+    "swept_values": {
+      "learning_rate": 0.00025,
+      "ratings_per_batch": 256
+    },
+    "parameters": {
+      "n_factors": 120,
+      "n_activity_buckets": 10,
+      "learning_rate": 0.00025,
+      "bias_regularization": 3.0,
+      "factor_regularization": 8.0,
+      "ratings_per_batch": 256,
+      "max_epochs": 1000,
+      "early_stopping_patience": 6,
+      "refit_on_train_and_valid": true,
+      "seed": 0,
+      "calendar_fields": [
+        "month",
+        "year"
+      ]
+    }
+  },
+  "swept_parameters": {
+    "learning_rate": [
+      0.00025,
+      0.0005,
+      0.001
+    ],
+    "ratings_per_batch": [
+      256,
+      512
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK3_TIME_FACTORIZATION_MACHINE",
+  "runs": [
+    {
+      "learning_rate": 0.0005,
+      "ratings_per_batch": 512,
+      "score": 0.8966,
+      "best_epoch": 2,
+      "seconds": 45.3
+    },
+    {
+      "learning_rate": 0.0005,
+      "ratings_per_batch": 256,
+      "score": 0.896902,
+      "best_epoch": 2,
+      "seconds": 85.5
+    },
+    {
+      "learning_rate": 0.001,
+      "ratings_per_batch": 512,
+      "score": 0.895668,
+      "best_epoch": 2,
+      "seconds": 43.1
+    },
+    {
+      "learning_rate": 0.001,
+      "ratings_per_batch": 256,
+      "score": 0.894774,
+      "best_epoch": 2,
+      "seconds": 83.6
+    },
+    {
+      "learning_rate": 0.00025,
+      "ratings_per_batch": 256,
+      "score": 0.894107,
+      "best_epoch": 2,
+      "seconds": 84.3
+    },
+    {
+      "learning_rate": 0.00025,
+      "ratings_per_batch": 512,
+      "score": 0.894133,
+      "best_epoch": 2,
+      "seconds": 44.0
+    }
+  ]
+}

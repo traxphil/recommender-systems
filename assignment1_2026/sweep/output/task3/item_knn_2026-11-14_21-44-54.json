@@ -1,0 +1,62 @@
+{
+  "task": "task3",
+  "model": "item_knn",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-14 21:44:54",
+  "last_update": "2026-11-14 21:45:15",
+  "runs_finished": "3 / 3",
+  "device": "cuda",
+  "best": {
+    "score": 0.899235,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": null,
+    "swept_values": {
+      "n_neighbors": 200
+    },
+    "parameters": {
+      "n_neighbors": 200,
+      "similarity_shrinkage": 100.0,
+      "prediction_shrinkage": 1.0,
+      "baseline_biases": {
+        "user_bias_regularization": 3.0,
+        "item_bias_regularization": 5.0,
+        "n_iterations": 10
+      },
+      "max_ratings_per_user_for_similarity": 300,
+      "items_per_similarity_block": 2000,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "n_neighbors": [
+      50,
+      100,
+      200
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK3_ITEM_KNN",
+  "runs": [
+    {
+      "n_neighbors": 200,
+      "score": 0.899235,
+      "best_epoch": null,
+      "seconds": 7.0
+    },
+    {
+      "n_neighbors": 50,
+      "score": 0.899407,
+      "best_epoch": null,
+      "seconds": 6.6
+    },
+    {
+      "n_neighbors": 100,
+      "score": 0.899309,
+      "best_epoch": null,
+      "seconds": 7.3
+    }
+  ]
+}

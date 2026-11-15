@@ -1,0 +1,67 @@
+{
+  "task": "task5",
+  "model": "time_ease",
+  "metric": "validation pair accuracy (higher is better)",
+  "status": "finished",
+  "started": "2026-11-14 13:21:43",
+  "last_update": "2026-11-14 13:32:05",
+  "runs_finished": "4 / 4",
+  "device": "cuda",
+  "best": {
+    "score": 0.705799,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": null,
+    "swept_values": {
+      "history_time_decay_days": 730.0
+    },
+    "parameters": {
+      "regularization": 2000.0,
+      "max_items": 50000,
+      "use_gpu": false,
+      "history_time_decay_days": 730.0,
+      "history_time_decay_floor": 0.0,
+      "items_per_gram_block": 2000,
+      "pairs_per_scoring_chunk": 20000
+    }
+  },
+  "swept_parameters": {
+    "history_time_decay_days": [
+      60.0,
+      180.0,
+      365.0,
+      730.0
+    ]
+  },
+  "constant_parameters": {
+    "regularization": 2000.0
+  },
+  "base_config": "TASK5_EASE",
+  "runs": [
+    {
+      "history_time_decay_days": 365.0,
+      "score": 0.705477,
+      "best_epoch": null,
+      "seconds": 158.3
+    },
+    {
+      "history_time_decay_days": 60.0,
+      "score": 0.680565,
+      "best_epoch": null,
+      "seconds": 154.9
+    },
+    {
+      "history_time_decay_days": 180.0,
+      "score": 0.6996,
+      "best_epoch": null,
+      "seconds": 153.9
+    },
+    {
+      "history_time_decay_days": 730.0,
+      "score": 0.705799,
+      "best_epoch": null,
+      "seconds": 154.8
+    }
+  ]
+}

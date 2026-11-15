@@ -132,8 +132,9 @@ TASK1_FACTORIZATION_MACHINE = FactorizationMachineConfig(
 # no learning rate / lambda / early stopping to tune; more kept draws = a smoother posterior mean (never overfits)
 # CPU check 14 Nov (rank 32, 20 + 80 draws, no refit): valid MSE 0.7255 (SVD++ k = 32 in the same check: 0.7506)
 # time per draw (CPU check): rank 32 ~6 s, rank 64 ~12 s -> rank 32 to start, the sweep tries larger ranks
+# sweep 14 Nov (20 + 180 draws): rank 32 0.7272, 64 0.72337, 128 0.72022 (~35 min per fit on the PC)
 TASK1_BAYESIAN_FACTORIZATION_MACHINE = BayesianFactorizationMachineConfig(
-    rank=32,
+    rank=128,
     n_burn_in_iterations=20,
     n_kept_samples=180,
     use_implicit_feedback=True,
@@ -166,13 +167,14 @@ TASK1_RATING_TRANSFORMER = RatingTransformerConfig(
 # hidden 500 as in Sedhain et al. 2015; models the residuals of the closed-form bias model, masked training
 # CPU checks 14 Nov (hidden 200, no refit): learning rate 1e-3 -> worse than the bias model from epoch 1 on (lambda 1 and 100);
 # 1e-4 with lambda 16 (~ the factor penalty of SVD) -> valid MSE 0.7506 at epoch 15 (SVD++ k = 32 in the same check: 0.7506)
+# sweep 14 Nov: learning rate 3e-5 0.74950 (1e-4: 0.75110; 1.5e-5: 0.74898, same), hidden 250 + masked 25 % 0.74900
 TASK1_AUTOREC = AutoRecConfig(
-    hidden_dimension=500,
+    hidden_dimension=250,
     regularization=16.0,
     user_bias_regularization=1.0,           # own lambdas (independent of TASK1_SHARED_BASELINE_BIASES)
     item_bias_regularization=5.0,
     masked_fraction=0.25,
-    learning_rate=1e-4,
+    learning_rate=3e-5,
     books_per_batch=256,
     max_epochs=1000,
     early_stopping_patience=5,
@@ -185,8 +187,10 @@ TASK1_AUTOREC = AutoRecConfig(
 # CPU check 14 Nov (k = 32, lr 2e-3, batch 16384, 50 neighbours, no refit): valid MSE 0.7366 at epoch 3
 # (SVD++ with the same k / learning rate / batch: 0.7506)
 # neighbour lookups (CPU, 100 neighbours, measured 14 Nov): ~6 ms per batch of 512 -> ~20 s per epoch
+# sweep 14 Nov: neighbour penalty 0.1 (1.0: +0.0003), factor penalty 24 (8: 0.7362, 16: 0.7331, 32: 0.7337),
+# factors at penalty 24: 120 0.73246, 250 0.73267, 500 0.73290 -> 120 (fastest)
 TASK1_INTEGRATED_MODEL = IntegratedModelConfig(
-    n_factors=500,
+    n_factors=120,
     use_test_pairs_as_implicit_feedback=False,
     n_neighbors=100,
     similarity_shrinkage=100.0,
@@ -195,8 +199,8 @@ TASK1_INTEGRATED_MODEL = IntegratedModelConfig(
     learning_rate=2.5e-4,
     user_bias_regularization=1.0,
     item_bias_regularization=5.0,
-    factor_regularization=8.0,
-    neighbour_regularization=1.0,
+    factor_regularization=24.0,
+    neighbour_regularization=0.1,
     ratings_per_batch=512,
     max_epochs=1000,
     early_stopping_patience=6,
@@ -209,16 +213,17 @@ TASK1_INTEGRATED_MODEL = IntegratedModelConfig(
 # ensemble sweep 14 Nov (sweep/task1_ensemble_sweep.ipynb, all ten models trained on the GPU), out-of-fold MSE of the ridge:
 # blend of all ten 0.71118 (before the newer models: 0.7302); dropping the zero model, FM, AutoRec and SVD costs 0.00016 -> 0.71134
 # (without them: Bayesian FM +0.0137, bias model + item kNN +0.0037, integrated model +0.0026, SVD++ +0.0013, transformer +0.0009)
+# 14 Nov night: all ten switched on again (every sub-model in the blend for now; the ensemble sweep decides later)
 TASK1_BLEND_MODEL_FLAGS = {
     "bias_model": True,
-    "svd": False,
+    "svd": True,
     "svdpp": True,
     "item_knn": True,                       # bias model and item kNN only together: the blend uses their difference
-    "zero_model": False,
-    "factorization_machine": False,
+    "zero_model": True,
+    "factorization_machine": True,
     "bayesian_factorization_machine": True,
     "rating_transformer": True,
-    "autorec": False,
+    "autorec": True,
     "integrated_model": True,
 }
 TASK1_BLENDED_MODELS = tuple(model_name for model_name, is_blended in TASK1_BLEND_MODEL_FLAGS.items() if is_blended)
@@ -262,17 +267,19 @@ TASK1_SUBMITTED_BLENDER = TASK1_RIDGE_BLENDER
 # #########################################################################################
 
 # ---- item cosine similarity to the user's history ----------------------------------------
+# sweep 14 Nov (pair accuracy, mean of 3 validation splits): 1600 neighbours, no shrinkage, 1000 books per user 0.8690
+# (100 / 20 / 300: 0.8328; 2400 neighbours equal, 3200 worse)
 TASK2_ITEM_COSINE = ItemCosineConfig(
-    n_neighbors=100,
-    similarity_shrinkage=20.0,
-    max_interactions_per_user_for_similarity=300,  # as the item kNN of Task 1 (memory)
+    n_neighbors=1600,
+    similarity_shrinkage=0.0,
+    max_interactions_per_user_for_similarity=1000,
     items_per_similarity_block=2000,
     seed=0,
 )
 
 # ---- EASE (linear autoencoder) -----------------------------------------------------------
 TASK2_EASE = EaseConfig(
-    regularization=500.0,                   # Steck 2019 uses 200 - 1000; Task 4 check: 500 best alone, 30 - 2000 within 0.002 in the blend
+    regularization=1000.0,                  # sweep 14 Nov: 250 0.842, 500 0.849, 750 0.8508, 1000 0.8512, 2000 0.846
     max_items=60_000,                       # all ~51k books (the 25k most popular cover only 82 % of the interactions)
     use_gpu=False,                          # 51k x 51k float32 = 10.4 GB per matrix, ~21 GB peak -> in RAM, a few minutes per fit
     history_time_decay_days=0.0,            # plain EASE (the Task 2 test file has no timestamp)
@@ -282,12 +289,13 @@ TASK2_EASE = EaseConfig(
 )
 
 # ---- Mult-VAE (non-linear autoencoder) ----------------------------------------------------
-# architecture and beta as in Liang et al. 2018 (600 -> 200, dropout 0.5, beta up to 0.2)
+# starting point: Liang et al. 2018 (600 -> 200, dropout 0.5, beta up to 0.2): 0.8562
+# sweep 14 Nov: dropout 0.1, beta 0.5, hidden 1000 0.8626 (latent 400 / lr 5e-4 or 2e-3 / annealing 10 or 40 not better)
 TASK2_MULT_VAE = MultVaeConfig(
-    hidden_dimension=600,
+    hidden_dimension=1000,
     latent_dimension=200,
-    input_dropout=0.5,
-    kl_weight_max=0.2,
+    input_dropout=0.1,
+    kl_weight_max=0.5,
     kl_annealing_epochs=20,
     learning_rate=1e-3,
     users_per_batch=500,
@@ -360,14 +368,15 @@ TASK3_SVD = LatentFactorConfig(
 
 # ---- SVD++ -----------------------------------------------------------------------------
 # SVD++ rebuilds N(u) sums for every user in a batch -> bigger batches keep an epoch affordable
+# sweep 14 Nov: factor penalty 4, learning rate 1e-3 0.88416 (8 / 2e-3: 0.88550)
 TASK3_SVDPP = LatentFactorConfig(
     use_implicit_feedback=True,
     use_test_pairs_as_implicit_feedback=False,
     n_factors=500,
-    learning_rate=2e-3,
+    learning_rate=1e-3,
     user_bias_regularization=3.0,           # own lambdas (independent of TASK3_SHARED_BASELINE_BIASES)
     item_bias_regularization=5.0,
-    factor_regularization=8.0,
+    factor_regularization=4.0,
     ratings_per_batch=16384,
     max_epochs=1000,
     early_stopping_patience=6,
@@ -376,8 +385,9 @@ TASK3_SVDPP = LatentFactorConfig(
 )
 
 # ---- item-item kNN on the bias model's residuals ----------------------------------------
+# sweep 14 Nov: 200 neighbours 0.89924 (50: 0.89941, 100: 0.89931)
 TASK3_ITEM_KNN = ItemKnnConfig(
-    n_neighbors=50,                         # Task 1 values
+    n_neighbors=200,
     similarity_shrinkage=100.0,
     prediction_shrinkage=1.0,
     baseline_biases=TASK3_SHARED_BASELINE_BIASES,   # = the bias model's baseline (blend: kNN - bias model)
@@ -399,7 +409,8 @@ TASK3_ZERO_MODEL = ZeroModelConfig(
 # (no user drift 0.8958 / drift regularization 10: 0.9028 -> the drift needs strong shrinkage; 10 / 60 bins: same as 30)
 TASK3_TEMPORAL_BIASES = TemporalBiasConfig(
     n_time_bins=30,                         # Koren 2009 uses 30 bins on Netflix
-    user_period_lengths_in_days=(1, 7, 30, 90, 365),  # test rows whose user has a training rating in the same day / week / month: 10 / 43 / 76 %
+    user_period_lengths_in_days=(1, 7, 30, 90, 365, 1000),  # test rows whose user has a training rating in the same day / week / month: 10 / 43 / 76 %
+                                            # sweep 14 Nov: + 1000 days 0.88238 (without: 0.88291; 3-split mean 0.88651)
     drift_exponent=0.4,                     # Koren 2009 (PML Eq. 7.11); 0.2 same, 0.6 worse
     time_bias_regularization=50.0,          # mostly 1 - 2 ratings per (user, period) -> strong shrinkage (10: 0.9153, 25: 0.9016 w/o drift tuning)
     drift_regularization=3000.0,            # sum of dev_u(t)^2 over a user's ratings is in the thousands -> ridge needs a large value
@@ -421,9 +432,9 @@ TASK3_TIME_SVDPP = TimeSVDppConfig(
     use_factor_drift=False,                 # PML Sec. 7.2.3: biases first; True adds drifting user factors p_u(t)
     time_biases=TASK3_TIME_BIAS_MODEL,
     train_temporal_biases=False,            # True: Adam trains them further (overfits them within ~1 epoch)
-    learning_rate=2e-3,
-    bias_regularization=3.0,
-    factor_regularization=8.0,
+    learning_rate=1e-3,                     # sweep 14 Nov: penalty 4 / 1e-3 + the 1000-day period 0.85808 (8 / 2e-3: 0.86050;
+    bias_regularization=3.0,                # 1 - 2 or 1000 factors not better; drifting user factors 0.877)
+    factor_regularization=4.0,
     ratings_per_batch=16384,
     max_epochs=1000,
     early_stopping_patience=6,
@@ -433,7 +444,7 @@ TASK3_TIME_SVDPP = TimeSVDppConfig(
 
 # ---- time-decayed item-item kNN ----------------------------------------------------------
 TASK3_TIME_ITEM_KNN = TimeItemKnnConfig(
-    n_neighbors=50,                         # neighbourhoods as in TASK3_ITEM_KNN
+    n_neighbors=100,
     similarity_shrinkage=100.0,
     prediction_shrinkage=1.0,
     baseline_biases=TASK3_SHARED_BASELINE_BIASES,   # = the bias model's baseline (blend: kNN - bias model)
@@ -442,8 +453,9 @@ TASK3_TIME_ITEM_KNN = TimeItemKnnConfig(
     seed=0,
     # quick check on the validation split: no decay setting beats the plain kNN on its own (0.8997);
     # 365 days / floor 0.5: 0.9006 -> kept as a differently weighted neighbourhood for the blend
-    time_decay_days=365.0,
-    time_decay_floor=0.5,
+    # sweep 14 Nov: 3000 days / floor 0.7 / 100 neighbours 0.89938 (365 / 0.5 / 50: 0.90025; slower decays -> the plain kNN)
+    time_decay_days=3000.0,
+    time_decay_floor=0.7,
 )
 
 # ---- temporal zero model -----------------------------------------------------------------
@@ -452,26 +464,102 @@ TASK3_TIME_ZERO_MODEL = TimeZeroModelConfig(
     item_prior_strength=20.0,
     inverse_regularization=1.0,
     max_iterations=1000,
-    window_lengths_in_days=(0, 30),         # same day + the month around the rating
-    window_prior_strength=2.0,              # 1 zero among 1 other rating that day -> shrunk zero share 0.34
+    window_lengths_in_days=(0, 7, 30, 365, 1000),   # same day + week / month / year / ~3 years around the rating
+    window_prior_strength=5.0,              # sweep 14 Nov: log loss 0.05305 (windows 0 / 30, prior 2: 0.05382)
 )
 
 # ---- time-aware factorization machine ----------------------------------------------------
 # = TASK1_FACTORIZATION_MACHINE settings (starting point, not tuned on Task 3) + one-hot calendar fields of the timestamp
 # hour_of_day: all timestamps lie in 05:00 - 09:59 UTC (dates + an offset) -> little real signal
 # sweep 14 Nov, calendar fields: all four 0.89674, weekday + month + year 0.89555, month + year 0.89413, year 0.89543
+# sweep 14 Nov evening: batch 256, 60 factors, factor penalty 32, bias penalty 5 0.89303 (before: 0.89411)
 TASK3_TIME_FACTORIZATION_MACHINE = TimeFactorizationMachineConfig(
-    n_factors=120,
+    n_factors=60,
     n_activity_buckets=10,
     learning_rate=2.5e-4,
-    bias_regularization=3.0,
-    factor_regularization=8.0,
-    ratings_per_batch=512,
+    bias_regularization=5.0,
+    factor_regularization=32.0,
+    ratings_per_batch=256,
     max_epochs=1000,
     early_stopping_patience=6,
     refit_on_train_and_valid=True,
     seed=0,
     calendar_fields=("month", "year"),
+)
+
+# ---- the Task 1 models added 14 Nov: starting points = the Task 1 sweep winners, then the Task 3 sweep (14 Nov evening) --
+# ---- time-aware Bayesian factorization machine (Gibbs sampling with myFM; CPU, one core, ~5 s per draw) -----------
+# = TASK1_BAYESIAN_FACTORIZATION_MACHINE (the best single Task 1 model) + the calendar fields of the time-aware FM above
+# quick check 14 Nov (CPU, only 3 + 5 draws, no refit): without calendar fields 0.9109, month + year 0.8905
+# sweep 14 Nov (rank 32, 20 + 180 draws): month + year 0.84921, weekday + month + year 0.84878, all four 0.84988;
+# rank 16 0.85255, 64 0.84752, 128 0.84666; rank 64 with 30 + 380 draws 0.84445 (~35 min per fit on the PC)
+TASK3_TIME_BAYESIAN_FACTORIZATION_MACHINE = BayesianFactorizationMachineConfig(
+    rank=64,
+    n_burn_in_iterations=30,
+    n_kept_samples=380,
+    use_implicit_feedback=True,
+    use_test_pairs_as_implicit_feedback=False,
+    refit_on_train_and_valid=True,
+    seed=0,
+    calendar_fields=("weekday", "month", "year"),
+)
+
+# ---- rating transformer (attention over the user's rated books; timestamps not used) ------------------------------
+# = TASK1_RATING_TRANSFORMER (Task 1 sweep 14 Nov: learning rate, dropout, width, blocks, history length all within ~0.001)
+TASK3_RATING_TRANSFORMER = RatingTransformerConfig(
+    embedding_dimension=64,
+    n_blocks=2,
+    n_heads=2,
+    dropout=0.1,
+    max_history_length=200,
+    use_test_pairs_in_history=False,
+    learning_rate=1e-3,
+    bias_regularization=3.0,
+    factor_regularization=1.0,
+    ratings_per_batch=1024,
+    max_epochs=1000,
+    early_stopping_patience=3,
+    refit_on_train_and_valid=True,
+    seed=0,
+)
+
+# ---- I-AutoRec (item-based autoencoder on the bias-model residuals; timestamps not used) --------------------------
+# Task 1 sweep 14 Nov: learning rate 3e-5 (0.7495 vs 1e-4: 0.7511), hidden 250 / masked 25 % 0.7490
+# Task 3 sweep 14 Nov: hidden 500 0.89382 (250: 0.89461, 1000: 0.89399; learning rate 1e-4 worse)
+TASK3_AUTOREC = AutoRecConfig(
+    hidden_dimension=500,
+    regularization=16.0,
+    user_bias_regularization=1.0,
+    item_bias_regularization=5.0,
+    masked_fraction=0.25,
+    learning_rate=3e-5,
+    books_per_batch=256,
+    max_epochs=1000,
+    early_stopping_patience=5,
+    refit_on_train_and_valid=True,
+    seed=0,
+)
+
+# ---- integrated model (SVD++ + learned neighbour weights, Koren 2008; timestamps not used) ------------------------
+# Task 1 sweep 14 Nov: 250 factors, factor penalty 24, neighbour penalty 0.1 -> 0.7327 (config 500 / 8 / 1.0: 0.7365)
+# Task 3 sweep 14 Nov: 0.87506 (factor penalty 16 0.87539, 32 0.87531, 48 worse; 200 neighbours 0.87734)
+TASK3_INTEGRATED_MODEL = IntegratedModelConfig(
+    n_factors=250,
+    use_test_pairs_as_implicit_feedback=False,
+    n_neighbors=100,
+    similarity_shrinkage=100.0,
+    max_ratings_per_user_for_similarity=300,
+    items_per_similarity_block=2000,
+    learning_rate=2.5e-4,
+    user_bias_regularization=1.0,
+    item_bias_regularization=5.0,
+    factor_regularization=24.0,
+    neighbour_regularization=0.1,
+    ratings_per_batch=512,
+    max_epochs=1000,
+    early_stopping_patience=6,
+    refit_on_train_and_valid=True,
+    seed=0,
 )
 
 # ---- blenders ----------------------------------------------------------------------------
@@ -488,6 +576,10 @@ TASK3_BLEND_MODEL_FLAGS = {
     "time_item_knn": True,
     "time_zero_model": True,
     "time_factorization_machine": True,
+    "time_bayesian_factorization_machine": True,
+    "rating_transformer": True,
+    "autorec": True,
+    "integrated_model": True,
 }
 TASK3_BLENDED_MODELS = tuple(model_name for model_name, is_blended in TASK3_BLEND_MODEL_FLAGS.items() if is_blended)
 
@@ -534,10 +626,11 @@ TASK3_SUBMITTED_BLENDER = TASK3_RIDGE_BLENDER
 # #########################################################################################
 
 # ---- item cosine similarity to the user's history ----------------------------------------
+# sweep 14 Nov (mean of 3 validation splits): 20 neighbours, shrinkage 5, 2000 books per user 0.7233 (100 / 20 / 300: 0.6769)
 TASK4_ITEM_COSINE = ItemCosineConfig(
-    n_neighbors=100,
-    similarity_shrinkage=20.0,
-    max_interactions_per_user_for_similarity=300,
+    n_neighbors=20,
+    similarity_shrinkage=5.0,
+    max_interactions_per_user_for_similarity=2000,
     items_per_similarity_block=2000,
     seed=0,
 )
@@ -568,11 +661,12 @@ TASK4_TIME_EASE = EaseConfig(
 )
 
 # ---- Mult-VAE (non-linear autoencoder) ----------------------------------------------------
+# sweep 14 Nov: hidden 1500, dropout 0.1, beta 0.1 0.7592 (600 / 0.5 / 0.2: 0.7476)
 TASK4_MULT_VAE = MultVaeConfig(
-    hidden_dimension=600,
+    hidden_dimension=1500,
     latent_dimension=200,
-    input_dropout=0.5,
-    kl_weight_max=0.2,
+    input_dropout=0.1,
+    kl_weight_max=0.1,
     kl_annealing_epochs=20,
     learning_rate=1e-3,
     users_per_batch=500,
@@ -611,40 +705,45 @@ TASK4_PAIR_BLENDER = PairBlenderConfig(
 # #########################################################################################
 
 # ---- item cosine similarity to the user's history ----------------------------------------
+# sweep 14 Nov (mean of 3 validation splits): 3200 neighbours, no shrinkage, 1000 books per user 0.7717 (100 / 20 / 300: 0.7228;
+# 1600 0.7595, 2400 0.7683, 4800 0.7705, 6400 0.7667)
 TASK5_ITEM_COSINE = ItemCosineConfig(
-    n_neighbors=100,
-    similarity_shrinkage=20.0,
-    max_interactions_per_user_for_similarity=300,
+    n_neighbors=3200,
+    similarity_shrinkage=0.0,
+    max_interactions_per_user_for_similarity=1000,
     items_per_similarity_block=2000,
     seed=0,
 )
 
 # ---- transition model (which book follows which) ----------------------------------------
+# sweep 14 Nov (mean of 3 validation splits): 0.7460 (3 steps / 0.5 / 5 / 5 books / 0.5: 0.7019; 200 steps: same)
 TASK5_TRANSITION = TransitionConfig(
-    steps_ahead=3,                          # j -> i also when i comes 2 or 3 books later (weights 1, 0.5, 0.25)
-    step_decay=0.5,
-    shrinkage=5.0,
-    context_length=5,                       # the user's last 5 books vote, weights 1, 0.5, 0.25, ...
-    context_decay=0.5,
+    steps_ahead=100,                        # j -> i also when i comes up to 100 books later (weights 1, 0.95, 0.95^2, ...)
+    step_decay=0.95,
+    shrinkage=1.0,
+    context_length=20,                      # the user's last 20 books vote, weights 1, 0.8, 0.64, ...
+    context_decay=0.8,
 )
 
 # ---- EASE + time-weighted EASE (one set of weights, in RAM) -------------------------------
+# sweep 14 Nov: regularization 2000 0.7009 (plain; 500: 0.6885), time decay 730 days 0.7058 (1000 days: same)
 TASK5_EASE = EaseConfig(
-    regularization=500.0,
+    regularization=2000.0,
     max_items=50_000,                       # of 232k books: covers 85 % of the interactions; 10 GB per matrix, ~20 GB peak
     use_gpu=False,
-    history_time_decay_days=180.0,          # time-weighted variant: books read long before "now" (the last interaction) count less
+    history_time_decay_days=730.0,          # time-weighted variant: books read long before "now" (the last interaction) count less
     history_time_decay_floor=0.0,
     items_per_gram_block=2000,
     pairs_per_scoring_chunk=20_000,
 )
 
 # ---- Mult-VAE (non-linear autoencoder) ----------------------------------------------------
+# sweep 14 Nov: hidden 1000, dropout 0.1, beta 0.1 0.7189 (600 / 0.5 / 0.2: 0.7104)
 TASK5_MULT_VAE = MultVaeConfig(
-    hidden_dimension=600,
+    hidden_dimension=1000,
     latent_dimension=200,
-    input_dropout=0.5,
-    kl_weight_max=0.2,
+    input_dropout=0.1,
+    kl_weight_max=0.1,
     kl_annealing_epochs=20,
     learning_rate=1e-3,
     users_per_batch=500,
@@ -656,13 +755,14 @@ TASK5_MULT_VAE = MultVaeConfig(
 
 # ---- SASRec (self-attention over the sequence) ---------------------------------------------
 # Kang & McAuley 2018: 2 blocks, 1 head, d = 50, L = 50 and dropout 0.5 on their sparse datasets, Adam 1e-3
+# sweep 14 Nov: d 256, learning rate 1.25e-4 0.8921 (64 / 1e-3: 0.8854; 128 / 5e-4 0.8885; 512 / 2.5e-4 0.8918)
 TASK5_SASREC = SasRecConfig(
-    hidden_dimension=64,
+    hidden_dimension=256,
     n_blocks=2,
     n_heads=1,
     max_sequence_length=50,                 # 90 % of the users have fewer interactions
     dropout=0.5,
-    learning_rate=1e-3,
+    learning_rate=1.25e-4,
     users_per_batch=256,
     max_epochs=200,
     early_stopping_patience=10,
@@ -711,14 +811,18 @@ TASK6_LINEAR_GAP_MODEL = GapRegressorConfig(
 )
 
 # ---- LightGBM with an L1 loss ---------------------------------------------------------------
+# 15 Nov (out-of-fold MAE, mean of 3 fold splits): old features 83.62 days -> + next-book reader timing and book-to-book
+# timing (lib/time_gap.py) 81.65 -> 63 leaves / learning rate 0.02: 81.34 -> + the user's previous gap as an extra
+# training row 81.12 (feature fraction 0.7: -0.07 only, not used; with the old features 2 or 4 earlier gaps were worse than 1)
 TASK6_LIGHTGBM_GAP_MODEL = GapRegressorConfig(
     method="lightgbm",
     n_folds=5,
     lightgbm_n_estimators=600,
-    lightgbm_learning_rate=0.03,
-    lightgbm_num_leaves=31,
+    lightgbm_learning_rate=0.02,
+    lightgbm_num_leaves=63,
     lightgbm_min_child_samples=100,
     seed=0,
+    n_earlier_gaps_as_training_rows=1,
 )
 
 # the model that writes output/task_6_predictions.csv -> compare the validation MAEs in task6_ensemble.ipynb

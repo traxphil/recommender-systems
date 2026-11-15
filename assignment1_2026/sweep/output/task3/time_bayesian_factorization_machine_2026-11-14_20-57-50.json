@@ -1,0 +1,62 @@
+{
+  "task": "task3",
+  "model": "time_bayesian_factorization_machine",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-14 20:57:50",
+  "last_update": "2026-11-14 21:20:31",
+  "runs_finished": "2 / 2",
+  "device": "cuda",
+  "best": {
+    "score": 0.847516,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": null,
+    "swept_values": {
+      "rank": 64
+    },
+    "parameters": {
+      "rank": 64,
+      "n_burn_in_iterations": 20,
+      "n_kept_samples": 180,
+      "use_implicit_feedback": true,
+      "use_test_pairs_as_implicit_feedback": false,
+      "refit_on_train_and_valid": true,
+      "seed": 0,
+      "calendar_fields": [
+        "weekday",
+        "month",
+        "year"
+      ]
+    }
+  },
+  "swept_parameters": {
+    "rank": [
+      16,
+      64
+    ]
+  },
+  "constant_parameters": {
+    "calendar_fields": [
+      "weekday",
+      "month",
+      "year"
+    ]
+  },
+  "base_config": "TASK3_TIME_BAYESIAN_FACTORIZATION_MACHINE",
+  "runs": [
+    {
+      "rank": 16,
+      "score": 0.852549,
+      "best_epoch": null,
+      "seconds": 258.1
+    },
+    {
+      "rank": 64,
+      "score": 0.847516,
+      "best_epoch": null,
+      "seconds": 1102.5
+    }
+  ]
+}

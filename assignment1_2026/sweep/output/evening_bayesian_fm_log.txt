@@ -1,0 +1,14 @@
+2026-11-14 20:33:21 sweep started, overall end 2026-11-14 23:59
+2026-11-14 20:33:21 start    T3 time Bayesian FM 1 calendar fields | task3 / time_bayesian_factorization_machine | until 21:28
+2026-11-14 20:57:50 finished T3 time Bayesian FM 1 calendar fields | finished | 3 / 3 runs | best 0.84878 with {"calendar_fields": ["weekday", "month", "year"]} | task3/time_bayesian_factorization_machine_2026-11-14_20-33-21.json
+2026-11-14 20:57:50 start    T3 time Bayesian FM 2 rank | task3 / time_bayesian_factorization_machine | until 21:47
+2026-11-14 21:20:31 finished T3 time Bayesian FM 2 rank | finished | 2 / 2 runs | best 0.84752 with {"rank": 64} | task3/time_bayesian_factorization_machine_2026-11-14_20-57-50.json
+2026-11-14 21:20:31 start    T1 Bayesian FM rank 64 | task1 / bayesian_factorization_machine | until 22:05
+2026-11-14 21:39:53 finished T1 Bayesian FM rank 64 | finished | 1 / 1 runs | best 0.72337 with {} | task1/bayesian_factorization_machine_2026-11-14_21-20-31.json
+2026-11-14 21:39:53 start    queue: T3 time Bayesian FM rank 128 | task3 / time_bayesian_factorization_machine | until 22:29
+2026-11-14 22:15:01 finished queue: T3 time Bayesian FM rank 128 | finished | 1 / 1 runs | best 0.84666 with {} | task3/time_bayesian_factorization_machine_2026-11-14_21-39-53.json
+2026-11-14 22:15:01 start    queue: T3 time Bayesian FM rank 64 more draws | task3 / time_bayesian_factorization_machine | until 23:05
+2026-11-14 22:50:12 finished queue: T3 time Bayesian FM rank 64 more draws | finished | 1 / 1 runs | best 0.84445 with {} | task3/time_bayesian_factorization_machine_2026-11-14_22-15-01.json
+2026-11-14 22:50:12 start    queue: T1 Bayesian FM rank 128 | task1 / bayesian_factorization_machine | until 23:40
+2026-11-14 23:23:58 finished queue: T1 Bayesian FM rank 128 | finished | 1 / 1 runs | best 0.72022 with {} | task1/bayesian_factorization_machine_2026-11-14_22-50-12.json
+2026-11-14 23:58:58 sweep finished

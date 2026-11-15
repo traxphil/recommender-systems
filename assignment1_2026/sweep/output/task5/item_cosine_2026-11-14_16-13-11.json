@@ -1,0 +1,39 @@
+{
+  "task": "task5",
+  "model": "item_cosine",
+  "metric": "validation pair accuracy (higher is better)",
+  "status": "finished",
+  "started": "2026-11-14 16:13:11",
+  "last_update": "2026-11-14 16:13:53",
+  "runs_finished": "1 / 1",
+  "device": "cuda",
+  "best": {
+    "score": 0.770504,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": null,
+    "swept_values": {},
+    "parameters": {
+      "n_neighbors": 4800,
+      "similarity_shrinkage": 0.0,
+      "max_interactions_per_user_for_similarity": 1000,
+      "items_per_similarity_block": 2000,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {},
+  "constant_parameters": {
+    "n_neighbors": 4800,
+    "max_interactions_per_user_for_similarity": 1000,
+    "similarity_shrinkage": 0.0
+  },
+  "base_config": "TASK5_ITEM_COSINE",
+  "runs": [
+    {
+      "score": 0.770504,
+      "best_epoch": null,
+      "seconds": 41.3
+    }
+  ]
+}

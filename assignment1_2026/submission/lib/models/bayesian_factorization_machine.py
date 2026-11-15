@@ -7,6 +7,7 @@ from lib.custom_types import BayesianFactorizationMachineConfig, ModelResult, Ra
 from lib.data_loading import known_interaction_pairs
 from lib.helper_functioins import log, mse, sparse_matrix_from_entries
 from lib.model_storage import load_model_result, save_model_result
+from lib.temporal_features import CALENDAR_FIELD_SIZES, calendar_field_rows, first_and_last_year, require_test_timestamps
 
 # Bayesian factorization machine fitted by Gibbs sampling (Freudenthaler, Schmidt-Thieme & Rendle 2011; Rendle 2012,
 # "Factorization Machines with libFM"), implemented by myFM (https://myfm.readthedocs.io):
@@ -17,8 +18,12 @@ from lib.model_storage import load_model_result, save_model_result
 #   factorization models are among the strongest rating predictors)
 # features, one prior group each: user | the user's implicit feedback N(u) | item | the item's implicit feedback N(i)
 #   N(u) = the items of u, each weighted |N(u)|^-1/2 (as in SVD++); N(i) = the users of i, each weighted |N(i)|^-1/2
+# time-aware variant (Task 3, config.calendar_fields): + one-hot calendar fields of the rating's timestamp, one prior group
+#   per field, as in the time-aware factorization machine (lib/models/time_factorization_machine.py, lib/temporal_features.py)
+#   -> <v_item, v_month> = a book's seasonal popularity, <v_item, v_year> = how its ratings drift over the years, ...
 # relation blocks (Rendle 2013, "Scaling Factorization Machines to Relational Data"): the features of a user / an item are
-# stored once, every rating only points at its user's and its item's row -> N(u) is not copied into every rating
+# stored once, every rating only points at its user's and its item's row -> N(u) is not copied into every rating;
+# the calendar fields differ per rating -> they are the direct feature matrix X (myFM orders the features X, then the blocks)
 # runs on the CPU (C++, one core); myFM shows a progress bar per fit
 # the validation and test pairs are predicted while sampling (posterior_mean_predictions) -> no model to predict later
 
@@ -33,43 +38,64 @@ def feature_block(rows: np.ndarray, partners: np.ndarray, n_rows: int, n_partner
     return sp.hstack([one_hot_ids, implicit_feedback], format="csr", dtype=np.float64)
 
 
-# every feature comes from the relation blocks -> the direct feature matrix has no columns
-def no_direct_features(n_ratings: int) -> sp.csr_matrix:
-    return sp.csr_matrix((n_ratings, 0), dtype=np.float64)
+# number of values of every calendar field; the year field covers the years of the training ratings
+def calendar_field_sizes(calendar_fields: tuple[str, ...], year_range: tuple[int, int]) -> list[int]:
+    first_year, last_year = year_range
+    field_sizes = {**CALENDAR_FIELD_SIZES, "year": last_year - first_year + 1}
+    return [field_sizes[name] for name in calendar_fields]
 
 
-# Gibbs sampling on training_ratings -> the posterior mean prediction of every asked pair set (e.g. [validation, test pairs])
-# implicit_feedback_pairs = the (user, item) pairs of N(u) / N(i): the ratings it trains on, or every known pair
-# every kept draw predicts the asked pairs and adds them to a running sum; the draws themselves are not kept: myFM would
+# direct features of every rating / asked pair: (n, sum of field sizes) one-hot calendar fields, one 1 per field;
+# no calendar fields (Task 1) -> no columns (every feature comes from the relation blocks)
+def direct_features(n_rows: int, timestamps: np.ndarray | None, calendar_fields: tuple[str, ...],
+                    year_range: tuple[int, int] | None) -> sp.csr_matrix:
+    if not calendar_fields:
+        return sp.csr_matrix((n_rows, 0), dtype=np.float64)
+    field_sizes = calendar_field_sizes(calendar_fields, year_range)
+    column_offsets = np.concatenate([[0], np.cumsum(field_sizes)[:-1]])
+    columns = calendar_field_rows(timestamps, calendar_fields, *year_range) + column_offsets    # (n, fields)
+    n_fields = len(calendar_fields)
+    return sp.csr_matrix((np.ones(n_rows * n_fields), columns.ravel(), np.arange(0, n_rows * n_fields + 1, n_fields)),
+                         shape=(n_rows, sum(field_sizes)))
+
+
+# Gibbs sampling on training_ratings -> the posterior mean prediction of every asked row set (e.g. [validation, test rows])
+# asked_rows: (user rows, item rows, timestamps or None) per set; implicit_feedback_pairs = the (user, item) pairs of
+# N(u) / N(i): the ratings it trains on, or every known pair
+# every kept draw predicts the asked rows and adds them to a running sum; the draws themselves are not kept: myFM would
 # store each one in RAM (features x (rank + 1) float64: ~43 MB at rank 32 -> ~7.8 GB for 180 draws, more for larger ranks)
 def posterior_mean_predictions(training_ratings: RatingData, implicit_feedback_pairs: RatingData, n_user_rows: int,
                                n_item_rows: int, config: BayesianFactorizationMachineConfig,
-                               asked_pairs: list[tuple[np.ndarray, np.ndarray]]) -> list[np.ndarray]:
+                               asked_rows: list[tuple[np.ndarray, np.ndarray, np.ndarray | None]]) -> list[np.ndarray]:
 
-    # 1) one feature row per user and per item (+ the size of every prior group, in column order)
+    # 1) one feature row per user and per item (+ the size of every prior group, in column order: X first, then the blocks)
     user_rows, item_rows = implicit_feedback_pairs.user_rows, implicit_feedback_pairs.item_rows
     user_features = feature_block(user_rows, item_rows, n_user_rows, n_item_rows, config.use_implicit_feedback)
     item_features = feature_block(item_rows, user_rows, n_item_rows, n_user_rows, config.use_implicit_feedback)
-    group_shapes = ([n_user_rows, n_item_rows, n_item_rows, n_user_rows] if config.use_implicit_feedback
-                    else [n_user_rows, n_item_rows])
+    year_range = first_and_last_year(training_ratings.timestamps) if config.calendar_fields else None
+    group_shapes = ((calendar_field_sizes(config.calendar_fields, year_range) if config.calendar_fields else [])
+                    + ([n_user_rows, n_item_rows, n_item_rows, n_user_rows] if config.use_implicit_feedback
+                       else [n_user_rows, n_item_rows]))
 
-    # every rating / asked pair only points at its user's and its item's feature row
+    # every rating / asked row only points at its user's and its item's feature row
     def relation_blocks(users: np.ndarray, items: np.ndarray) -> list:
         return [myfm.RelationBlock(users, user_features), myfm.RelationBlock(items, item_features)]
 
     # 2) called by myFM after every draw (iteration 0, 1, ...): the draws after the burn-in add their predictions
-    asked_relation_blocks = [relation_blocks(users, items) for users, items in asked_pairs]
-    prediction_sums = [np.zeros(len(users)) for users, _ in asked_pairs]
+    asked_inputs = [(direct_features(len(users), timestamps, config.calendar_fields, year_range), relation_blocks(users, items))
+                    for users, items, timestamps in asked_rows]
+    prediction_sums = [np.zeros(len(users)) for users, _, _ in asked_rows]
 
     def add_kept_draw(iteration, draw, hyperparameters, history):
         if iteration >= config.n_burn_in_iterations:
-            for prediction_sum, blocks in zip(prediction_sums, asked_relation_blocks):
-                prediction_sum += draw.predict_score(no_direct_features(len(prediction_sum)), blocks)
+            for prediction_sum, (features, blocks) in zip(prediction_sums, asked_inputs):
+                prediction_sum += draw.predict_score(features, blocks)
         return False, None                  # never stop early, no progress message
 
     # 3) Gibbs sampling: burn-in draws, then n_kept_samples draws (myFM itself keeps only its last draw)
     sampler = myfm.MyFMRegressor(rank=config.rank, random_seed=config.seed)
-    sampler.fit(no_direct_features(len(training_ratings.ratings)), training_ratings.ratings,
+    sampler.fit(direct_features(len(training_ratings.ratings), training_ratings.timestamps, config.calendar_fields, year_range),
+                training_ratings.ratings,
                 X_rel=relation_blocks(training_ratings.user_rows, training_ratings.item_rows),
                 n_iter=config.n_burn_in_iterations + config.n_kept_samples, n_kept_samples=1,
                 group_shapes=group_shapes, callback=add_kept_draw)
@@ -78,25 +104,30 @@ def posterior_mean_predictions(training_ratings: RatingData, implicit_feedback_p
 
 
 def train_bayesian_factorization_machine(task: RatingTask, config: BayesianFactorizationMachineConfig) -> ModelResult:
-    validation, test_pairs = task.validation_data, (task.test_user_rows, task.test_item_rows)
+    if config.calendar_fields:
+        require_test_timestamps(task, "time-aware Bayesian factorization machine")
+    validation = task.validation_data
+    validation_rows = (validation.user_rows, validation.item_rows, validation.timestamps)
+    test_rows = (task.test_user_rows, task.test_item_rows, task.test_timestamps)
 
     # N(u) / N(i): the ratings the model trains on, or every known pair of the training + test file (ratings never used)
     def implicit_feedback_pairs(training_ratings: RatingData) -> RatingData:
         return known_interaction_pairs(task) if config.use_test_pairs_as_implicit_feedback else training_ratings
 
     # 1) sampled on the training split -> validation predictions (input of the blender) [+ test predictions without refit]
-    asked_pairs = [(validation.user_rows, validation.item_rows)] + ([] if config.refit_on_train_and_valid else [test_pairs])
+    asked_rows = [validation_rows] + ([] if config.refit_on_train_and_valid else [test_rows])
     predictions = posterior_mean_predictions(task.training_data, implicit_feedback_pairs(task.training_data),
-                                             task.n_user_rows, task.n_item_rows, config, asked_pairs)
+                                             task.n_user_rows, task.n_item_rows, config, asked_rows)
     valid_predictions = predictions[0]
-    log(f"Bayesian factorization machine | rank {config.rank}, {config.n_burn_in_iterations} + {config.n_kept_samples} draws | "
-        f"valid MSE {mse(valid_predictions, validation.ratings):.4f}")
+    calendar_text = f", calendar fields {'/'.join(config.calendar_fields)}" if config.calendar_fields else ""
+    log(f"Bayesian factorization machine | rank {config.rank}, {config.n_burn_in_iterations} + {config.n_kept_samples} draws"
+        f"{calendar_text} | valid MSE {mse(valid_predictions, validation.ratings):.4f}")
 
     # 2) optional: sampled again on 100 % of the training file -> test predictions
     if config.refit_on_train_and_valid:
         [test_predictions] = posterior_mean_predictions(task.training_and_validation_data,
                                                         implicit_feedback_pairs(task.training_and_validation_data),
-                                                        task.n_user_rows, task.n_item_rows, config, [test_pairs])
+                                                        task.n_user_rows, task.n_item_rows, config, [test_rows])
     else:
         test_predictions = predictions[1]
 
@@ -110,3 +141,12 @@ def store_bayesian_factorization_machine(model_result: ModelResult, task_name: s
 
 def load_bayesian_factorization_machine(task_name: str) -> ModelResult:
     return load_model_result(task_name, "bayesian_factorization_machine")
+
+
+# the time-aware variant (Task 3) is stored under its own name
+def store_time_bayesian_factorization_machine(model_result: ModelResult, task_name: str):
+    return save_model_result(model_result, task_name, "time_bayesian_factorization_machine")
+
+
+def load_time_bayesian_factorization_machine(task_name: str) -> ModelResult:
+    return load_model_result(task_name, "time_bayesian_factorization_machine")

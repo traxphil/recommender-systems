@@ -1,0 +1,74 @@
+{
+  "task": "task2",
+  "model": "mult_vae",
+  "metric": "validation pair accuracy (higher is better)",
+  "status": "stopped at the deadline",
+  "started": "2026-11-14 14:08:43",
+  "last_update": "2026-11-14 14:19:02",
+  "runs_finished": "3 / 4",
+  "device": "cuda",
+  "best": {
+    "score": 0.861407,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": 30,
+    "swept_values": {
+      "learning_rate": 0.0005,
+      "kl_annealing_epochs": 10
+    },
+    "parameters": {
+      "hidden_dimension": 1000,
+      "latent_dimension": 200,
+      "input_dropout": 0.1,
+      "kl_weight_max": 0.5,
+      "kl_annealing_epochs": 10,
+      "learning_rate": 0.0005,
+      "users_per_batch": 500,
+      "max_epochs": 200,
+      "early_stopping_patience": 10,
+      "max_items": 60000,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "learning_rate": [
+      0.0005,
+      0.002
+    ],
+    "kl_annealing_epochs": [
+      10,
+      40
+    ]
+  },
+  "constant_parameters": {
+    "input_dropout": 0.1,
+    "kl_weight_max": 0.5,
+    "hidden_dimension": 1000,
+    "latent_dimension": 200
+  },
+  "base_config": "TASK2_MULT_VAE",
+  "runs": [
+    {
+      "learning_rate": 0.002,
+      "kl_annealing_epochs": 10,
+      "score": 0.855944,
+      "best_epoch": 6,
+      "seconds": 120.1
+    },
+    {
+      "learning_rate": 0.0005,
+      "kl_annealing_epochs": 10,
+      "score": 0.861407,
+      "best_epoch": 30,
+      "seconds": 293.3
+    },
+    {
+      "learning_rate": 0.0005,
+      "kl_annealing_epochs": 40,
+      "score": 0.858872,
+      "best_epoch": 18,
+      "seconds": 206.1
+    }
+  ]
+}

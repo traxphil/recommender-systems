@@ -1,0 +1,306 @@
+{
+  "task": "task5",
+  "model": "transition",
+  "metric": "validation pair accuracy (higher is better)",
+  "status": "finished",
+  "started": "2026-11-14 15:29:23",
+  "last_update": "2026-11-14 15:33:57",
+  "runs_finished": "30 / 30",
+  "device": "cuda",
+  "best": {
+    "score": 0.745963,
+    "split_seeds": [
+      0,
+      1,
+      2
+    ],
+    "scores_by_split_seed": {
+      "0": 0.746687,
+      "1": 0.7461,
+      "2": 0.745103
+    },
+    "best_epoch_by_split_seed": {
+      "0": null,
+      "1": null,
+      "2": null
+    },
+    "swept_values": {
+      "steps_ahead": 100,
+      "step_decay": 0.95,
+      "context_decay": 0.8
+    },
+    "parameters": {
+      "steps_ahead": 100,
+      "step_decay": 0.95,
+      "shrinkage": 1.0,
+      "context_length": 20,
+      "context_decay": 0.8
+    }
+  },
+  "swept_parameters": {
+    "steps_ahead": [
+      50,
+      100
+    ],
+    "step_decay": [
+      0.8,
+      0.85,
+      0.9,
+      0.95
+    ],
+    "context_decay": [
+      0.6,
+      0.7,
+      0.8
+    ]
+  },
+  "constant_parameters": {
+    "shrinkage": 1.0,
+    "context_length": 20
+  },
+  "base_config": "TASK5_TRANSITION",
+  "runs": [
+    {
+      "steps_ahead": 100,
+      "step_decay": 0.9,
+      "context_decay": 0.6,
+      "score": 0.744325,
+      "best_epoch": null,
+      "seconds": 11.1
+    },
+    {
+      "steps_ahead": 50,
+      "step_decay": 0.85,
+      "context_decay": 0.7,
+      "score": 0.743328,
+      "best_epoch": null,
+      "seconds": 7.6
+    },
+    {
+      "steps_ahead": 100,
+      "step_decay": 0.95,
+      "context_decay": 0.6,
+      "score": 0.744982,
+      "best_epoch": null,
+      "seconds": 10.4
+    },
+    {
+      "steps_ahead": 50,
+      "step_decay": 0.95,
+      "context_decay": 0.7,
+      "score": 0.744112,
+      "best_epoch": null,
+      "seconds": 7.4
+    },
+    {
+      "steps_ahead": 50,
+      "step_decay": 0.95,
+      "context_decay": 0.8,
+      "score": 0.745103,
+      "best_epoch": null,
+      "seconds": 7.6
+    },
+    {
+      "steps_ahead": 50,
+      "step_decay": 0.8,
+      "context_decay": 0.8,
+      "score": 0.742372,
+      "best_epoch": null,
+      "seconds": 7.0
+    },
+    {
+      "steps_ahead": 100,
+      "step_decay": 0.95,
+      "context_decay": 0.7,
+      "score": 0.745408,
+      "best_epoch": null,
+      "seconds": 10.2
+    },
+    {
+      "steps_ahead": 50,
+      "step_decay": 0.9,
+      "context_decay": 0.6,
+      "score": 0.743351,
+      "best_epoch": null,
+      "seconds": 7.1
+    },
+    {
+      "steps_ahead": 100,
+      "step_decay": 0.95,
+      "context_decay": 0.8,
+      "score": 0.746687,
+      "best_epoch": null,
+      "seconds": 10.3
+    },
+    {
+      "steps_ahead": 50,
+      "step_decay": 0.85,
+      "context_decay": 0.6,
+      "score": 0.742441,
+      "best_epoch": null,
+      "seconds": 7.6
+    },
+    {
+      "steps_ahead": 100,
+      "step_decay": 0.9,
+      "context_decay": 0.8,
+      "score": 0.745178,
+      "best_epoch": null,
+      "seconds": 10.4
+    },
+    {
+      "steps_ahead": 50,
+      "step_decay": 0.9,
+      "context_decay": 0.8,
+      "score": 0.744504,
+      "best_epoch": null,
+      "seconds": 6.7
+    },
+    {
+      "steps_ahead": 50,
+      "step_decay": 0.8,
+      "context_decay": 0.6,
+      "score": 0.741358,
+      "best_epoch": null,
+      "seconds": 7.0
+    },
+    {
+      "steps_ahead": 100,
+      "step_decay": 0.85,
+      "context_decay": 0.7,
+      "score": 0.743922,
+      "best_epoch": null,
+      "seconds": 10.5
+    },
+    {
+      "steps_ahead": 100,
+      "step_decay": 0.8,
+      "context_decay": 0.6,
+      "score": 0.741911,
+      "best_epoch": null,
+      "seconds": 10.2
+    },
+    {
+      "steps_ahead": 100,
+      "step_decay": 0.9,
+      "context_decay": 0.7,
+      "score": 0.745132,
+      "best_epoch": null,
+      "seconds": 10.4
+    },
+    {
+      "steps_ahead": 100,
+      "step_decay": 0.8,
+      "context_decay": 0.7,
+      "score": 0.742441,
+      "best_epoch": null,
+      "seconds": 10.4
+    },
+    {
+      "steps_ahead": 50,
+      "step_decay": 0.9,
+      "context_decay": 0.7,
+      "score": 0.744354,
+      "best_epoch": null,
+      "seconds": 7.1
+    },
+    {
+      "steps_ahead": 50,
+      "step_decay": 0.85,
+      "context_decay": 0.8,
+      "score": 0.743536,
+      "best_epoch": null,
+      "seconds": 7.3
+    },
+    {
+      "steps_ahead": 100,
+      "step_decay": 0.85,
+      "context_decay": 0.8,
+      "score": 0.744083,
+      "best_epoch": null,
+      "seconds": 9.9
+    },
+    {
+      "steps_ahead": 100,
+      "step_decay": 0.8,
+      "context_decay": 0.8,
+      "score": 0.742879,
+      "best_epoch": null,
+      "seconds": 10.0
+    },
+    {
+      "steps_ahead": 50,
+      "step_decay": 0.95,
+      "context_decay": 0.6,
+      "score": 0.743651,
+      "best_epoch": null,
+      "seconds": 7.1
+    },
+    {
+      "steps_ahead": 50,
+      "step_decay": 0.8,
+      "context_decay": 0.7,
+      "score": 0.741934,
+      "best_epoch": null,
+      "seconds": 7.0
+    },
+    {
+      "steps_ahead": 100,
+      "step_decay": 0.85,
+      "context_decay": 0.6,
+      "score": 0.743046,
+      "best_epoch": null,
+      "seconds": 10.4
+    }
+  ],
+  "finalists": [
+    {
+      "steps_ahead": 100,
+      "step_decay": 0.95,
+      "context_decay": 0.8,
+      "mean_score": 0.745963,
+      "scores_by_split_seed": {
+        "0": 0.746687,
+        "1": 0.7461,
+        "2": 0.745103
+      },
+      "best_epoch_by_split_seed": {
+        "0": null,
+        "1": null,
+        "2": null
+      }
+    },
+    {
+      "steps_ahead": 100,
+      "step_decay": 0.95,
+      "context_decay": 0.7,
+      "mean_score": 0.745606,
+      "scores_by_split_seed": {
+        "0": 0.745408,
+        "1": 0.746157,
+        "2": 0.745253
+      },
+      "best_epoch_by_split_seed": {
+        "0": null,
+        "1": null,
+        "2": null
+      }
+    },
+    {
+      "steps_ahead": 100,
+      "step_decay": 0.9,
+      "context_decay": 0.8,
+      "mean_score": 0.745138,
+      "scores_by_split_seed": {
+        "0": 0.745178,
+        "1": 0.745708,
+        "2": 0.744527
+      },
+      "best_epoch_by_split_seed": {
+        "0": null,
+        "1": null,
+        "2": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "task": "task5",
+  "model": "sasrec",
+  "metric": "validation pair accuracy (higher is better)",
+  "status": "finished",
+  "started": "2026-11-14 15:19:12",
+  "last_update": "2026-11-14 15:27:13",
+  "runs_finished": "2 / 2",
+  "device": "cuda",
+  "best": {
+    "score": 0.88853,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": 23,
+    "swept_values": {
+      "learning_rate": 0.0005
+    },
+    "parameters": {
+      "hidden_dimension": 128,
+      "n_blocks": 2,
+      "n_heads": 1,
+      "max_sequence_length": 50,
+      "dropout": 0.5,
+      "learning_rate": 0.0005,
+      "users_per_batch": 256,
+      "max_epochs": 200,
+      "early_stopping_patience": 10,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "learning_rate": [
+      0.0005,
+      0.002
+    ]
+  },
+  "constant_parameters": {
+    "hidden_dimension": 128,
+    "dropout": 0.5
+  },
+  "base_config": "TASK5_SASREC",
+  "runs": [
+    {
+      "learning_rate": 0.0005,
+      "score": 0.88853,
+      "best_epoch": 23,
+      "seconds": 262.7
+    },
+    {
+      "learning_rate": 0.002,
+      "score": 0.884371,
+      "best_epoch": 16,
+      "seconds": 217.9
+    }
+  ]
+}

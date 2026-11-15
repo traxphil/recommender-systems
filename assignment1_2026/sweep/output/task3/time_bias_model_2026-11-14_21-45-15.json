@@ -1,0 +1,274 @@
+{
+  "task": "task3",
+  "model": "time_bias_model",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-14 21:45:15",
+  "last_update": "2026-11-14 21:45:58",
+  "runs_finished": "13 / 13",
+  "device": "cuda",
+  "best": {
+    "score": 0.886426,
+    "split_seeds": [
+      0,
+      1,
+      2
+    ],
+    "scores_by_split_seed": {
+      "0": 0.882402,
+      "1": 0.88695,
+      "2": 0.889927
+    },
+    "best_epoch_by_split_seed": {
+      "0": null,
+      "1": null,
+      "2": null
+    },
+    "swept_values": {
+      "temporal_biases.user_period_lengths_in_days": [
+        1,
+        7,
+        30,
+        90,
+        365,
+        1000
+      ],
+      "temporal_biases.n_time_bins": 20
+    },
+    "parameters": {
+      "temporal_biases": {
+        "n_time_bins": 20,
+        "user_period_lengths_in_days": [
+          1,
+          7,
+          30,
+          90,
+          365,
+          1000
+        ],
+        "drift_exponent": 0.4,
+        "time_bias_regularization": 50.0,
+        "drift_regularization": 3000.0
+      },
+      "bias_regularization": 3.0,
+      "n_iterations": 10
+    }
+  },
+  "swept_parameters": {
+    "temporal_biases.user_period_lengths_in_days": [
+      [
+        1,
+        7,
+        30,
+        90,
+        365,
+        1000
+      ],
+      [
+        1,
+        7,
+        30,
+        90,
+        365,
+        1000,
+        3000
+      ],
+      [
+        1,
+        7,
+        30,
+        90,
+        180,
+        365,
+        1000
+      ]
+    ],
+    "temporal_biases.n_time_bins": [
+      20,
+      30,
+      45
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK3_TIME_BIAS_MODEL",
+  "runs": [
+    {
+      "temporal_biases.user_period_lengths_in_days": [
+        1,
+        7,
+        30,
+        90,
+        365,
+        1000,
+        3000
+      ],
+      "temporal_biases.n_time_bins": 30,
+      "score": 0.88243,
+      "best_epoch": null,
+      "seconds": 3.3
+    },
+    {
+      "temporal_biases.user_period_lengths_in_days": [
+        1,
+        7,
+        30,
+        90,
+        365,
+        1000,
+        3000
+      ],
+      "temporal_biases.n_time_bins": 45,
+      "score": 0.882507,
+      "best_epoch": null,
+      "seconds": 3.4
+    },
+    {
+      "temporal_biases.user_period_lengths_in_days": [
+        1,
+        7,
+        30,
+        90,
+        365,
+        1000
+      ],
+      "temporal_biases.n_time_bins": 45,
+      "score": 0.882449,
+      "best_epoch": null,
+      "seconds": 3.2
+    },
+    {
+      "temporal_biases.user_period_lengths_in_days": [
+        1,
+        7,
+        30,
+        90,
+        180,
+        365,
+        1000
+      ],
+      "temporal_biases.n_time_bins": 20,
+      "score": 0.882576,
+      "best_epoch": null,
+      "seconds": 3.3
+    },
+    {
+      "temporal_biases.user_period_lengths_in_days": [
+        1,
+        7,
+        30,
+        90,
+        365,
+        1000,
+        3000
+      ],
+      "temporal_biases.n_time_bins": 20,
+      "score": 0.882461,
+      "best_epoch": null,
+      "seconds": 3.2
+    },
+    {
+      "temporal_biases.user_period_lengths_in_days": [
+        1,
+        7,
+        30,
+        90,
+        180,
+        365,
+        1000
+      ],
+      "temporal_biases.n_time_bins": 45,
+      "score": 0.882623,
+      "best_epoch": null,
+      "seconds": 3.7
+    },
+    {
+      "temporal_biases.user_period_lengths_in_days": [
+        1,
+        7,
+        30,
+        90,
+        180,
+        365,
+        1000
+      ],
+      "temporal_biases.n_time_bins": 30,
+      "score": 0.882569,
+      "best_epoch": null,
+      "seconds": 3.2
+    },
+    {
+      "temporal_biases.user_period_lengths_in_days": [
+        1,
+        7,
+        30,
+        90,
+        365,
+        1000
+      ],
+      "temporal_biases.n_time_bins": 20,
+      "score": 0.882402,
+      "best_epoch": null,
+      "seconds": 3.1
+    },
+    {
+      "temporal_biases.user_period_lengths_in_days": [
+        1,
+        7,
+        30,
+        90,
+        365,
+        1000
+      ],
+      "temporal_biases.n_time_bins": 30,
+      "score": 0.882375,
+      "best_epoch": null,
+      "seconds": 2.9
+    }
+  ],
+  "finalists": [
+    {
+      "temporal_biases.user_period_lengths_in_days": [
+        1,
+        7,
+        30,
+        90,
+        365,
+        1000
+      ],
+      "temporal_biases.n_time_bins": 30,
+      "mean_score": 0.886511,
+      "scores_by_split_seed": {
+        "0": 0.882375,
+        "1": 0.887088,
+        "2": 0.89007
+      },
+      "best_epoch_by_split_seed": {
+        "0": null,
+        "1": null,
+        "2": null
+      }
+    },
+    {
+      "temporal_biases.user_period_lengths_in_days": [
+        1,
+        7,
+        30,
+        90,
+        365,
+        1000
+      ],
+      "temporal_biases.n_time_bins": 20,
+      "mean_score": 0.886426,
+      "scores_by_split_seed": {
+        "0": 0.882402,
+        "1": 0.88695,
+        "2": 0.889927
+      },
+      "best_epoch_by_split_seed": {
+        "0": null,
+        "1": null,
+        "2": null
+      }
+    }
+  ]
+}

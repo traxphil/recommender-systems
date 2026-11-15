@@ -1,0 +1,276 @@
+{
+  "task": "task3",
+  "model": "time_bias_model",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-14 20:32:29",
+  "last_update": "2026-11-14 20:33:38",
+  "runs_finished": "27 / 27",
+  "device": "cuda",
+  "best": {
+    "score": 0.882908,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": null,
+    "swept_values": {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "temporal_biases.drift_exponent": 0.4
+    },
+    "parameters": {
+      "temporal_biases": {
+        "n_time_bins": 30,
+        "user_period_lengths_in_days": [
+          1,
+          7,
+          30,
+          90,
+          365
+        ],
+        "drift_exponent": 0.4,
+        "time_bias_regularization": 50.0,
+        "drift_regularization": 3000.0
+      },
+      "bias_regularization": 3.0,
+      "n_iterations": 10
+    }
+  },
+  "swept_parameters": {
+    "temporal_biases.time_bias_regularization": [
+      25.0,
+      50.0,
+      100.0
+    ],
+    "temporal_biases.drift_regularization": [
+      1000.0,
+      3000.0,
+      10000.0
+    ],
+    "temporal_biases.drift_exponent": [
+      0.2,
+      0.4,
+      0.6
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK3_TIME_BIAS_MODEL",
+  "runs": [
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "temporal_biases.drift_exponent": 0.4,
+      "score": 0.886618,
+      "best_epoch": null,
+      "seconds": 2.3
+    },
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "temporal_biases.drift_exponent": 0.4,
+      "score": 0.884817,
+      "best_epoch": null,
+      "seconds": 2.3
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "temporal_biases.drift_exponent": 0.4,
+      "score": 0.88507,
+      "best_epoch": null,
+      "seconds": 2.3
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "temporal_biases.drift_exponent": 0.6,
+      "score": 0.895406,
+      "best_epoch": null,
+      "seconds": 2.3
+    },
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "temporal_biases.drift_exponent": 0.6,
+      "score": 0.886878,
+      "best_epoch": null,
+      "seconds": 2.4
+    },
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "temporal_biases.drift_exponent": 0.6,
+      "score": 0.897063,
+      "best_epoch": null,
+      "seconds": 2.4
+    },
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "temporal_biases.drift_exponent": 0.4,
+      "score": 0.885627,
+      "best_epoch": null,
+      "seconds": 2.3
+    },
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "temporal_biases.drift_exponent": 0.2,
+      "score": 0.88759,
+      "best_epoch": null,
+      "seconds": 2.4
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "temporal_biases.drift_exponent": 0.4,
+      "score": 0.883781,
+      "best_epoch": null,
+      "seconds": 2.3
+    },
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "temporal_biases.drift_exponent": 0.6,
+      "score": 0.892167,
+      "best_epoch": null,
+      "seconds": 2.3
+    },
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "temporal_biases.drift_exponent": 0.2,
+      "score": 0.886867,
+      "best_epoch": null,
+      "seconds": 2.4
+    },
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "temporal_biases.drift_exponent": 0.2,
+      "score": 0.888824,
+      "best_epoch": null,
+      "seconds": 2.4
+    },
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "temporal_biases.drift_exponent": 0.6,
+      "score": 0.887178,
+      "best_epoch": null,
+      "seconds": 2.3
+    },
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "temporal_biases.drift_exponent": 0.2,
+      "score": 0.885772,
+      "best_epoch": null,
+      "seconds": 2.3
+    },
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "temporal_biases.drift_exponent": 0.6,
+      "score": 0.897007,
+      "best_epoch": null,
+      "seconds": 2.3
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "temporal_biases.drift_exponent": 0.2,
+      "score": 0.886165,
+      "best_epoch": null,
+      "seconds": 2.3
+    },
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "temporal_biases.drift_exponent": 0.2,
+      "score": 0.886318,
+      "best_epoch": null,
+      "seconds": 2.4
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "temporal_biases.drift_exponent": 0.4,
+      "score": 0.882908,
+      "best_epoch": null,
+      "seconds": 2.4
+    },
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "temporal_biases.drift_exponent": 0.4,
+      "score": 0.885331,
+      "best_epoch": null,
+      "seconds": 2.3
+    },
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "temporal_biases.drift_exponent": 0.6,
+      "score": 0.892193,
+      "best_epoch": null,
+      "seconds": 2.4
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "temporal_biases.drift_exponent": 0.6,
+      "score": 0.885357,
+      "best_epoch": null,
+      "seconds": 2.4
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "temporal_biases.drift_exponent": 0.6,
+      "score": 0.890555,
+      "best_epoch": null,
+      "seconds": 2.7
+    },
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 3000.0,
+      "temporal_biases.drift_exponent": 0.4,
+      "score": 0.884415,
+      "best_epoch": null,
+      "seconds": 2.8
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "temporal_biases.drift_exponent": 0.2,
+      "score": 0.884361,
+      "best_epoch": null,
+      "seconds": 2.8
+    },
+    {
+      "temporal_biases.time_bias_regularization": 100.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "temporal_biases.drift_exponent": 0.2,
+      "score": 0.890826,
+      "best_epoch": null,
+      "seconds": 2.8
+    },
+    {
+      "temporal_biases.time_bias_regularization": 25.0,
+      "temporal_biases.drift_regularization": 1000.0,
+      "temporal_biases.drift_exponent": 0.4,
+      "score": 0.886857,
+      "best_epoch": null,
+      "seconds": 2.8
+    },
+    {
+      "temporal_biases.time_bias_regularization": 50.0,
+      "temporal_biases.drift_regularization": 10000.0,
+      "temporal_biases.drift_exponent": 0.2,
+      "score": 0.887482,
+      "best_epoch": null,
+      "seconds": 2.8
+    }
+  ]
+}

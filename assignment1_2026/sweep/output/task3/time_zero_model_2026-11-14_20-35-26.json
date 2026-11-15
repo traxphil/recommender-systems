@@ -1,0 +1,249 @@
+{
+  "task": "task3",
+  "model": "time_zero_model",
+  "metric": "validation log loss of P(0) (lower is better)",
+  "status": "finished",
+  "started": "2026-11-14 20:35:26",
+  "last_update": "2026-11-14 20:35:48",
+  "runs_finished": "16 / 16",
+  "device": "cuda",
+  "best": {
+    "score": 0.053105,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": null,
+    "swept_values": {
+      "window_lengths_in_days": [
+        0,
+        7,
+        30,
+        365
+      ],
+      "window_prior_strength": 5.0
+    },
+    "parameters": {
+      "user_prior_strength": 5.0,
+      "item_prior_strength": 20.0,
+      "inverse_regularization": 1.0,
+      "max_iterations": 1000,
+      "window_lengths_in_days": [
+        0,
+        7,
+        30,
+        365
+      ],
+      "window_prior_strength": 5.0
+    }
+  },
+  "swept_parameters": {
+    "window_lengths_in_days": [
+      [
+        0,
+        30
+      ],
+      [
+        0,
+        7,
+        30
+      ],
+      [
+        0,
+        30,
+        365
+      ],
+      [
+        0,
+        7,
+        30,
+        365
+      ]
+    ],
+    "window_prior_strength": [
+      0.5,
+      1.0,
+      2.0,
+      5.0
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK3_TIME_ZERO_MODEL",
+  "runs": [
+    {
+      "window_lengths_in_days": [
+        0,
+        30
+      ],
+      "window_prior_strength": 2.0,
+      "score": 0.053823,
+      "best_epoch": null,
+      "seconds": 0.9
+    },
+    {
+      "window_lengths_in_days": [
+        0,
+        30,
+        365
+      ],
+      "window_prior_strength": 5.0,
+      "score": 0.053159,
+      "best_epoch": null,
+      "seconds": 1.5
+    },
+    {
+      "window_lengths_in_days": [
+        0,
+        30
+      ],
+      "window_prior_strength": 5.0,
+      "score": 0.053825,
+      "best_epoch": null,
+      "seconds": 0.9
+    },
+    {
+      "window_lengths_in_days": [
+        0,
+        30,
+        365
+      ],
+      "window_prior_strength": 2.0,
+      "score": 0.053199,
+      "best_epoch": null,
+      "seconds": 1.3
+    },
+    {
+      "window_lengths_in_days": [
+        0,
+        30
+      ],
+      "window_prior_strength": 0.5,
+      "score": 0.053817,
+      "best_epoch": null,
+      "seconds": 1.2
+    },
+    {
+      "window_lengths_in_days": [
+        0,
+        7,
+        30
+      ],
+      "window_prior_strength": 0.5,
+      "score": 0.05374,
+      "best_epoch": null,
+      "seconds": 1.3
+    },
+    {
+      "window_lengths_in_days": [
+        0,
+        7,
+        30
+      ],
+      "window_prior_strength": 5.0,
+      "score": 0.053774,
+      "best_epoch": null,
+      "seconds": 1.5
+    },
+    {
+      "window_lengths_in_days": [
+        0,
+        7,
+        30
+      ],
+      "window_prior_strength": 1.0,
+      "score": 0.053748,
+      "best_epoch": null,
+      "seconds": 1.3
+    },
+    {
+      "window_lengths_in_days": [
+        0,
+        7,
+        30,
+        365
+      ],
+      "window_prior_strength": 2.0,
+      "score": 0.053131,
+      "best_epoch": null,
+      "seconds": 1.3
+    },
+    {
+      "window_lengths_in_days": [
+        0,
+        7,
+        30,
+        365
+      ],
+      "window_prior_strength": 0.5,
+      "score": 0.053193,
+      "best_epoch": null,
+      "seconds": 1.7
+    },
+    {
+      "window_lengths_in_days": [
+        0,
+        7,
+        30
+      ],
+      "window_prior_strength": 2.0,
+      "score": 0.053763,
+      "best_epoch": null,
+      "seconds": 1.4
+    },
+    {
+      "window_lengths_in_days": [
+        0,
+        30,
+        365
+      ],
+      "window_prior_strength": 1.0,
+      "score": 0.053236,
+      "best_epoch": null,
+      "seconds": 1.3
+    },
+    {
+      "window_lengths_in_days": [
+        0,
+        7,
+        30,
+        365
+      ],
+      "window_prior_strength": 1.0,
+      "score": 0.053156,
+      "best_epoch": null,
+      "seconds": 1.5
+    },
+    {
+      "window_lengths_in_days": [
+        0,
+        30,
+        365
+      ],
+      "window_prior_strength": 0.5,
+      "score": 0.053277,
+      "best_epoch": null,
+      "seconds": 1.3
+    },
+    {
+      "window_lengths_in_days": [
+        0,
+        30
+      ],
+      "window_prior_strength": 1.0,
+      "score": 0.05382,
+      "best_epoch": null,
+      "seconds": 1.2
+    },
+    {
+      "window_lengths_in_days": [
+        0,
+        7,
+        30,
+        365
+      ],
+      "window_prior_strength": 5.0,
+      "score": 0.053105,
+      "best_epoch": null,
+      "seconds": 1.3
+    }
+  ]
+}

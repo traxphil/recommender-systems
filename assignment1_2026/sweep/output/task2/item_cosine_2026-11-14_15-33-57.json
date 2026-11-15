@@ -1,0 +1,114 @@
+{
+  "task": "task2",
+  "model": "item_cosine",
+  "metric": "validation pair accuracy (higher is better)",
+  "status": "finished",
+  "started": "2026-11-14 15:33:57",
+  "last_update": "2026-11-14 15:40:14",
+  "runs_finished": "9 / 9",
+  "device": "cuda",
+  "best": {
+    "score": 0.868953,
+    "split_seeds": [
+      0,
+      1,
+      2
+    ],
+    "scores_by_split_seed": {
+      "0": 0.869593,
+      "1": 0.869201,
+      "2": 0.868065
+    },
+    "best_epoch_by_split_seed": {
+      "0": null,
+      "1": null,
+      "2": null
+    },
+    "swept_values": {
+      "n_neighbors": 1600
+    },
+    "parameters": {
+      "n_neighbors": 1600,
+      "similarity_shrinkage": 0.0,
+      "max_interactions_per_user_for_similarity": 1000,
+      "items_per_similarity_block": 2000,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "n_neighbors": [
+      1600,
+      2400,
+      3200
+    ]
+  },
+  "constant_parameters": {
+    "max_interactions_per_user_for_similarity": 1000,
+    "similarity_shrinkage": 0.0
+  },
+  "base_config": "TASK2_ITEM_COSINE",
+  "runs": [
+    {
+      "n_neighbors": 3200,
+      "score": 0.8681,
+      "best_epoch": null,
+      "seconds": 42.8
+    },
+    {
+      "n_neighbors": 1600,
+      "score": 0.869593,
+      "best_epoch": null,
+      "seconds": 39.5
+    },
+    {
+      "n_neighbors": 2400,
+      "score": 0.869263,
+      "best_epoch": null,
+      "seconds": 41.5
+    }
+  ],
+  "finalists": [
+    {
+      "n_neighbors": 1600,
+      "mean_score": 0.868953,
+      "scores_by_split_seed": {
+        "0": 0.869593,
+        "1": 0.869201,
+        "2": 0.868065
+      },
+      "best_epoch_by_split_seed": {
+        "0": null,
+        "1": null,
+        "2": null
+      }
+    },
+    {
+      "n_neighbors": 2400,
+      "mean_score": 0.868907,
+      "scores_by_split_seed": {
+        "0": 0.869263,
+        "1": 0.86926,
+        "2": 0.868197
+      },
+      "best_epoch_by_split_seed": {
+        "0": null,
+        "1": null,
+        "2": null
+      }
+    },
+    {
+      "n_neighbors": 3200,
+      "mean_score": 0.867591,
+      "scores_by_split_seed": {
+        "0": 0.8681,
+        "1": 0.86785,
+        "2": 0.866824
+      },
+      "best_epoch_by_split_seed": {
+        "0": null,
+        "1": null,
+        "2": null
+      }
+    }
+  ]
+}

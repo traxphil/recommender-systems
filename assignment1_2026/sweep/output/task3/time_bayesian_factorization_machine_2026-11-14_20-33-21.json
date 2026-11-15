@@ -1,0 +1,91 @@
+{
+  "task": "task3",
+  "model": "time_bayesian_factorization_machine",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-14 20:33:21",
+  "last_update": "2026-11-14 20:57:50",
+  "runs_finished": "3 / 3",
+  "device": "cuda",
+  "best": {
+    "score": 0.848778,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": null,
+    "swept_values": {
+      "calendar_fields": [
+        "weekday",
+        "month",
+        "year"
+      ]
+    },
+    "parameters": {
+      "rank": 32,
+      "n_burn_in_iterations": 20,
+      "n_kept_samples": 180,
+      "use_implicit_feedback": true,
+      "use_test_pairs_as_implicit_feedback": false,
+      "refit_on_train_and_valid": true,
+      "seed": 0,
+      "calendar_fields": [
+        "weekday",
+        "month",
+        "year"
+      ]
+    }
+  },
+  "swept_parameters": {
+    "calendar_fields": [
+      [
+        "month",
+        "year"
+      ],
+      [
+        "weekday",
+        "month",
+        "year"
+      ],
+      [
+        "hour_of_day",
+        "weekday",
+        "month",
+        "year"
+      ]
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK3_TIME_BAYESIAN_FACTORIZATION_MACHINE",
+  "runs": [
+    {
+      "calendar_fields": [
+        "hour_of_day",
+        "weekday",
+        "month",
+        "year"
+      ],
+      "score": 0.849879,
+      "best_epoch": null,
+      "seconds": 538.7
+    },
+    {
+      "calendar_fields": [
+        "month",
+        "year"
+      ],
+      "score": 0.849206,
+      "best_epoch": null,
+      "seconds": 448.9
+    },
+    {
+      "calendar_fields": [
+        "weekday",
+        "month",
+        "year"
+      ],
+      "score": 0.848778,
+      "best_epoch": null,
+      "seconds": 480.3
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "task": "task3",
+  "model": "autorec",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-14 22:04:52",
+  "last_update": "2026-11-14 22:06:51",
+  "runs_finished": "1 / 1",
+  "device": "cuda",
+  "best": {
+    "score": 0.893993,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": 22,
+    "swept_values": {},
+    "parameters": {
+      "hidden_dimension": 1000,
+      "regularization": 16.0,
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0,
+      "masked_fraction": 0.25,
+      "learning_rate": 3e-05,
+      "books_per_batch": 256,
+      "max_epochs": 1000,
+      "early_stopping_patience": 5,
+      "refit_on_train_and_valid": true,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {},
+  "constant_parameters": {
+    "hidden_dimension": 1000
+  },
+  "base_config": "TASK3_AUTOREC",
+  "runs": [
+    {
+      "score": 0.893993,
+      "best_epoch": 22,
+      "seconds": 118.3
+    }
+  ]
+}

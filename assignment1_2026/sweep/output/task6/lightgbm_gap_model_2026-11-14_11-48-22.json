@@ -1,0 +1,77 @@
+{
+  "task": "task6",
+  "model": "lightgbm_gap_model",
+  "metric": "validation MAE in days (lower is better)",
+  "status": "finished",
+  "started": "2026-11-14 11:48:22",
+  "last_update": "2026-11-14 11:49:02",
+  "runs_finished": "5 / 5",
+  "device": "cuda",
+  "best": {
+    "score": 83.477364,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": null,
+    "swept_values": {
+      "seed": 1
+    },
+    "parameters": {
+      "method": "lightgbm",
+      "n_folds": 5,
+      "lightgbm_n_estimators": 600,
+      "lightgbm_learning_rate": 0.02,
+      "lightgbm_num_leaves": 63,
+      "lightgbm_min_child_samples": 100,
+      "seed": 1
+    }
+  },
+  "swept_parameters": {
+    "seed": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "constant_parameters": {
+    "lightgbm_num_leaves": 63,
+    "lightgbm_min_child_samples": 100,
+    "lightgbm_learning_rate": 0.02,
+    "lightgbm_n_estimators": 600
+  },
+  "base_config": "TASK6_LIGHTGBM_GAP_MODEL",
+  "runs": [
+    {
+      "seed": 2,
+      "score": 83.537417,
+      "best_epoch": null,
+      "seconds": 8.2
+    },
+    {
+      "seed": 4,
+      "score": 83.76356,
+      "best_epoch": null,
+      "seconds": 8.3
+    },
+    {
+      "seed": 3,
+      "score": 83.543586,
+      "best_epoch": null,
+      "seconds": 7.8
+    },
+    {
+      "seed": 0,
+      "score": 83.577987,
+      "best_epoch": null,
+      "seconds": 7.8
+    },
+    {
+      "seed": 1,
+      "score": 83.477364,
+      "best_epoch": null,
+      "seconds": 7.4
+    }
+  ]
+}

@@ -1,0 +1,349 @@
+{
+  "end_at": null,
+  "sweeps": [
+    {
+      "name": "T4 item cosine fewer neighbours",
+      "task": "task4",
+      "model": "item_cosine",
+      "grid": {
+        "n_neighbors": [
+          50,
+          100,
+          150,
+          200,
+          300
+        ],
+        "max_interactions_per_user_for_similarity": 2000,
+        "similarity_shrinkage": [
+          0.0,
+          1.0
+        ]
+      },
+      "budget_minutes": 6,
+      "options": {
+        "rerun_finalists_on_other_splits": true,
+        "n_finalists": 3
+      }
+    },
+    {
+      "name": "T5 transition longer range",
+      "task": "task5",
+      "model": "transition",
+      "grid": {
+        "steps_ahead": [
+          50,
+          100
+        ],
+        "step_decay": [
+          0.8,
+          0.85,
+          0.9,
+          0.95
+        ],
+        "shrinkage": 1.0,
+        "context_length": 20,
+        "context_decay": [
+          0.6,
+          0.7,
+          0.8
+        ]
+      },
+      "budget_minutes": 10,
+      "options": {
+        "rerun_finalists_on_other_splits": true,
+        "n_finalists": 3
+      }
+    },
+    {
+      "name": "T2 item cosine more neighbours",
+      "task": "task2",
+      "model": "item_cosine",
+      "grid": {
+        "n_neighbors": [
+          1600,
+          2400,
+          3200
+        ],
+        "max_interactions_per_user_for_similarity": 1000,
+        "similarity_shrinkage": 0.0
+      },
+      "budget_minutes": 12,
+      "options": {
+        "rerun_finalists_on_other_splits": true,
+        "n_finalists": 3
+      }
+    },
+    {
+      "name": "T5 item cosine more neighbours",
+      "task": "task5",
+      "model": "item_cosine",
+      "grid": {
+        "n_neighbors": [
+          1600,
+          2400,
+          3200
+        ],
+        "max_interactions_per_user_for_similarity": 1000,
+        "similarity_shrinkage": 0.0
+      },
+      "budget_minutes": 12,
+      "options": {
+        "rerun_finalists_on_other_splits": true,
+        "n_finalists": 3
+      }
+    },
+    {
+      "name": "T4 Mult-VAE wider / less regularised",
+      "task": "task4",
+      "model": "mult_vae",
+      "grid": {
+        "latent_dimension": 200,
+        "input_dropout": [
+          0.05,
+          0.1
+        ],
+        "kl_weight_max": [
+          0.1,
+          0.2
+        ],
+        "hidden_dimension": [
+          1500,
+          2000
+        ]
+      },
+      "budget_minutes": 12,
+      "options": {}
+    },
+    {
+      "name": "T2 Mult-VAE wider",
+      "task": "task2",
+      "model": "mult_vae",
+      "grid": {
+        "input_dropout": 0.1,
+        "kl_weight_max": 0.5,
+        "hidden_dimension": [
+          1500,
+          2000
+        ],
+        "latent_dimension": [
+          100,
+          200
+        ]
+      },
+      "budget_minutes": 14,
+      "options": {}
+    },
+    {
+      "name": "T4 item cosine even fewer neighbours",
+      "task": "task4",
+      "model": "item_cosine",
+      "grid": {
+        "n_neighbors": [
+          10,
+          20,
+          30,
+          50
+        ],
+        "max_interactions_per_user_for_similarity": 2000,
+        "similarity_shrinkage": [
+          1.0,
+          2.0,
+          5.0
+        ]
+      },
+      "budget_minutes": 5,
+      "options": {
+        "rerun_finalists_on_other_splits": true,
+        "n_finalists": 3
+      }
+    },
+    {
+      "name": "T5 transition even longer range",
+      "task": "task5",
+      "model": "transition",
+      "grid": {
+        "steps_ahead": [
+          100,
+          200
+        ],
+        "step_decay": [
+          0.95,
+          0.97
+        ],
+        "shrinkage": 1.0,
+        "context_length": [
+          20,
+          40
+        ],
+        "context_decay": [
+          0.8,
+          0.9
+        ]
+      },
+      "budget_minutes": 8,
+      "options": {
+        "rerun_finalists_on_other_splits": true,
+        "n_finalists": 2
+      }
+    },
+    {
+      "name": "T5 item cosine 4800 neighbours",
+      "task": "task5",
+      "model": "item_cosine",
+      "grid": {
+        "n_neighbors": 4800,
+        "max_interactions_per_user_for_similarity": 1000,
+        "similarity_shrinkage": 0.0
+      },
+      "budget_minutes": 3,
+      "options": {}
+    },
+    {
+      "name": "T5 SASRec wider",
+      "task": "task5",
+      "model": "sasrec",
+      "grid": {
+        "hidden_dimension": 256,
+        "dropout": 0.5,
+        "learning_rate": [
+          0.00025,
+          0.0005
+        ]
+      },
+      "budget_minutes": 14,
+      "options": {}
+    },
+    {
+      "name": "T5 SASRec slower learning rate",
+      "task": "task5",
+      "model": "sasrec",
+      "grid": {
+        "hidden_dimension": 128,
+        "dropout": 0.5,
+        "learning_rate": 0.00025
+      },
+      "budget_minutes": 6,
+      "options": {}
+    },
+    {
+      "name": "T5 Mult-VAE as in Tasks 2 / 4",
+      "task": "task5",
+      "model": "mult_vae",
+      "grid": {
+        "input_dropout": 0.1,
+        "kl_weight_max": [
+          0.1,
+          0.2
+        ],
+        "hidden_dimension": 1000,
+        "latent_dimension": 200
+      },
+      "budget_minutes": 12,
+      "options": {}
+    },
+    {
+      "name": "T5 item cosine 6400 neighbours",
+      "task": "task5",
+      "model": "item_cosine",
+      "grid": {
+        "n_neighbors": 6400,
+        "max_interactions_per_user_for_similarity": 1000,
+        "similarity_shrinkage": 0.0
+      },
+      "budget_minutes": 3,
+      "options": {}
+    },
+    {
+      "name": "T1 integrated model factor penalty",
+      "task": "task1",
+      "model": "integrated_model",
+      "grid": {
+        "n_neighbors": 100,
+        "neighbour_regularization": 0.1,
+        "n_factors": 250,
+        "learning_rate": 0.00025,
+        "factor_regularization": [
+          24.0,
+          32.0
+        ]
+      },
+      "budget_minutes": 30,
+      "options": {}
+    },
+    {
+      "name": "T4 item cosine more shrinkage",
+      "task": "task4",
+      "model": "item_cosine",
+      "grid": {
+        "n_neighbors": [
+          15,
+          20,
+          30
+        ],
+        "max_interactions_per_user_for_similarity": 2000,
+        "similarity_shrinkage": [
+          5.0,
+          10.0,
+          20.0
+        ]
+      },
+      "budget_minutes": 4,
+      "options": {
+        "rerun_finalists_on_other_splits": true,
+        "n_finalists": 2
+      }
+    },
+    {
+      "name": "T5 SASRec 256 slower learning rate",
+      "task": "task5",
+      "model": "sasrec",
+      "grid": {
+        "dropout": 0.5,
+        "hidden_dimension": 256,
+        "learning_rate": 0.000125
+      },
+      "budget_minutes": 10,
+      "options": {}
+    },
+    {
+      "name": "T5 SASRec 512",
+      "task": "task5",
+      "model": "sasrec",
+      "grid": {
+        "dropout": 0.5,
+        "hidden_dimension": 512,
+        "learning_rate": 0.00025
+      },
+      "budget_minutes": 10,
+      "options": {}
+    },
+    {
+      "name": "T5 time EASE longer decay",
+      "task": "task5",
+      "model": "time_ease",
+      "grid": {
+        "regularization": 2000.0,
+        "history_time_decay_days": [
+          1000.0,
+          1500.0
+        ]
+      },
+      "budget_minutes": 7,
+      "options": {}
+    },
+    {
+      "name": "T2 EASE around 1000",
+      "task": "task2",
+      "model": "ease",
+      "grid": {
+        "regularization": [
+          750.0,
+          1250.0,
+          1500.0
+        ]
+      },
+      "budget_minutes": 10,
+      "options": {}
+    }
+  ]
+}

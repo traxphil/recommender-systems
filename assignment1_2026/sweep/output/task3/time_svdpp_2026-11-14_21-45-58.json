@@ -1,0 +1,224 @@
+{
+  "task": "task3",
+  "model": "time_svdpp",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-14 21:45:58",
+  "last_update": "2026-11-14 21:50:50",
+  "runs_finished": "16 / 16",
+  "device": "cuda",
+  "best": {
+    "score": 0.863075,
+    "split_seeds": [
+      0,
+      1,
+      2
+    ],
+    "scores_by_split_seed": {
+      "0": 0.858084,
+      "1": 0.864506,
+      "2": 0.866635
+    },
+    "best_epoch_by_split_seed": {
+      "0": 3,
+      "1": 3,
+      "2": 3
+    },
+    "swept_values": {
+      "factor_regularization": 4.0,
+      "learning_rate": 0.001,
+      "n_factors": 500
+    },
+    "parameters": {
+      "use_implicit_feedback": true,
+      "use_test_pairs_as_implicit_feedback": false,
+      "n_factors": 500,
+      "use_factor_drift": false,
+      "time_biases": {
+        "temporal_biases": {
+          "n_time_bins": 30,
+          "user_period_lengths_in_days": [
+            1,
+            7,
+            30,
+            90,
+            365,
+            1000
+          ],
+          "drift_exponent": 0.4,
+          "time_bias_regularization": 50.0,
+          "drift_regularization": 3000.0
+        },
+        "bias_regularization": 3.0,
+        "n_iterations": 10
+      },
+      "train_temporal_biases": false,
+      "learning_rate": 0.001,
+      "bias_regularization": 3.0,
+      "factor_regularization": 4.0,
+      "ratings_per_batch": 16384,
+      "max_epochs": 1000,
+      "early_stopping_patience": 6,
+      "refit_on_train_and_valid": true,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "factor_regularization": [
+      1.0,
+      2.0,
+      4.0
+    ],
+    "learning_rate": [
+      0.0005,
+      0.001
+    ],
+    "n_factors": [
+      500,
+      1000
+    ]
+  },
+  "constant_parameters": {
+    "time_biases.temporal_biases.user_period_lengths_in_days": [
+      1,
+      7,
+      30,
+      90,
+      365,
+      1000
+    ]
+  },
+  "base_config": "TASK3_TIME_SVDPP",
+  "runs": [
+    {
+      "factor_regularization": 4.0,
+      "learning_rate": 0.0005,
+      "n_factors": 1000,
+      "score": 0.858729,
+      "best_epoch": 4,
+      "seconds": 23.9
+    },
+    {
+      "factor_regularization": 1.0,
+      "learning_rate": 0.001,
+      "n_factors": 500,
+      "score": 0.860063,
+      "best_epoch": 3,
+      "seconds": 13.5
+    },
+    {
+      "factor_regularization": 2.0,
+      "learning_rate": 0.001,
+      "n_factors": 1000,
+      "score": 0.858824,
+      "best_epoch": 2,
+      "seconds": 19.3
+    },
+    {
+      "factor_regularization": 2.0,
+      "learning_rate": 0.0005,
+      "n_factors": 500,
+      "score": 0.860252,
+      "best_epoch": 5,
+      "seconds": 15.4
+    },
+    {
+      "factor_regularization": 2.0,
+      "learning_rate": 0.0005,
+      "n_factors": 1000,
+      "score": 0.858964,
+      "best_epoch": 4,
+      "seconds": 23.3
+    },
+    {
+      "factor_regularization": 4.0,
+      "learning_rate": 0.001,
+      "n_factors": 1000,
+      "score": 0.859415,
+      "best_epoch": 2,
+      "seconds": 19.8
+    },
+    {
+      "factor_regularization": 1.0,
+      "learning_rate": 0.0005,
+      "n_factors": 500,
+      "score": 0.860556,
+      "best_epoch": 4,
+      "seconds": 14.2
+    },
+    {
+      "factor_regularization": 1.0,
+      "learning_rate": 0.001,
+      "n_factors": 1000,
+      "score": 0.858731,
+      "best_epoch": 2,
+      "seconds": 19.6
+    },
+    {
+      "factor_regularization": 2.0,
+      "learning_rate": 0.001,
+      "n_factors": 500,
+      "score": 0.859057,
+      "best_epoch": 3,
+      "seconds": 13.7
+    },
+    {
+      "factor_regularization": 4.0,
+      "learning_rate": 0.001,
+      "n_factors": 500,
+      "score": 0.858084,
+      "best_epoch": 3,
+      "seconds": 13.1
+    },
+    {
+      "factor_regularization": 4.0,
+      "learning_rate": 0.0005,
+      "n_factors": 500,
+      "score": 0.859608,
+      "best_epoch": 5,
+      "seconds": 15.7
+    },
+    {
+      "factor_regularization": 1.0,
+      "learning_rate": 0.0005,
+      "n_factors": 1000,
+      "score": 0.859304,
+      "best_epoch": 4,
+      "seconds": 23.5
+    }
+  ],
+  "finalists": [
+    {
+      "factor_regularization": 4.0,
+      "learning_rate": 0.001,
+      "n_factors": 500,
+      "mean_score": 0.863075,
+      "scores_by_split_seed": {
+        "0": 0.858084,
+        "1": 0.864506,
+        "2": 0.866635
+      },
+      "best_epoch_by_split_seed": {
+        "0": 3,
+        "1": 3,
+        "2": 3
+      }
+    },
+    {
+      "factor_regularization": 4.0,
+      "learning_rate": 0.0005,
+      "n_factors": 1000,
+      "mean_score": 0.863244,
+      "scores_by_split_seed": {
+        "0": 0.858729,
+        "1": 0.864086,
+        "2": 0.866918
+      },
+      "best_epoch_by_split_seed": {
+        "0": 4,
+        "1": 4,
+        "2": 4
+      }
+    }
+  ]
+}

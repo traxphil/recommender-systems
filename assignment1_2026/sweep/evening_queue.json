@@ -1,0 +1,305 @@
+{
+  "end_at": null,
+  "sweeps": [
+    {
+      "name": "T3 time zero model stronger prior / windows",
+      "task": "task3",
+      "model": "time_zero_model",
+      "grid": {
+        "window_lengths_in_days": [
+          [
+            0,
+            7,
+            30,
+            365
+          ],
+          [
+            0,
+            1,
+            7,
+            30,
+            365
+          ],
+          [
+            0,
+            7,
+            30,
+            365,
+            1000
+          ]
+        ],
+        "window_prior_strength": [
+          5.0,
+          10.0,
+          20.0,
+          50.0
+        ]
+      },
+      "budget_minutes": 3,
+      "options": {
+        "rerun_finalists_on_other_splits": true,
+        "n_finalists": 2
+      }
+    },
+    {
+      "name": "T3 time kNN slower decay",
+      "task": "task3",
+      "model": "time_item_knn",
+      "grid": {
+        "time_decay_days": [
+          3000.0,
+          10000.0,
+          30000.0
+        ],
+        "time_decay_floor": [
+          0.7,
+          0.85
+        ],
+        "n_neighbors": [
+          100,
+          200
+        ]
+      },
+      "budget_minutes": 5,
+      "options": {
+        "rerun_finalists_on_other_splits": true,
+        "n_finalists": 2
+      }
+    },
+    {
+      "name": "T3 item kNN neighbours",
+      "task": "task3",
+      "model": "item_knn",
+      "grid": {
+        "n_neighbors": [
+          50,
+          100,
+          200
+        ]
+      },
+      "budget_minutes": 3,
+      "options": {}
+    },
+    {
+      "name": "T3 time bias longer periods",
+      "task": "task3",
+      "model": "time_bias_model",
+      "grid": {
+        "temporal_biases.user_period_lengths_in_days": [
+          [
+            1,
+            7,
+            30,
+            90,
+            365,
+            1000
+          ],
+          [
+            1,
+            7,
+            30,
+            90,
+            365,
+            1000,
+            3000
+          ],
+          [
+            1,
+            7,
+            30,
+            90,
+            180,
+            365,
+            1000
+          ]
+        ],
+        "temporal_biases.n_time_bins": [
+          20,
+          30,
+          45
+        ]
+      },
+      "budget_minutes": 3,
+      "options": {
+        "rerun_finalists_on_other_splits": true,
+        "n_finalists": 2
+      }
+    },
+    {
+      "name": "T3 timeSVD++ lower penalty / learning rate / more factors",
+      "task": "task3",
+      "model": "time_svdpp",
+      "grid": {
+        "time_biases.temporal_biases.user_period_lengths_in_days": [
+          [
+            1,
+            7,
+            30,
+            90,
+            365,
+            1000
+          ]
+        ],
+        "factor_regularization": [
+          1.0,
+          2.0,
+          4.0
+        ],
+        "learning_rate": [
+          0.0005,
+          0.001
+        ],
+        "n_factors": [
+          500,
+          1000
+        ]
+      },
+      "budget_minutes": 10,
+      "options": {
+        "rerun_finalists_on_other_splits": true,
+        "n_finalists": 2
+      }
+    },
+    {
+      "name": "T3 SVD++ penalty / learning rate",
+      "task": "task3",
+      "model": "svdpp",
+      "grid": {
+        "factor_regularization": [
+          2.0,
+          4.0,
+          8.0
+        ],
+        "learning_rate": [
+          0.0005,
+          0.001,
+          0.002
+        ]
+      },
+      "budget_minutes": 6,
+      "options": {}
+    },
+    {
+      "name": "T3 integrated model stronger penalty",
+      "task": "task3",
+      "model": "integrated_model",
+      "grid": {
+        "factor_regularization": [
+          32.0,
+          48.0
+        ]
+      },
+      "budget_minutes": 14,
+      "options": {}
+    },
+    {
+      "name": "T3 AutoRec hidden 1000",
+      "task": "task3",
+      "model": "autorec",
+      "grid": {
+        "hidden_dimension": 1000
+      },
+      "budget_minutes": 6,
+      "options": {}
+    },
+    {
+      "name": "T3 AutoRec learning rate 1e-4",
+      "task": "task3",
+      "model": "autorec",
+      "grid": {
+        "hidden_dimension": [
+          500,
+          1000
+        ],
+        "learning_rate": 0.0001
+      },
+      "budget_minutes": 8,
+      "options": {}
+    },
+    {
+      "name": "T3 time FM stronger penalties / fewer factors",
+      "task": "task3",
+      "model": "time_factorization_machine",
+      "grid": {
+        "learning_rate": 0.00025,
+        "ratings_per_batch": 256,
+        "n_factors": [
+          60,
+          120
+        ],
+        "factor_regularization": [
+          32.0,
+          64.0,
+          128.0
+        ],
+        "bias_regularization": [
+          5.0,
+          10.0
+        ]
+      },
+      "budget_minutes": 15,
+      "options": {}
+    },
+    {
+      "name": "T1 integrated model factors at penalty 24",
+      "task": "task1",
+      "model": "integrated_model",
+      "grid": {
+        "n_neighbors": 100,
+        "neighbour_regularization": 0.1,
+        "learning_rate": 0.00025,
+        "factor_regularization": 24.0,
+        "n_factors": [
+          120,
+          500
+        ]
+      },
+      "budget_minutes": 30,
+      "options": {}
+    },
+    {
+      "name": "T3 integrated model 200 neighbours",
+      "task": "task3",
+      "model": "integrated_model",
+      "grid": {
+        "n_neighbors": 200
+      },
+      "budget_minutes": 10,
+      "options": {}
+    },
+    {
+      "name": "T3 SVD penalty",
+      "task": "task3",
+      "model": "svd",
+      "grid": {
+        "factor_regularization": [
+          4.0,
+          8.0,
+          16.0
+        ]
+      },
+      "budget_minutes": 15,
+      "options": {}
+    },
+    {
+      "name": "T3 time FM fewer factors",
+      "task": "task3",
+      "model": "time_factorization_machine",
+      "grid": {
+        "learning_rate": 0.00025,
+        "ratings_per_batch": 256,
+        "factor_regularization": 32.0,
+        "n_factors": [
+          30,
+          60
+        ],
+        "bias_regularization": [
+          5.0,
+          10.0
+        ]
+      },
+      "budget_minutes": 10,
+      "options": {}
+    }
+  ]
+}

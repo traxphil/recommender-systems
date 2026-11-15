@@ -1,0 +1,51 @@
+{
+  "end_at": null,
+  "sweeps": [
+    {
+      "name": "T3 time Bayesian FM rank 128",
+      "task": "task3",
+      "model": "time_bayesian_factorization_machine",
+      "grid": {
+        "calendar_fields": [
+          [
+            "weekday",
+            "month",
+            "year"
+          ]
+        ],
+        "rank": 128
+      },
+      "budget_minutes": 50,
+      "options": {}
+    },
+    {
+      "name": "T3 time Bayesian FM rank 64 more draws",
+      "task": "task3",
+      "model": "time_bayesian_factorization_machine",
+      "grid": {
+        "calendar_fields": [
+          [
+            "weekday",
+            "month",
+            "year"
+          ]
+        ],
+        "rank": 64,
+        "n_burn_in_iterations": 30,
+        "n_kept_samples": 380
+      },
+      "budget_minutes": 50,
+      "options": {}
+    },
+    {
+      "name": "T1 Bayesian FM rank 128",
+      "task": "task1",
+      "model": "bayesian_factorization_machine",
+      "grid": {
+        "rank": 128
+      },
+      "budget_minutes": 50,
+      "options": {}
+    }
+  ]
+}

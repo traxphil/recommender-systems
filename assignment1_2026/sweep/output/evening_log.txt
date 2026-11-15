@@ -1,0 +1,56 @@
+2026-11-14 20:32:29 sweep started, overall end 2026-11-14 23:59
+2026-11-14 20:32:29 start    T3 time bias 1 shrinkage / drift | task3 / time_bias_model | until 20:40
+2026-11-14 20:33:38 finished T3 time bias 1 shrinkage / drift | finished | 27 / 27 runs | best 0.88291 with {"temporal_biases.time_bias_regularization": 50.0, "temporal_biases.drift_regularization": 3000.0, "temporal_biases.drift_exponent": 0.4} | task3/time_bias_model_2026-11-14_20-32-29.json
+2026-11-14 20:33:38 start    T3 time bias 2 bins / periods | task3 / time_bias_model | until 20:41
+2026-11-14 20:35:26 finished T3 time bias 2 bins / periods | finished | 33 / 33 runs | best 0.88651 with {"temporal_biases.n_time_bins": 30, "bias_regularization": 3.0, "temporal_biases.user_period_lengths_in_days": [1, 7, 30, 90, 365, 1000]} | task3/time_bias_model_2026-11-14_20-33-38.json
+2026-11-14 20:35:26 start    T3 time zero model | task3 / time_zero_model | until 20:40
+2026-11-14 20:35:48 finished T3 time zero model | finished | 16 / 16 runs | best 0.05310 with {"window_lengths_in_days": [0, 7, 30, 365], "window_prior_strength": 5.0} | task3/time_zero_model_2026-11-14_20-35-26.json
+2026-11-14 20:35:48 start    T3 time-decayed kNN | task3 / time_item_knn | until 20:55
+2026-11-14 20:38:38 finished T3 time-decayed kNN | finished | 24 / 24 runs | best 0.89938 with {"time_decay_days": 3000.0, "time_decay_floor": 0.7, "n_neighbors": 100} | task3/time_item_knn_2026-11-14_20-35-48.json
+2026-11-14 20:38:38 start    T3 time FM 2 learning rate / batch | task3 / time_factorization_machine | until 20:56
+2026-11-14 20:45:04 finished T3 time FM 2 learning rate / batch | finished | 6 / 6 runs | best 0.89411 with {"learning_rate": 0.00025, "ratings_per_batch": 256} | task3/time_factorization_machine_2026-11-14_20-38-38.json
+2026-11-14 20:45:04 start    T3 time FM 3 factors / penalty | task3 / time_factorization_machine | until 21:10
+2026-11-14 20:55:58 finished T3 time FM 3 factors / penalty | finished | 6 / 6 runs | best 0.89382 with {"n_factors": 120, "factor_regularization": 32.0} | task3/time_factorization_machine_2026-11-14_20-45-04.json
+2026-11-14 20:55:58 start    T3 time FM 4 bias lambda | task3 / time_factorization_machine | until 21:03
+2026-11-14 21:00:50 finished T3 time FM 4 bias lambda | finished | 3 / 3 runs | best 0.89355 with {"bias_regularization": 5.0} | task3/time_factorization_machine_2026-11-14_20-55-58.json
+2026-11-14 21:00:50 start    T3 timeSVD++ 1 penalty / learning rate | task3 / time_svdpp | until 21:20
+2026-11-14 21:02:08 finished T3 timeSVD++ 1 penalty / learning rate | finished | 6 / 6 runs | best 0.85847 with {"factor_regularization": 4.0, "learning_rate": 0.001} | task3/time_svdpp_2026-11-14_21-00-50.json
+2026-11-14 21:02:08 start    T3 timeSVD++ 2 new biases / factor drift | task3 / time_svdpp | until 21:14
+2026-11-14 21:02:35 finished T3 timeSVD++ 2 new biases / factor drift | finished | 2 / 2 runs | best 0.85808 with {"use_factor_drift": false} | task3/time_svdpp_2026-11-14_21-02-08.json
+2026-11-14 21:02:35 start    T3 integrated model | task3 / integrated_model | until 21:27
+2026-11-14 21:12:57 finished T3 integrated model | finished | 2 / 2 runs | best 0.87506 with {"factor_regularization": 24.0} | task3/integrated_model_2026-11-14_21-02-35.json
+2026-11-14 21:12:57 start    T3 AutoRec | task3 / autorec | until 21:27
+2026-11-14 21:18:17 finished T3 AutoRec | finished | 2 / 2 runs | best 0.89382 with {"hidden_dimension": 500} | task3/autorec_2026-11-14_21-12-57.json
+2026-11-14 21:18:17 start    T3 rating transformer | task3 / rating_transformer | until 21:33
+2026-11-14 21:29:40 finished T3 rating transformer | finished | 1 / 1 runs | best 0.90573 with {} | task3/rating_transformer_2026-11-14_21-18-17.json
+2026-11-14 21:29:40 start    T1 AutoRec learning rate 1.5e-5 | task1 / autorec | until 21:44
+2026-11-14 21:42:26 finished T1 AutoRec learning rate 1.5e-5 | finished | 1 / 1 runs | best 0.74898 with {} | task1/autorec_2026-11-14_21-29-40.json
+2026-11-14 21:42:26 start    queue: T3 time zero model stronger prior / windows | task3 / time_zero_model | until 21:45
+2026-11-14 21:42:58 finished queue: T3 time zero model stronger prior / windows | finished | 16 / 16 runs | best 0.05356 with {"window_lengths_in_days": [0, 7, 30, 365, 1000], "window_prior_strength": 5.0} | task3/time_zero_model_2026-11-14_21-42-26.json
+2026-11-14 21:42:58 start    queue: T3 time kNN slower decay | task3 / time_item_knn | until 21:47
+2026-11-14 21:44:54 finished queue: T3 time kNN slower decay | finished | 16 / 16 runs | best 0.90381 with {"time_decay_days": 30000.0, "time_decay_floor": 0.85, "n_neighbors": 200} | task3/time_item_knn_2026-11-14_21-42-58.json
+2026-11-14 21:44:54 start    queue: T3 item kNN neighbours | task3 / item_knn | until 21:47
+2026-11-14 21:45:15 finished queue: T3 item kNN neighbours | finished | 3 / 3 runs | best 0.89924 with {"n_neighbors": 200} | task3/item_knn_2026-11-14_21-44-54.json
+2026-11-14 21:45:15 start    queue: T3 time bias longer periods | task3 / time_bias_model | until 21:48
+2026-11-14 21:45:58 finished queue: T3 time bias longer periods | finished | 13 / 13 runs | best 0.88643 with {"temporal_biases.user_period_lengths_in_days": [1, 7, 30, 90, 365, 1000], "temporal_biases.n_time_bins": 20} | task3/time_bias_model_2026-11-14_21-45-15.json
+2026-11-14 21:45:58 start    queue: T3 timeSVD++ lower penalty / learning rate / more factors | task3 / time_svdpp | until 21:55
+2026-11-14 21:50:50 finished queue: T3 timeSVD++ lower penalty / learning rate / more factors | finished | 16 / 16 runs | best 0.86308 with {"factor_regularization": 4.0, "learning_rate": 0.001, "n_factors": 500} | task3/time_svdpp_2026-11-14_21-45-58.json
+2026-11-14 21:50:50 start    queue: T3 SVD++ penalty / learning rate | task3 / svdpp | until 21:56
+2026-11-14 21:52:21 finished queue: T3 SVD++ penalty / learning rate | finished | 9 / 9 runs | best 0.88416 with {"factor_regularization": 4.0, "learning_rate": 0.001} | task3/svdpp_2026-11-14_21-50-50.json
+2026-11-14 21:52:21 start    queue: T3 integrated model stronger penalty | task3 / integrated_model | until 22:06
+2026-11-14 22:04:52 finished queue: T3 integrated model stronger penalty | finished | 2 / 2 runs | best 0.87531 with {"factor_regularization": 32.0} | task3/integrated_model_2026-11-14_21-52-21.json
+2026-11-14 22:04:52 start    queue: T3 AutoRec hidden 1000 | task3 / autorec | until 22:10
+2026-11-14 22:06:51 finished queue: T3 AutoRec hidden 1000 | finished | 1 / 1 runs | best 0.89399 with {} | task3/autorec_2026-11-14_22-04-52.json
+2026-11-14 22:06:51 start    queue: T3 AutoRec learning rate 1e-4 | task3 / autorec | until 22:14
+2026-11-14 22:08:58 finished queue: T3 AutoRec learning rate 1e-4 | finished | 2 / 2 runs | best 0.89673 with {"hidden_dimension": 500} | task3/autorec_2026-11-14_22-06-51.json
+2026-11-14 22:08:58 start    queue: T3 time FM stronger penalties / fewer factors | task3 / time_factorization_machine | until 22:23
+2026-11-14 22:25:18 finished queue: T3 time FM stronger penalties / fewer factors | stopped at the deadline | 9 / 12 runs | best 0.89303 with {"n_factors": 60, "factor_regularization": 32.0, "bias_regularization": 5.0} | task3/time_factorization_machine_2026-11-14_22-08-58.json
+2026-11-14 22:25:18 start    queue: T1 integrated model factors at penalty 24 | task1 / integrated_model | until 22:55
+2026-11-14 22:54:05 finished queue: T1 integrated model factors at penalty 24 | finished | 2 / 2 runs | best 0.73246 with {"n_factors": 120} | task1/integrated_model_2026-11-14_22-25-18.json
+2026-11-14 22:54:05 start    queue: T3 integrated model 200 neighbours | task3 / integrated_model | until 23:04
+2026-11-14 23:00:27 finished queue: T3 integrated model 200 neighbours | finished | 1 / 1 runs | best 0.87734 with {} | task3/integrated_model_2026-11-14_22-54-05.json
+2026-11-14 23:00:27 start    queue: T3 SVD penalty | task3 / svd | until 23:15
+2026-11-14 23:06:28 finished queue: T3 SVD penalty | finished | 3 / 3 runs | best 0.88964 with {"factor_regularization": 8.0} | task3/svd_2026-11-14_23-00-27.json
+2026-11-14 23:06:28 start    queue: T3 time FM fewer factors | task3 / time_factorization_machine | until 23:16
+2026-11-14 23:12:14 finished queue: T3 time FM fewer factors | finished | 4 / 4 runs | best 0.89303 with {"n_factors": 60, "bias_regularization": 5.0} | task3/time_factorization_machine_2026-11-14_23-06-28.json
+2026-11-14 23:58:14 sweep finished

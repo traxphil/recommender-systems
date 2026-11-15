@@ -1,0 +1,65 @@
+{
+  "task": "task1",
+  "model": "integrated_model",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-14 22:25:18",
+  "last_update": "2026-11-14 22:54:05",
+  "runs_finished": "2 / 2",
+  "device": "cuda",
+  "best": {
+    "score": 0.732457,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": 10,
+    "swept_values": {
+      "n_factors": 120
+    },
+    "parameters": {
+      "n_factors": 120,
+      "use_test_pairs_as_implicit_feedback": false,
+      "n_neighbors": 100,
+      "similarity_shrinkage": 100.0,
+      "max_ratings_per_user_for_similarity": 300,
+      "items_per_similarity_block": 2000,
+      "learning_rate": 0.00025,
+      "user_bias_regularization": 1.0,
+      "item_bias_regularization": 5.0,
+      "factor_regularization": 24.0,
+      "neighbour_regularization": 0.1,
+      "ratings_per_batch": 512,
+      "max_epochs": 1000,
+      "early_stopping_patience": 6,
+      "refit_on_train_and_valid": true,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "n_factors": [
+      120,
+      500
+    ]
+  },
+  "constant_parameters": {
+    "n_neighbors": 100,
+    "neighbour_regularization": 0.1,
+    "learning_rate": 0.00025,
+    "factor_regularization": 24.0
+  },
+  "base_config": "TASK1_INTEGRATED_MODEL",
+  "runs": [
+    {
+      "n_factors": 120,
+      "score": 0.732457,
+      "best_epoch": 10,
+      "seconds": 701.9
+    },
+    {
+      "n_factors": 500,
+      "score": 0.732899,
+      "best_epoch": 10,
+      "seconds": 1024.9
+    }
+  ]
+}

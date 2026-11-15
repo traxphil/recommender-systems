@@ -1,0 +1,75 @@
+{
+  "task": "task5",
+  "model": "sasrec",
+  "metric": "validation pair accuracy (higher is better)",
+  "status": "finished",
+  "started": "2026-11-14 15:05:55",
+  "last_update": "2026-11-14 15:19:12",
+  "runs_finished": "4 / 4",
+  "device": "cuda",
+  "best": {
+    "score": 0.887182,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": 14,
+    "swept_values": {
+      "hidden_dimension": 128,
+      "dropout": 0.5
+    },
+    "parameters": {
+      "hidden_dimension": 128,
+      "n_blocks": 2,
+      "n_heads": 1,
+      "max_sequence_length": 50,
+      "dropout": 0.5,
+      "learning_rate": 0.001,
+      "users_per_batch": 256,
+      "max_epochs": 200,
+      "early_stopping_patience": 10,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "hidden_dimension": [
+      64,
+      128
+    ],
+    "dropout": [
+      0.2,
+      0.5
+    ]
+  },
+  "constant_parameters": {},
+  "base_config": "TASK5_SASREC",
+  "runs": [
+    {
+      "hidden_dimension": 128,
+      "dropout": 0.2,
+      "score": 0.882458,
+      "best_epoch": 8,
+      "seconds": 158.4
+    },
+    {
+      "hidden_dimension": 64,
+      "dropout": 0.2,
+      "score": 0.88459,
+      "best_epoch": 14,
+      "seconds": 189.7
+    },
+    {
+      "hidden_dimension": 64,
+      "dropout": 0.5,
+      "score": 0.885362,
+      "best_epoch": 23,
+      "seconds": 258.0
+    },
+    {
+      "hidden_dimension": 128,
+      "dropout": 0.5,
+      "score": 0.887182,
+      "best_epoch": 14,
+      "seconds": 191.0
+    }
+  ]
+}

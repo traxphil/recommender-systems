@@ -1,0 +1,84 @@
+{
+  "task": "task1",
+  "model": "rating_transformer",
+  "metric": "validation MSE (lower is better)",
+  "status": "finished",
+  "started": "2026-11-14 16:11:36",
+  "last_update": "2026-11-14 17:00:33",
+  "runs_finished": "4 / 4",
+  "device": "cuda",
+  "best": {
+    "score": 0.75892,
+    "split_seeds": [
+      0
+    ],
+    "best_epoch": 4,
+    "swept_values": {
+      "max_history_length": 200,
+      "use_test_pairs_in_history": false
+    },
+    "parameters": {
+      "embedding_dimension": 64,
+      "n_blocks": 2,
+      "n_heads": 2,
+      "dropout": 0.3,
+      "max_history_length": 200,
+      "use_test_pairs_in_history": false,
+      "learning_rate": 0.001,
+      "bias_regularization": 3.0,
+      "factor_regularization": 1.0,
+      "ratings_per_batch": 1024,
+      "max_epochs": 1000,
+      "early_stopping_patience": 3,
+      "refit_on_train_and_valid": true,
+      "seed": 0
+    }
+  },
+  "swept_parameters": {
+    "max_history_length": [
+      100,
+      200
+    ],
+    "use_test_pairs_in_history": [
+      false,
+      true
+    ]
+  },
+  "constant_parameters": {
+    "learning_rate": 0.001,
+    "dropout": 0.3,
+    "embedding_dimension": 64,
+    "n_blocks": 2
+  },
+  "base_config": "TASK1_RATING_TRANSFORMER",
+  "runs": [
+    {
+      "max_history_length": 100,
+      "use_test_pairs_in_history": false,
+      "score": 0.75917,
+      "best_epoch": 5,
+      "seconds": 523.8
+    },
+    {
+      "max_history_length": 100,
+      "use_test_pairs_in_history": true,
+      "score": 0.759712,
+      "best_epoch": 5,
+      "seconds": 600.2
+    },
+    {
+      "max_history_length": 200,
+      "use_test_pairs_in_history": false,
+      "score": 0.75892,
+      "best_epoch": 4,
+      "seconds": 909.6
+    },
+    {
+      "max_history_length": 200,
+      "use_test_pairs_in_history": true,
+      "score": 0.759355,
+      "best_epoch": 4,
+      "seconds": 902.8
+    }
+  ]
+}

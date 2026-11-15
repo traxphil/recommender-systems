@@ -1,0 +1,249 @@
+{
+  "task": "task5",
+  "model": "transition",
+  "metric": "validation pair accuracy (higher is better)",
+  "status": "finished",
+  "started": "2026-11-14 11:52:11",
+  "last_update": "2026-11-14 11:55:47",
+  "runs_finished": "26 / 26",
+  "device": "cuda",
+  "best": {
+    "score": 0.74309,
+    "split_seeds": [
+      0,
+      1,
+      2
+    ],
+    "scores_by_split_seed": {
+      "0": 0.743328,
+      "1": 0.743478,
+      "2": 0.742464
+    },
+    "best_epoch_by_split_seed": {
+      "0": null,
+      "1": null,
+      "2": null
+    },
+    "swept_values": {
+      "context_length": 20,
+      "context_decay": 0.7
+    },
+    "parameters": {
+      "steps_ahead": 50,
+      "step_decay": 0.85,
+      "shrinkage": 1.0,
+      "context_length": 20,
+      "context_decay": 0.7
+    }
+  },
+  "swept_parameters": {
+    "context_length": [
+      5,
+      10,
+      20,
+      50,
+      100
+    ],
+    "context_decay": [
+      0.5,
+      0.7,
+      0.85,
+      1.0
+    ]
+  },
+  "constant_parameters": {
+    "steps_ahead": 50,
+    "step_decay": 0.85,
+    "shrinkage": 1.0
+  },
+  "base_config": "TASK5_TRANSITION",
+  "runs": [
+    {
+      "context_length": 10,
+      "context_decay": 0.5,
+      "score": 0.740655,
+      "best_epoch": null,
+      "seconds": 6.3
+    },
+    {
+      "context_length": 100,
+      "context_decay": 1.0,
+      "score": 0.730671,
+      "best_epoch": null,
+      "seconds": 10.2
+    },
+    {
+      "context_length": 10,
+      "context_decay": 0.85,
+      "score": 0.741116,
+      "best_epoch": null,
+      "seconds": 6.3
+    },
+    {
+      "context_length": 5,
+      "context_decay": 0.85,
+      "score": 0.736415,
+      "best_epoch": null,
+      "seconds": 5.6
+    },
+    {
+      "context_length": 50,
+      "context_decay": 0.7,
+      "score": 0.742868,
+      "best_epoch": null,
+      "seconds": 10.1
+    },
+    {
+      "context_length": 100,
+      "context_decay": 0.5,
+      "score": 0.740488,
+      "best_epoch": null,
+      "seconds": 10.9
+    },
+    {
+      "context_length": 5,
+      "context_decay": 1.0,
+      "score": 0.735862,
+      "best_epoch": null,
+      "seconds": 5.3
+    },
+    {
+      "context_length": 20,
+      "context_decay": 1.0,
+      "score": 0.738201,
+      "best_epoch": null,
+      "seconds": 8.1
+    },
+    {
+      "context_length": 20,
+      "context_decay": 0.85,
+      "score": 0.742787,
+      "best_epoch": null,
+      "seconds": 7.6
+    },
+    {
+      "context_length": 20,
+      "context_decay": 0.5,
+      "score": 0.741381,
+      "best_epoch": null,
+      "seconds": 7.6
+    },
+    {
+      "context_length": 5,
+      "context_decay": 0.5,
+      "score": 0.736311,
+      "best_epoch": null,
+      "seconds": 5.5
+    },
+    {
+      "context_length": 50,
+      "context_decay": 0.5,
+      "score": 0.740886,
+      "best_epoch": null,
+      "seconds": 9.5
+    },
+    {
+      "context_length": 10,
+      "context_decay": 1.0,
+      "score": 0.739042,
+      "best_epoch": null,
+      "seconds": 6.2
+    },
+    {
+      "context_length": 10,
+      "context_decay": 0.7,
+      "score": 0.741854,
+      "best_epoch": null,
+      "seconds": 6.5
+    },
+    {
+      "context_length": 100,
+      "context_decay": 0.85,
+      "score": 0.742067,
+      "best_epoch": null,
+      "seconds": 10.7
+    },
+    {
+      "context_length": 100,
+      "context_decay": 0.7,
+      "score": 0.742458,
+      "best_epoch": null,
+      "seconds": 11.1
+    },
+    {
+      "context_length": 50,
+      "context_decay": 0.85,
+      "score": 0.742499,
+      "best_epoch": null,
+      "seconds": 9.4
+    },
+    {
+      "context_length": 20,
+      "context_decay": 0.7,
+      "score": 0.743328,
+      "best_epoch": null,
+      "seconds": 8.0
+    },
+    {
+      "context_length": 5,
+      "context_decay": 0.7,
+      "score": 0.73683,
+      "best_epoch": null,
+      "seconds": 5.3
+    },
+    {
+      "context_length": 50,
+      "context_decay": 1.0,
+      "score": 0.7335,
+      "best_epoch": null,
+      "seconds": 9.5
+    }
+  ],
+  "finalists": [
+    {
+      "context_length": 20,
+      "context_decay": 0.7,
+      "mean_score": 0.74309,
+      "scores_by_split_seed": {
+        "0": 0.743328,
+        "1": 0.743478,
+        "2": 0.742464
+      },
+      "best_epoch_by_split_seed": {
+        "0": null,
+        "1": null,
+        "2": null
+      }
+    },
+    {
+      "context_length": 50,
+      "context_decay": 0.7,
+      "mean_score": 0.742658,
+      "scores_by_split_seed": {
+        "0": 0.742868,
+        "1": 0.743075,
+        "2": 0.742032
+      },
+      "best_epoch_by_split_seed": {
+        "0": null,
+        "1": null,
+        "2": null
+      }
+    },
+    {
+      "context_length": 20,
+      "context_decay": 0.85,
+      "mean_score": 0.742376,
+      "scores_by_split_seed": {
+        "0": 0.742787,
+        "1": 0.742476,
+        "2": 0.741865
+      },
+      "best_epoch_by_split_seed": {
+        "0": null,
+        "1": null,
+        "2": null
+      }
+    }
+  ]
+}

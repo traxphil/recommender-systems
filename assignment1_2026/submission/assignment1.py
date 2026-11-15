@@ -330,6 +330,23 @@ def train_task3_time_factorization_machine(task: RatingTask) -> ModelResult:
     return train_time_factorization_machine(task, model_configs.TASK3_TIME_FACTORIZATION_MACHINE)
 
 
+# the Task 1 models added 14 Nov: the Bayesian FM with the calendar fields, the other three without timestamps
+def train_task3_time_bayesian_factorization_machine(task: RatingTask) -> ModelResult:
+    return train_bayesian_factorization_machine(task, model_configs.TASK3_TIME_BAYESIAN_FACTORIZATION_MACHINE)
+
+
+def train_task3_rating_transformer(task: RatingTask) -> ModelResult:
+    return train_rating_transformer(task, model_configs.TASK3_RATING_TRANSFORMER)
+
+
+def train_task3_autorec(task: RatingTask) -> ModelResult:
+    return train_autorec(task, model_configs.TASK3_AUTOREC)
+
+
+def train_task3_integrated_model(task: RatingTask) -> ModelResult:
+    return train_integrated_model(task, model_configs.TASK3_INTEGRATED_MODEL)
+
+
 # sub-model name (as in the blender configs and in trained_models/) -> its training function
 TASK3_SUB_MODEL_TRAINERS = {
     "bias_model": train_task3_bias_model,
@@ -342,6 +359,10 @@ TASK3_SUB_MODEL_TRAINERS = {
     "time_item_knn": train_task3_time_item_knn,
     "time_zero_model": train_task3_time_zero_model,
     "time_factorization_machine": train_task3_time_factorization_machine,
+    "time_bayesian_factorization_machine": train_task3_time_bayesian_factorization_machine,
+    "rating_transformer": train_task3_rating_transformer,
+    "autorec": train_task3_autorec,
+    "integrated_model": train_task3_integrated_model,
 }
 
 
