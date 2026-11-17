@@ -1,5 +1,5 @@
 {
- "heartbeat": "2026-11-17 01:06:30",
+ "heartbeat": "2026-11-17 07:34:05",
  "stop_requested": false,
  "running": {},
  "pending": [],
@@ -28,6 +28,7 @@
   "gpu_12_task5_window_span.py",
   "gpu_13_task6_sweep.py",
   "cpu_08_bayesian_fm_chains.py",
-  "gpu_14_restore_task3_rank_64_two_chains.py"
+  "gpu_14_restore_task3_rank_64_two_chains.py",
+  "gpu_15_move_to_archive.py"
  ]
 }

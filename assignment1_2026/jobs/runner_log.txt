@@ -49,3 +49,5 @@
 2026-11-16 05:21:12 finished cpu_08_bayesian_fm_chains.py (exit code 0, 297.0 min)
 2026-11-16 05:31:38 started  gpu_14_restore_task3_rank_64_two_chains.py (lane gpu, pid 44772)
 2026-11-16 05:31:43 finished gpu_14_restore_task3_rank_64_two_chains.py (exit code 0, 0.1 min)
+2026-11-17 07:29:50 started  gpu_15_move_to_archive.py (lane gpu, pid 8240)
+2026-11-17 07:29:55 finished gpu_15_move_to_archive.py (exit code 0, 0.1 min)
