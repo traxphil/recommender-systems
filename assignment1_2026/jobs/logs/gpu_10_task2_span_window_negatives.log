@@ -1,0 +1,92 @@
+RESULT task2 stored blend: 0.93689
+[20:30:22] popularity             validation accuracy 0.4914
+[20:30:22] item_cosine            validation accuracy 0.8696
+[20:30:22] ease                   validation accuracy 0.8512
+[20:30:22] mult_vae               validation accuracy 0.8626
+[20:30:22] pair blend             validation accuracy 0.9380  (out-of-fold, 5 folds)
+[20:30:24] pair blend inputs: popularity_difference 1325, ease_difference 1297, mult_vae_difference 1116, ease_first 545, item_cosine_difference 534, item_cosine_first 512, popularity_first 510, popularity_second 506, already_read_difference 502, ease_second 502, item_cosine_second 486, mult_vae_first 422, mult_vae_second 384, log_user_interactions 311, item_median_minus_user_median_years_first 264, item_median_minus_user_median_years_second 238, user_span_years 227, share_of_item_reads_in_user_span_difference 208, item_first_minus_user_first_years_first 187, item_median_minus_user_median_years_difference 185, item_first_minus_user_last_years_first 181, item_first_minus_user_first_years_second 181, item_first_minus_user_last_years_second 174, share_of_item_reads_in_user_span_second 171, share_of_item_reads_in_user_span_first 170, item_10_percent_minus_user_last_years_second 149, item_10_percent_minus_user_last_years_first 148, item_10_percent_minus_user_last_years_difference 125, item_first_minus_user_last_years_difference 122, share_of_item_reads_in_user_span_180_days_difference 118, share_of_item_reads_in_user_span_180_days_second 84, share_of_item_reads_in_user_span_180_days_first 79, item_first_minus_user_first_years_difference 35, already_read_second 2, already_read_first 0
+RESULT task2 stage A span: 0.93800 (0.2 min)
+[20:30:24] stored pair_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task2\pair_blender.pt
+RESULT task2: adopted stage A span (0.93800), wrote task_2_predictions.csv
+[20:30:35] popularity             validation accuracy 0.4914
+[20:30:35] item_cosine            validation accuracy 0.8696
+[20:30:35] ease                   validation accuracy 0.8512
+[20:30:35] mult_vae               validation accuracy 0.8626
+[20:30:35] pair blend             validation accuracy 0.9396  (out-of-fold, 5 folds)
+[20:30:36] pair blend inputs: popularity_difference 1501, mult_vae_difference 1273, ease_difference 1097, log_read_within_5_of_user_books_per_sqrt_readers_difference 862, popularity_first 605, popularity_second 598, item_cosine_difference 596, mult_vae_second 542, item_cosine_first 535, ease_first 529, ease_second 517, item_cosine_second 514, mult_vae_first 506, already_read_difference 484, log_user_interactions 395, log_read_within_5_of_user_books_per_sqrt_readers_second 359, log_read_within_5_of_user_books_per_sqrt_readers_first 338, log_read_within_5_of_user_books_difference 277, log_read_within_5_of_user_books_second 242, log_read_within_5_of_user_books_first 230, already_read_first 0, already_read_second 0
+RESULT task2 stage A window: 0.93957 (0.2 min)
+[20:30:36] stored pair_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task2\pair_blender.pt
+RESULT task2: adopted stage A window (0.93957), wrote task_2_predictions.csv
+[20:30:51] popularity             validation accuracy 0.4914
+[20:30:51] item_cosine            validation accuracy 0.8696
+[20:30:51] ease                   validation accuracy 0.8512
+[20:30:51] mult_vae               validation accuracy 0.8626
+[20:30:51] pair blend             validation accuracy 0.9401  (out-of-fold, 5 folds)
+[20:30:54] pair blend inputs: popularity_difference 1358, mult_vae_difference 1078, ease_difference 928, log_read_within_5_of_user_books_per_sqrt_readers_difference 773, already_read_difference 469, item_cosine_difference 460, popularity_second 455, popularity_first 428, ease_first 402, ease_second 382, item_cosine_second 366, item_cosine_first 360, mult_vae_first 327, mult_vae_second 326, item_median_minus_user_median_years_second 251, log_user_interactions 242, log_read_within_5_of_user_books_per_sqrt_readers_first 239, log_read_within_5_of_user_books_per_sqrt_readers_second 239, item_median_minus_user_median_years_first 228, user_span_years 205, item_first_minus_user_first_years_first 173, share_of_item_reads_in_user_span_difference 162, item_first_minus_user_last_years_second 160, item_first_minus_user_first_years_second 159, log_read_within_5_of_user_books_first 156, log_read_within_5_of_user_books_difference 153, item_first_minus_user_last_years_first 149, item_10_percent_minus_user_last_years_second 149, share_of_item_reads_in_user_span_first 145, item_median_minus_user_median_years_difference 143, log_read_within_5_of_user_books_second 141, share_of_item_reads_in_user_span_second 139, item_10_percent_minus_user_last_years_first 137, share_of_item_reads_in_user_span_180_days_difference 124, item_first_minus_user_last_years_difference 116, item_10_percent_minus_user_last_years_difference 102, share_of_item_reads_in_user_span_180_days_first 60, share_of_item_reads_in_user_span_180_days_second 58, item_first_minus_user_first_years_difference 57, already_read_second 1, already_read_first 0
+RESULT task2 stage A span + window: 0.94005 (0.3 min)
+[20:30:54] stored pair_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task2\pair_blender.pt
+RESULT task2: adopted stage A span + window (0.94005), wrote task_2_predictions.csv
+[20:31:21] popularity             validation accuracy 0.4914
+[20:31:21] item_cosine            validation accuracy 0.8696
+[20:31:21] ease                   validation accuracy 0.8512
+[20:31:21] mult_vae               validation accuracy 0.8626
+[20:31:21] pair blend             validation accuracy 0.9403  (out-of-fold, 5 folds)
+[20:31:26] pair blend inputs: popularity_difference 4129, mult_vae_difference 3007, ease_difference 3001, log_read_within_5_of_user_books_per_sqrt_readers_difference 2507, popularity_first 1785, popularity_second 1721, item_cosine_difference 1659, ease_first 1658, ease_second 1635, item_cosine_first 1563, mult_vae_first 1557, item_cosine_second 1556, mult_vae_second 1475, log_user_interactions 1393, item_median_minus_user_median_years_first 1317, user_span_years 1262, already_read_difference 1252, item_median_minus_user_median_years_second 1223, log_read_within_5_of_user_books_per_sqrt_readers_second 1098, log_read_within_5_of_user_books_per_sqrt_readers_first 1096, item_first_minus_user_first_years_first 960, item_10_percent_minus_user_last_years_second 946, item_first_minus_user_first_years_second 939, item_10_percent_minus_user_last_years_first 920, item_median_minus_user_median_years_difference 915, log_read_within_5_of_user_books_difference 885, item_first_minus_user_last_years_first 883, item_first_minus_user_last_years_second 880, share_of_item_reads_in_user_span_difference 865, log_read_within_5_of_user_books_second 706, item_10_percent_minus_user_last_years_difference 692, share_of_item_reads_in_user_span_second 686, log_read_within_5_of_user_books_first 672, item_first_minus_user_last_years_difference 653, share_of_item_reads_in_user_span_first 632, share_of_item_reads_in_user_span_180_days_difference 571, share_of_item_reads_in_user_span_180_days_first 362, share_of_item_reads_in_user_span_180_days_second 356, item_first_minus_user_first_years_difference 180, already_read_second 3, already_read_first 0
+RESULT task2 stage A span + window + bigger LightGBM: 0.94025 (0.5 min)
+[20:31:26] stored pair_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task2\pair_blender.pt
+RESULT task2: adopted stage A span + window + bigger LightGBM (0.94025), wrote task_2_predictions.csv
+RESULT task2 stage A best: span + window + bigger LightGBM 0.94025
+744656 validation pairs (186164 original)
+[20:31:27] popularity | validation accuracy 0.4911
+[20:31:27] stored popularity -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_task2_four_negatives\task2\popularity.pt
+RESULT task2 popularity   on its own, original pairs 0.49140 (0.0 min)
+[20:32:08] item cosine | validation accuracy 0.8685
+[20:32:48] stored item_cosine -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_task2_four_negatives\task2\item_cosine.pt
+RESULT task2 item_cosine  on its own, original pairs 0.86959 (1.3 min)
+[20:35:36] EASE | validation accuracy 0.8503
+[20:38:19] stored ease -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_task2_four_negatives\task2\ease.pt
+RESULT task2 ease         on its own, original pairs 0.85122 (5.5 min)
+[20:38:26] Mult-VAE epoch   1 | train loss 552.33 | validation accuracy 0.7068
+[20:38:31] Mult-VAE epoch   2 | train loss 512.28 | validation accuracy 0.7862
+[20:38:36] Mult-VAE epoch   3 | train loss 493.48 | validation accuracy 0.8152
+[20:38:41] Mult-VAE epoch   4 | train loss 483.47 | validation accuracy 0.8357
+[20:38:45] Mult-VAE epoch   5 | train loss 474.22 | validation accuracy 0.8479
+[20:38:50] Mult-VAE epoch   6 | train loss 467.28 | validation accuracy 0.8557
+[20:38:55] Mult-VAE epoch   7 | train loss 461.81 | validation accuracy 0.8553
+[20:39:00] Mult-VAE epoch   8 | train loss 456.65 | validation accuracy 0.8590
+[20:39:04] Mult-VAE epoch   9 | train loss 451.85 | validation accuracy 0.8607
+[20:39:09] Mult-VAE epoch  10 | train loss 446.98 | validation accuracy 0.8618
+[20:39:14] Mult-VAE epoch  11 | train loss 442.18 | validation accuracy 0.8612
+[20:39:19] Mult-VAE epoch  12 | train loss 437.78 | validation accuracy 0.8613
+[20:39:23] Mult-VAE epoch  13 | train loss 433.69 | validation accuracy 0.8614
+[20:39:28] Mult-VAE epoch  14 | train loss 429.55 | validation accuracy 0.8603
+[20:39:33] Mult-VAE epoch  15 | train loss 425.27 | validation accuracy 0.8595
+[20:39:38] Mult-VAE epoch  16 | train loss 421.69 | validation accuracy 0.8579
+[20:39:42] Mult-VAE epoch  17 | train loss 418.51 | validation accuracy 0.8581
+[20:39:47] Mult-VAE epoch  18 | train loss 415.38 | validation accuracy 0.8545
+[20:39:52] Mult-VAE epoch  19 | train loss 412.41 | validation accuracy 0.8554
+[20:39:57] Mult-VAE epoch  20 | train loss 409.76 | validation accuracy 0.8532
+[20:39:57] Mult-VAE | best validation accuracy 0.8618 at epoch 10
+[20:40:02] Mult-VAE refit epoch   1 | train loss 612.48
+[20:40:05] Mult-VAE refit epoch   2 | train loss 567.00
+[20:40:08] Mult-VAE refit epoch   3 | train loss 545.45
+[20:40:11] Mult-VAE refit epoch   4 | train loss 534.12
+[20:40:14] Mult-VAE refit epoch   5 | train loss 525.16
+[20:40:16] Mult-VAE refit epoch   6 | train loss 517.32
+[20:40:19] Mult-VAE refit epoch   7 | train loss 511.06
+[20:40:22] Mult-VAE refit epoch   8 | train loss 505.40
+[20:40:25] Mult-VAE refit epoch   9 | train loss 500.25
+[20:40:28] Mult-VAE refit epoch  10 | train loss 495.20
+[20:40:29] stored mult_vae -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_task2_four_negatives\task2\mult_vae.pt
+RESULT task2 mult_vae     on its own, original pairs 0.86258 (2.2 min)
+[20:41:59] popularity             validation accuracy 0.4911
+[20:41:59] item_cosine            validation accuracy 0.8685
+[20:41:59] ease                   validation accuracy 0.8503
+[20:41:59] mult_vae               validation accuracy 0.8618
+[20:41:59] pair blend             validation accuracy 0.9411  (out-of-fold, 5 folds)
+[20:42:18] pair blend inputs: popularity_difference 3991, ease_difference 2971, mult_vae_difference 2930, log_read_within_5_of_user_books_per_sqrt_readers_difference 2447, log_user_interactions 2063, ease_first 1932, ease_second 1925, popularity_second 1885, popularity_first 1871, mult_vae_second 1782, item_cosine_first 1768, item_cosine_second 1746, mult_vae_first 1732, item_cosine_difference 1694, already_read_difference 1469, item_median_minus_user_median_years_second 1303, user_span_years 1299, item_median_minus_user_median_years_first 1250, log_read_within_5_of_user_books_per_sqrt_readers_first 1008, log_read_within_5_of_user_books_per_sqrt_readers_second 992, item_first_minus_user_first_years_second 924, item_first_minus_user_first_years_first 920, item_10_percent_minus_user_last_years_second 850, item_10_percent_minus_user_last_years_first 790, item_first_minus_user_last_years_first 788, item_first_minus_user_last_years_second 773, share_of_item_reads_in_user_span_second 698, log_read_within_5_of_user_books_first 681, share_of_item_reads_in_user_span_first 649, share_of_item_reads_in_user_span_difference 639, log_read_within_5_of_user_books_second 635, log_read_within_5_of_user_books_difference 593, item_median_minus_user_median_years_difference 525, share_of_item_reads_in_user_span_180_days_difference 449, share_of_item_reads_in_user_span_180_days_first 442, share_of_item_reads_in_user_span_180_days_second 438, item_10_percent_minus_user_last_years_difference 354, item_first_minus_user_last_years_difference 296, item_first_minus_user_first_years_difference 91, already_read_second 7, already_read_first 0
+RESULT task2 stage B 4 negatives + span + window + bigger LightGBM: original pairs 0.94091 | all pairs 0.94115 (1.8 min)
+[20:42:18] stored pair_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_task2_four_negatives\task2\pair_blender.pt
+[20:42:19] stored pair_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task2\pair_blender.pt
+RESULT task2: adopted stage B 4 negatives + span + window + bigger LightGBM (0.94091), wrote task_2_predictions.csv
+RESULT task2 final: 0.94091 (stored before: 0.93689)

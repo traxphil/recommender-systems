@@ -1,5 +1,5 @@
 {
- "heartbeat": "2026-11-15 20:20:25",
+ "heartbeat": "2026-11-17 01:06:30",
  "stop_requested": false,
  "running": {},
  "pending": [],
@@ -22,6 +22,12 @@
   "cpu_05_task1_bfm_more_draws.py",
   "cpu_06_bayesian_fm_variants.py",
   "gpu_09_known_pairs_for_other_models.py",
-  "cpu_07_task1_bfm_known_pairs_200_draws.py"
+  "cpu_07_task1_bfm_known_pairs_200_draws.py",
+  "gpu_10_task2_span_window_negatives.py",
+  "gpu_11_task4_window_span_negatives.py",
+  "gpu_12_task5_window_span.py",
+  "gpu_13_task6_sweep.py",
+  "cpu_08_bayesian_fm_chains.py",
+  "gpu_14_restore_task3_rank_64_two_chains.py"
  ]
 }

@@ -1,3 +1,5 @@
+from dataclasses import replace
+
 import myfm
 import numpy as np
 import scipy.sparse as sp
@@ -145,6 +147,13 @@ def posterior_mean_predictions(training_ratings: RatingData, implicit_feedback_p
 
 
 def train_bayesian_factorization_machine(task: RatingTask, config: BayesianFactorizationMachineConfig) -> ModelResult:
+    # n_chains > 1: independent chains with seeds seed, seed + 1, ... averaged -> less sampling noise (a longer single chain
+    # made Task 1 worse: 30 + 380 draws 0.55708 vs 20 + 180 draws 0.54871)
+    if config.n_chains > 1:
+        chains = [train_bayesian_factorization_machine(task, replace(config, seed=config.seed + chain, n_chains=1))
+                  for chain in range(config.n_chains)]
+        return ModelResult(config, [], np.mean([chain.valid_predictions for chain in chains], axis=0),
+                           np.mean([chain.test_predictions for chain in chains], axis=0))
     if config.calendar_fields or config.user_period_days:
         require_test_timestamps(task, "time-aware Bayesian factorization machine")
     validation = task.validation_data

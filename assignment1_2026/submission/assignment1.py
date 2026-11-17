@@ -243,7 +243,8 @@ TASK2_PREDICTION_FILE = OUTPUT_DIR / "task_2_predictions.csv"
 
 # validation pairs = held-out interactions vs. negatives drawn like the test negatives (see load_pair_choice_task)
 def load_task2() -> PairChoiceTask:
-    return load_pair_choice_task(TASK2_TRAINING_FILE, TASK2_TEST_FILE, VALIDATION_FRACTION, SPLIT_SEED)
+    return load_pair_choice_task(TASK2_TRAINING_FILE, TASK2_TEST_FILE, VALIDATION_FRACTION, SPLIT_SEED,
+                                 model_configs.TASK2_NEGATIVES_PER_VALIDATION_PAIR)
 
 
 def train_task2_popularity_model(task: PairChoiceTask) -> ModelResult:
@@ -421,7 +422,8 @@ TASK4_PREDICTION_FILE = OUTPUT_DIR / "task_4_predictions.csv"
 
 
 def load_task4() -> PairChoiceTask:
-    return load_pair_choice_task(TASK4_TRAINING_FILE, TASK4_TEST_FILE, VALIDATION_FRACTION, SPLIT_SEED)
+    return load_pair_choice_task(TASK4_TRAINING_FILE, TASK4_TEST_FILE, VALIDATION_FRACTION, SPLIT_SEED,
+                                 model_configs.TASK4_NEGATIVES_PER_VALIDATION_PAIR)
 
 
 def train_task4_popularity_model(task: PairChoiceTask) -> ModelResult:

@@ -139,7 +139,7 @@ TASK1_FACTORIZATION_MACHINE = FactorizationMachineConfig(
 # sweep 14 Nov (20 + 180 draws): rank 32 0.7272, 64 0.72337, 128 0.72022 (~35 min per fit on the PC)
 # 15 Nov without the 0-star ratings (MSE on the validation ratings > 0): 20 + 180 draws 0.54871, 30 + 380 draws 0.55708 (worse);
 # + every known pair as implicit feedback 0.54395 (jobs/cpu_07; Task 1 blend 0.54058 -> 0.53768), at rank 192 0.54084
-# (blend 0.53601; ~2 h per fit on the PC)
+# (blend 0.53601; ~2 h per fit on the PC); 16 Nov 2 chains (seeds 0 + 1 averaged, jobs/cpu_08) 0.53796 (blend 0.53391)
 TASK1_BAYESIAN_FACTORIZATION_MACHINE = BayesianFactorizationMachineConfig(
     rank=192,
     n_burn_in_iterations=20,
@@ -148,6 +148,7 @@ TASK1_BAYESIAN_FACTORIZATION_MACHINE = BayesianFactorizationMachineConfig(
     use_test_pairs_as_implicit_feedback=True,
     refit_on_train_and_valid=True,
     seed=0,
+    n_chains=2,
 )
 
 # ---- rating transformer (attention over the user's rated books) --------------------------
@@ -316,6 +317,10 @@ TASK2_MULT_VAE = MultVaeConfig(
 )
 
 # ---- pair blender --------------------------------------------------------------------------
+# validation negatives per held-out interaction (> 1: more pairs for the blender, scored on the original pairs; as Task 5)
+# 15 Nov (jobs/gpu_10, accuracy on the original pairs): 1 -> 4 negatives 0.94025 -> 0.94091
+TASK2_NEGATIVES_PER_VALIDATION_PAIR = 4
+
 # which sub-models the blend combines: True = in the blend, False = left out (still trained and stored -> can be switched back on)
 TASK2_PAIR_BLEND_MODEL_FLAGS = {
     "popularity": True,
@@ -323,16 +328,20 @@ TASK2_PAIR_BLEND_MODEL_FLAGS = {
     "ease": True,
     "mult_vae": True,
 }
+# 15 Nov (jobs/gpu_10, stored sub-models, 1 negative): 0.93689 -> user span 0.93800, reading window 0.93957, both 0.94005,
+# + bigger LightGBM (as Task 4) 0.94025
 TASK2_PAIR_BLENDER = PairBlenderConfig(
     combined_models=tuple(model_name for model_name, is_blended in TASK2_PAIR_BLEND_MODEL_FLAGS.items() if is_blended),
     use_time_features=False,                # the Task 2 test file has no timestamp
     activity_window_days=30,                # not used without time features
     n_folds=5,
-    lightgbm_n_estimators=400,
-    lightgbm_learning_rate=0.05,
-    lightgbm_num_leaves=31,
-    lightgbm_min_child_samples=200,
+    lightgbm_n_estimators=800,
+    lightgbm_learning_rate=0.03,
+    lightgbm_num_leaves=63,
+    lightgbm_min_child_samples=100,
     seed=0,
+    use_user_span_features=True,            # the training file has timestamps: item's reads vs. the user's active span
+    use_reading_window_features=True,       # how often others read the item within 5 books of the user's books
 )
 
 
@@ -506,7 +515,9 @@ TASK3_TIME_FACTORIZATION_MACHINE = TimeFactorizationMachineConfig(
 # sweep 14 Nov (rank 32, 20 + 180 draws): month + year 0.84921, weekday + month + year 0.84878, all four 0.84988;
 # rank 16 0.85255, 64 0.84752, 128 0.84666; rank 64 with 30 + 380 draws 0.84445 (~35 min per fit on the PC)
 # 15 Nov without the 0-star ratings (MSE on the validation ratings > 0): 0.67859; rank 128 0.67760; user periods 365 / 1000
-# days + every known pair 0.67650 (jobs/cpu_06; quick check rank 8: user day / 30 days / book periods no gain)
+# days + every known pair 0.67650 (jobs/cpu_06; quick check rank 8: user day / 30 days / book periods no gain);
+# 16 Nov 2 chains (seeds 0 + 1 averaged, jobs/cpu_08) 0.67464 (blend 0.66773 -> 0.66712)
+# (rank 128: 1 chain 0.67651, 2 chains 0.67461 but blend 0.66738 -> kept rank 64)
 TASK3_TIME_BAYESIAN_FACTORIZATION_MACHINE = BayesianFactorizationMachineConfig(
     rank=64,
     n_burn_in_iterations=30,
@@ -517,6 +528,7 @@ TASK3_TIME_BAYESIAN_FACTORIZATION_MACHINE = BayesianFactorizationMachineConfig(
     seed=0,
     calendar_fields=("weekday", "month", "year"),
     user_period_days=(365, 1000),
+    n_chains=2,
 )
 
 # ---- rating transformer (attention over the user's rated books; timestamps not used) ------------------------------
@@ -696,6 +708,9 @@ TASK4_MULT_VAE = MultVaeConfig(
 
 # ---- pair blender --------------------------------------------------------------------------
 # which sub-models the blend combines: True = in the blend, False = left out (still trained and stored -> can be switched back on)
+# validation negatives per held-out interaction (as Task 2); 15 Nov (jobs/gpu_11): 1 -> 4 negatives 0.93287 -> 0.93408
+TASK4_NEGATIVES_PER_VALIDATION_PAIR = 4
+
 TASK4_PAIR_BLEND_MODEL_FLAGS = {
     "popularity": True,
     "item_cosine": True,
@@ -714,6 +729,8 @@ TASK4_PAIR_BLENDER = PairBlenderConfig(
     lightgbm_min_child_samples=100,
     seed=0,
     use_reader_timing_features=True,       # 15 Nov: out-of-fold accuracy 0.93077 -> 0.93164 (readers after t, first reader after t, ...)
+    use_user_span_features=True,           # 15 Nov (jobs/gpu_11, with the reading window): 0.93254 -> 0.93287 (window alone 0.93233)
+    use_reading_window_features=True,
 )
 
 
@@ -827,6 +844,8 @@ TASK5_PAIR_BLENDER = PairBlenderConfig(
     seed=0,
     use_reader_timing_features=True,       # 15 Nov: out-of-fold accuracy 0.92149 -> 0.92258 (readers after t, first reader after t, ...)
     use_sequence_features=True,            # 15 Nov: what other readers read right after the user's last books: 0.92462 -> 0.92502
+    use_user_span_features=True,           # 16 Nov (jobs/gpu_12, with the reading window, 4 negatives): 0.92749 -> 0.92804
+    use_reading_window_features=True,      # (window alone 0.92745)
 )
 
 
@@ -854,7 +873,8 @@ TASK6_LINEAR_GAP_MODEL = GapRegressorConfig(
 TASK6_LIGHTGBM_GAP_MODEL = GapRegressorConfig(
     method="lightgbm",
     n_folds=5,
-    lightgbm_n_estimators=600,
+    lightgbm_n_estimators=1000,            # 16 Nov sweep (jobs/gpu_13): 600 trees 80.41 -> 1000 trees 80.38 days; 6 / 8 earlier
+                                           # gaps 80.58 / 80.82, 511 leaves 80.46, min 50 / 200 per leaf 80.60 / 80.42
     lightgbm_learning_rate=0.02,
     lightgbm_num_leaves=255,
     lightgbm_min_child_samples=100,

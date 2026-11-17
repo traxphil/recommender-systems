@@ -121,7 +121,9 @@ def known_interaction_pairs(task: RatingTask) -> RatingData:
 # validation pairs built like the test pairs: a held-out interaction (positive) vs. the item of a random other interaction
 # (negative, so drawn in proportion to popularity, regardless of time; never the positive item itself), in random order
 # -> checked on the test files: popularity of both pair items and "item not seen yet at t" (Task 4) match this sampling
-def load_pair_choice_task(training_csv_path, test_csv_path, validation_fraction: float = 0.1, split_seed: int = 0) -> PairChoiceTask:
+# negatives_per_positive > 1: further negatives per validation positive, as in load_next_item_task (original pairs unchanged)
+def load_pair_choice_task(training_csv_path, test_csv_path, validation_fraction: float = 0.1, split_seed: int = 0,
+                          negatives_per_positive: int = 1) -> PairChoiceTask:
 
     # read both files as string columns (training: user, item, timestamp, rating | test: user, (timestamp,) item1, item2, which)
     training_columns = read_csv_columns(training_csv_path)
@@ -151,12 +153,26 @@ def load_pair_choice_task(training_csv_path, test_csv_path, validation_fraction:
 
     # random order inside every pair -> first_is_positive is 50 / 50
     first_is_positive = random_generator.random(n_valid) < 0.5
+
+    # extra negatives (own random generator -> the original pairs stay exactly as with 1), appended after the original pairs
+    extra_generator = np.random.default_rng(split_seed + 1)
+    pair_indices, pair_positives, pair_negatives, pair_first_is_positive = [valid_indices], [positive_item_rows], [negative_item_rows], [first_is_positive]
+    for _ in range(negatives_per_positive - 1):
+        extra_negatives = item_rows[extra_generator.choice(train_indices, n_valid)]
+        while np.any(is_same_item := extra_negatives == positive_item_rows):
+            extra_negatives[is_same_item] = item_rows[extra_generator.choice(train_indices, is_same_item.sum())]
+        pair_indices.append(valid_indices)
+        pair_positives.append(positive_item_rows)
+        pair_negatives.append(extra_negatives)
+        pair_first_is_positive.append(extra_generator.random(n_valid) < 0.5)
+    pair_indices, pair_positives, pair_negatives = np.concatenate(pair_indices), np.concatenate(pair_positives), np.concatenate(pair_negatives)
+    pair_first_is_positive = np.concatenate(pair_first_is_positive)
     validation_pairs = ChoicePairs(
-        user_rows=user_rows[valid_indices],
-        first_item_rows=np.where(first_is_positive, positive_item_rows, negative_item_rows),
-        second_item_rows=np.where(first_is_positive, negative_item_rows, positive_item_rows),
-        days=days[valid_indices],
-        first_is_positive=first_is_positive,
+        user_rows=user_rows[pair_indices],
+        first_item_rows=np.where(pair_first_is_positive, pair_positives, pair_negatives),
+        second_item_rows=np.where(pair_first_is_positive, pair_negatives, pair_positives),
+        days=days[pair_indices],
+        first_is_positive=pair_first_is_positive,
     )
 
     test_pairs = ChoicePairs(

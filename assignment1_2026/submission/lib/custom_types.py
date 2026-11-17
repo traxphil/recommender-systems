@@ -171,6 +171,7 @@ class BayesianFactorizationMachineConfig:
     seed: int
     calendar_fields: tuple[str, ...] = ()   # time-aware variant (Task 3): one-hot calendar fields of the timestamp, as in
                                             # TimeFactorizationMachineConfig ("hour_of_day", "weekday", "month", "year"); () = none
+    n_chains: int = 1                       # independent Gibbs chains (seeds seed, seed + 1, ...), their predictions averaged
     user_period_days: tuple[int, ...] = ()  # time-aware variant: one-hot (user, day // period) for every period length, e.g.
                                             # (1, 30) = the user's day and 30-day window of the rating; () = none
 
@@ -421,3 +422,11 @@ class PairBlenderConfig:
     # Task 5: what other readers read right after the user's last books (their reading orders in the reference): how often the
     # item came next / within 5 books after the user's last book, within 5 after the 2nd / 3rd last, and before the last book
     use_sequence_features: bool = False
+    # Task 2 (no time in the test file, but in the training file): when the item was read by others vs. the user's active span
+    # (first / last / median day of the user's reference interactions) -> the negative often comes from a time the user was not
+    # reading at all: item's first day - user's last day, median vs. median, 10 % quantile - user's last day, first - user's
+    # first day, share of the item's reads inside the user's span (and +- 180 days), + the user's span length
+    use_user_span_features: bool = False
+    # Task 2: how often other readers read the item within 5 books (in time order) of the books the user read: summed over the
+    # user's history, raw and / sqrt(readers of the item) (a time-local "readers of X also read Y")
+    use_reading_window_features: bool = False

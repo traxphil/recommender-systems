@@ -257,8 +257,8 @@ Blend: ridge regression on the ten validation predictions (the sub-models were f
 scored; applied to the test predictions of the sub-models refit on all data and clipped to 1 - 5. The bias model and the item kNN
 share one baseline, so the blend effectively uses the kNN's neighbourhood correction. A LightGBM blender was slightly worse (0.5378).
 
-Result (validation MSE on ratings > 0): best single model (Bayesian FM, rank 192) 0.5408 -> blend 0.5360 (with zeros in training: 0.5789 ->
-0.5495, leaderboard 0.5455).
+Result (validation MSE on ratings > 0): best single model (Bayesian FM, rank 192, 2 sampling chains averaged) 0.5380 -> blend
+0.5339 (one chain: 0.5408 -> 0.5360, leaderboard 0.5341; with zeros in training: 0.5789 -> 0.5495, leaderboard 0.5455).
 
 
 # #########################################################################################
@@ -280,7 +280,15 @@ same way. Every sub-model scores (user, book); a pair blender decides which book
   it is non-linear and trained to fill in held-out books [14]. Manual features: none.
 
 Blend: LightGBM on both books' scores, their difference, "already read by the user" and the user's number of interactions; every
-pair is used in both orders, 5-fold out-of-fold scored. Result: validation accuracy 0.9369, leaderboard 0.9406.
+pair is used in both orders, 5-fold out-of-fold scored. The test file has no timestamps, but the training file does, so the
+blender also gets:
+* User span features: the book's first / 10 % / median read date (by anyone) vs. the user's first / median / last date and the
+  share of the book's reads inside the user's active span. Works because the negative often comes from a time the user was not
+  reading at all.
+* Reading window: how often other readers read the book within 5 books (in time order) of a book the user read, raw and per
+  sqrt(readers). A time-local "readers of X also read Y", sharper than plain co-occurrence.
+The validation draws 4 negatives per held-out book (as Task 5). Result (validation accuracy): 0.9369 (leaderboard 0.9406) ->
+span + window 0.9401 -> bigger LightGBM 0.9403 -> 4 negatives 0.9409.
 
 
 # #########################################################################################
@@ -309,8 +317,8 @@ models are trained again on this data (timestamps ignored, zeros left out of tra
   Task 1), N(i), weekday, month, year, the user's 365 / 1000-day period.
 
 Blend: ridge regression over all 14 sub-models, fit on the validation ratings > 0 (a LightGBM blender with time features was
-worse, 0.6711). Result (validation MSE on ratings > 0): best single model 0.6765 -> blend 0.6677 (with zeros in training: 0.7105
--> 0.6776, leaderboard 0.6883).
+worse). Result (validation MSE on ratings > 0): best single model (2 sampling chains averaged) 0.6746 -> blend 0.6671 (one
+chain: 0.6765 -> 0.6677, leaderboard 0.6778; with zeros in training: 0.7105 -> 0.6776, leaderboard 0.6883).
 
 
 # #########################################################################################
@@ -326,7 +334,8 @@ strong signal on top of the Task 2 models (popularity, item cosine, EASE, Mult-V
 Blend: the Task 2 pair blender + time features per book: interactions within +-30 days of t, the book's age at t, and how the
 other readers' reading is placed around t (readers within 7 / 30 / 90 / 365 days after t, within 30 days before, share after t,
 days to the first reader after t and since the last one before). The real book is typically being read around t, the negative
-is from a random time. Result: validation accuracy 0.9325, leaderboard 0.9372.
+is from a random time. Plus the Task 2 user span and reading window features and 4 negatives per held-out book. Result
+(validation accuracy): 0.9325 (leaderboard 0.9372) -> span + window 0.9329 -> 4 negatives 0.9341.
 
 
 # #########################################################################################
@@ -349,7 +358,8 @@ features of the candidate: how often other readers read it right after / within 
 of the last book's followers, "within 5 after" the 2nd / 3rd-last book and "within 5 before" the last book. Works because
 reading orders (series, lists) are shared across readers. The validation draws 4 negatives per held-out book, so the blender
 learns from 4x the pairs (scored on the 1-negative pairs, as the test). Result (validation accuracy): 0.9246 (leaderboard
-0.9192) -> sequence features 0.9250 -> 4 negatives 0.9269 -> + the 200-book SASRec 0.9275.
+0.9192) -> sequence features 0.9250 -> 4 negatives 0.9269 -> + the 200-book SASRec 0.9275 (leaderboard 0.9225) -> + the
+Task 2 user span and reading window features 0.9280.
 
 
 # #########################################################################################
@@ -372,7 +382,7 @@ in the test that no model can predict.
   readers, the last earlier reader, share within a week / month / year); book-to-book timing (readers of both the user's last
   book and the next book: how many, how often the next one came second, median time between them). The user's 4 previous gaps
   are added as extra training rows (features computed as of that point), with their position from the end as an input;
-  255 leaves. Bagging (averaging models on random row / feature subsets) did not help.
+  255 leaves, 1000 trees. Bagging (averaging models on random row / feature subsets) and more earlier gaps (6, 8) did not help.
 
 Result (validation MAE): median baseline 139.5 days, LightGBM before the new features 83.6 -> 81.1 days (leaderboard 8.73M s)
--> 80.4 days with the extra rows.
+-> 80.4 days with the extra rows (leaderboard 8.58M s) -> 1000 trees 80.38 days.

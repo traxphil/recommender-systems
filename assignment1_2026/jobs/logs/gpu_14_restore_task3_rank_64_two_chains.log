@@ -1,0 +1,19 @@
+RESULT rank 64 two chains: 0.67464 (expected 0.67464)
+stored now: rank 128, 0.67461
+[05:31:42] stored time_bayesian_factorization_machine_rank_128_2_chains -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_bfm_candidates\task3\time_bayesian_factorization_machine_rank_128_2_chains.pt
+[05:31:42] stored time_bayesian_factorization_machine -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task3\time_bayesian_factorization_machine.pt
+[05:31:43] bias_model             valid MSE 0.7399  (rows with rating > 0)
+[05:31:43] svd                    valid MSE 0.7172  (rows with rating > 0)
+[05:31:43] svdpp                  valid MSE 0.7102  (rows with rating > 0)
+[05:31:43] item_knn               valid MSE 0.7264  (rows with rating > 0)
+[05:31:43] time_bias_model        valid MSE 0.7210  (rows with rating > 0)
+[05:31:43] time_svdpp             valid MSE 0.6960  (rows with rating > 0)
+[05:31:43] time_item_knn          valid MSE 0.7265  (rows with rating > 0)
+[05:31:43] time_factorization_machine valid MSE 0.7277  (rows with rating > 0)
+[05:31:43] time_bayesian_factorization_machine valid MSE 0.6746  (rows with rating > 0)
+[05:31:43] rating_transformer     valid MSE 0.7277  (rows with rating > 0)
+[05:31:43] autorec                valid MSE 0.7207  (rows with rating > 0)
+[05:31:43] integrated_model       valid MSE 0.7007  (rows with rating > 0)
+[05:31:43] ridge blend                valid MSE 0.6671  (out-of-fold, 5 folds, rows with rating > 0)
+[05:31:43] ridge blend inputs: bias_model -1.6, svd -0.226, svdpp -0.0636, item_knn 0.0221, zero_model 0.0546, time_bias_model 0.0307, time_svdpp 0.143, time_item_knn 1.6, time_zero_model 0.0726, time_factorization_machine -0.0363, time_bayesian_factorization_machine 0.676, rating_transformer 0.209, autorec -0.0744, integrated_model 0.296
+RESULT ridge blend from the stored models: 0.66712 (stored blend 0.66712); test predictions identical: True

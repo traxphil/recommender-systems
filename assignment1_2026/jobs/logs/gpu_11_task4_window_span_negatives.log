@@ -1,0 +1,90 @@
+RESULT task4 stored blend: 0.93254
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:183: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:184: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:184: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[20:54:21] popularity             validation accuracy 0.4975
+[20:54:21] item_cosine            validation accuracy 0.7229
+[20:54:21] ease                   validation accuracy 0.7514
+[20:54:21] time_ease              validation accuracy 0.7872
+[20:54:21] mult_vae               validation accuracy 0.7592
+[20:54:21] pair blend             validation accuracy 0.9323  (out-of-fold, 5 folds)
+[20:54:27] pair blend inputs: popularity_difference 3367, mult_vae_difference 2668, time_ease_difference 2200, time_ease_first 1562, time_ease_second 1558, popularity_first 1460, popularity_second 1419, log_user_interactions 1395, item_age_years_at_t_first 1388, log_interactions_around_t_difference 1384, item_age_years_at_t_second 1353, share_of_readers_after_t_first 1336, share_of_readers_after_t_second 1320, item_age_years_at_t_difference 1174, share_of_readers_after_t_difference 1159, mult_vae_second 1141, ease_first 1140, mult_vae_first 1137, ease_second 1111, log_days_since_last_reader_before_t_difference 1044, ease_difference 991, log_days_to_first_reader_after_t_difference 878, item_cosine_difference 862, log_read_within_5_of_user_books_per_sqrt_readers_difference 775, item_cosine_first 770, item_cosine_second 754, log_days_since_last_reader_before_t_second 748, log_days_since_last_reader_before_t_first 732, log_read_within_5_of_user_books_per_sqrt_readers_first 707, log_read_within_5_of_user_books_per_sqrt_readers_second 705, already_read_difference 674, log_read_within_5_of_user_books_second 664, log_readers_365_days_after_t_second 653, log_readers_30_days_before_t_difference 652, log_days_to_first_reader_after_t_first 646, log_readers_365_days_after_t_first 643, log_days_to_first_reader_after_t_second 634, log_readers_30_days_after_t_difference 621, log_readers_7_days_after_t_difference 606, log_readers_90_days_after_t_difference 605, log_read_within_5_of_user_books_first 594, log_readers_365_days_after_t_difference 573, log_read_within_5_of_user_books_difference 460, log_readers_90_days_after_t_first 421, log_readers_90_days_after_t_second 406, log_readers_30_days_before_t_first 344, log_interactions_around_t_first 342, log_readers_30_days_before_t_second 341, log_interactions_around_t_second 331, log_readers_7_days_after_t_second 311, log_readers_7_days_after_t_first 310, log_readers_30_days_after_t_second 274, log_readers_30_days_after_t_first 255, already_read_second 2, already_read_first 0
+RESULT task4 stage A window: 0.93233 (0.5 min)
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:183: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:184: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:184: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[20:55:00] popularity             validation accuracy 0.4975
+[20:55:00] item_cosine            validation accuracy 0.7229
+[20:55:00] ease                   validation accuracy 0.7514
+[20:55:00] time_ease              validation accuracy 0.7872
+[20:55:00] mult_vae               validation accuracy 0.7592
+[20:55:00] pair blend             validation accuracy 0.9329  (out-of-fold, 5 folds)
+[20:55:06] pair blend inputs: popularity_difference 3307, mult_vae_difference 2403, time_ease_difference 1960, log_interactions_around_t_difference 1285, popularity_first 1270, popularity_second 1219, time_ease_first 1196, time_ease_second 1183, log_user_interactions 1042, item_median_minus_user_median_years_first 1040, share_of_readers_after_t_first 1030, share_of_readers_after_t_second 1028, item_age_years_at_t_first 985, item_median_minus_user_median_years_second 975, item_age_years_at_t_second 935, mult_vae_first 922, mult_vae_second 893, ease_difference 856, ease_second 842, log_days_since_last_reader_before_t_difference 837, ease_first 825, share_of_readers_after_t_difference 765, item_median_minus_user_median_years_difference 747, item_10_percent_minus_user_last_years_difference 718, log_days_to_first_reader_after_t_difference 690, log_read_within_5_of_user_books_per_sqrt_readers_difference 683, already_read_difference 676, item_cosine_difference 668, item_cosine_first 612, user_span_years 607, item_cosine_second 601, log_days_since_last_reader_before_t_first 584, share_of_item_reads_in_user_span_difference 576, log_days_since_last_reader_before_t_second 563, log_readers_30_days_before_t_difference 558, item_first_minus_user_first_years_second 551, log_read_within_5_of_user_books_per_sqrt_readers_second 545, item_first_minus_user_first_years_first 539, log_read_within_5_of_user_books_per_sqrt_readers_first 526, item_10_percent_minus_user_last_years_first 511, share_of_item_reads_in_user_span_180_days_difference 504, log_read_within_5_of_user_books_second 500, item_first_minus_user_last_years_second 496, item_first_minus_user_last_years_first 491, log_days_to_first_reader_after_t_first 490, log_readers_7_days_after_t_difference 489, item_10_percent_minus_user_last_years_second 484, log_readers_30_days_after_t_difference 481, log_days_to_first_reader_after_t_second 479, share_of_item_reads_in_user_span_second 453, log_readers_90_days_after_t_difference 447, log_read_within_5_of_user_books_first 442, share_of_item_reads_in_user_span_first 432, log_readers_365_days_after_t_first 419, log_readers_365_days_after_t_second 392, log_readers_365_days_after_t_difference 374, share_of_item_reads_in_user_span_180_days_first 359, share_of_item_reads_in_user_span_180_days_second 357, log_readers_90_days_after_t_first 330, log_read_within_5_of_user_books_difference 327, log_interactions_around_t_second 317, log_readers_90_days_after_t_second 314, item_age_years_at_t_difference 308, log_readers_7_days_after_t_second 298, log_interactions_around_t_first 296, log_readers_7_days_after_t_first 292, log_readers_30_days_before_t_second 265, log_readers_30_days_before_t_first 238, log_readers_30_days_after_t_second 222, item_first_minus_user_last_years_difference 216, log_readers_30_days_after_t_first 199, item_first_minus_user_first_years_difference 135, already_read_second 1, already_read_first 0
+RESULT task4 stage A span + window: 0.93287 (0.7 min)
+[20:55:06] stored pair_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task4\pair_blender.pt
+RESULT task4: adopted stage A span + window (0.93287), wrote task_4_predictions.csv
+RESULT task4 stage A best: span + window 0.93287
+571696 validation pairs (142924 original)
+[20:55:08] popularity | validation accuracy 0.4989
+[20:55:08] stored popularity -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_task4_four_negatives\task4\popularity.pt
+RESULT task4 popularity   on its own, original pairs 0.49754 (0.0 min)
+[20:55:15] item cosine | validation accuracy 0.7239
+[20:55:23] stored item_cosine -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_task4_four_negatives\task4\item_cosine.pt
+RESULT task4 item_cosine  on its own, original pairs 0.72290 (0.3 min)
+[20:55:25] EASE | validation accuracy 0.7517
+[20:55:27] stored ease -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_task4_four_negatives\task4\ease.pt
+RESULT task4 ease         on its own, original pairs 0.75142 (0.1 min)
+[20:55:32] time-weighted EASE | validation accuracy 0.7875
+[20:55:34] stored time_ease -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_task4_four_negatives\task4\time_ease.pt
+RESULT task4 time_ease    on its own, original pairs 0.78720 (0.1 min)
+[20:55:38] Mult-VAE epoch   1 | train loss 289.10 | validation accuracy 0.6032
+[20:55:41] Mult-VAE epoch   2 | train loss 266.66 | validation accuracy 0.6863
+[20:55:43] Mult-VAE epoch   3 | train loss 257.18 | validation accuracy 0.7238
+[20:55:45] Mult-VAE epoch   4 | train loss 250.09 | validation accuracy 0.7385
+[20:55:48] Mult-VAE epoch   5 | train loss 242.79 | validation accuracy 0.7474
+[20:55:50] Mult-VAE epoch   6 | train loss 236.21 | validation accuracy 0.7595
+[20:55:53] Mult-VAE epoch   7 | train loss 229.19 | validation accuracy 0.7532
+[20:55:55] Mult-VAE epoch   8 | train loss 223.32 | validation accuracy 0.7500
+[20:55:58] Mult-VAE epoch   9 | train loss 217.77 | validation accuracy 0.7446
+[20:56:00] Mult-VAE epoch  10 | train loss 213.55 | validation accuracy 0.7398
+[20:56:02] Mult-VAE epoch  11 | train loss 210.11 | validation accuracy 0.7314
+[20:56:05] Mult-VAE epoch  12 | train loss 207.42 | validation accuracy 0.7294
+[20:56:07] Mult-VAE epoch  13 | train loss 205.44 | validation accuracy 0.7227
+[20:56:10] Mult-VAE epoch  14 | train loss 203.99 | validation accuracy 0.7210
+[20:56:12] Mult-VAE epoch  15 | train loss 202.98 | validation accuracy 0.7199
+[20:56:15] Mult-VAE epoch  16 | train loss 201.73 | validation accuracy 0.7195
+[20:56:15] Mult-VAE | best validation accuracy 0.7595 at epoch 6
+[20:56:17] Mult-VAE refit epoch   1 | train loss 320.55
+[20:56:19] Mult-VAE refit epoch   2 | train loss 295.27
+[20:56:20] Mult-VAE refit epoch   3 | train loss 284.49
+[20:56:22] Mult-VAE refit epoch   4 | train loss 277.13
+[20:56:23] Mult-VAE refit epoch   5 | train loss 269.45
+[20:56:25] Mult-VAE refit epoch   6 | train loss 263.05
+[20:56:25] stored mult_vae -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_task4_four_negatives\task4\mult_vae.pt
+RESULT task4 mult_vae     on its own, original pairs 0.75921 (0.9 min)
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:183: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:183: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_after, np.log1p(self.sorted_days[np.minimum(first_after, last)] - days), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:184: RuntimeWarning: divide by zero encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+c:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\submission\lib\models\pair_blender.py:184: RuntimeWarning: invalid value encountered in log1p
+  columns.append(np.where(has_before, np.log1p(days - self.sorted_days[np.maximum(first_after - 1, 0)]), np.nan))
+[20:58:20] popularity             validation accuracy 0.4989
+[20:58:20] item_cosine            validation accuracy 0.7239
+[20:58:20] ease                   validation accuracy 0.7517
+[20:58:20] time_ease              validation accuracy 0.7875
+[20:58:20] mult_vae               validation accuracy 0.7595
+[20:58:20] pair blend             validation accuracy 0.9339  (out-of-fold, 5 folds)
+[20:58:46] pair blend inputs: popularity_difference 3452, mult_vae_difference 2435, time_ease_difference 2119, log_user_interactions 1654, popularity_first 1474, popularity_second 1448, time_ease_second 1401, log_interactions_around_t_difference 1391, time_ease_first 1367, item_age_years_at_t_first 1158, share_of_readers_after_t_first 1148, share_of_readers_after_t_second 1142, item_age_years_at_t_second 1139, item_median_minus_user_median_years_second 1108, item_median_minus_user_median_years_first 1092, mult_vae_second 1004, mult_vae_first 985, ease_second 972, ease_first 925, already_read_difference 833, user_span_years 767, ease_difference 728, log_days_since_last_reader_before_t_second 655, item_cosine_second 652, log_days_since_last_reader_before_t_first 646, item_10_percent_minus_user_last_years_difference 643, log_days_to_first_reader_after_t_second 590, item_cosine_first 582, log_days_to_first_reader_after_t_first 576, log_read_within_5_of_user_books_per_sqrt_readers_second 569, item_first_minus_user_first_years_first 560, share_of_readers_after_t_difference 554, item_cosine_difference 553, item_first_minus_user_first_years_second 543, log_read_within_5_of_user_books_per_sqrt_readers_difference 542, log_readers_365_days_after_t_second 535, log_read_within_5_of_user_books_per_sqrt_readers_first 519, item_first_minus_user_last_years_second 513, log_readers_365_days_after_t_first 508, log_days_since_last_reader_before_t_difference 494, item_first_minus_user_last_years_first 489, item_10_percent_minus_user_last_years_second 487, item_10_percent_minus_user_last_years_first 482, log_read_within_5_of_user_books_first 414, log_read_within_5_of_user_books_second 394, log_readers_7_days_after_t_difference 391, share_of_item_reads_in_user_span_180_days_first 388, share_of_item_reads_in_user_span_second 375, share_of_item_reads_in_user_span_180_days_second 374, share_of_item_reads_in_user_span_first 372, log_interactions_around_t_second 371, log_days_to_first_reader_after_t_difference 345, log_readers_30_days_before_t_difference 343, log_interactions_around_t_first 340, log_readers_90_days_after_t_second 332, log_readers_7_days_after_t_first 329, log_readers_7_days_after_t_second 325, log_readers_90_days_after_t_first 319, share_of_item_reads_in_user_span_180_days_difference 317, item_median_minus_user_median_years_difference 292, log_readers_90_days_after_t_difference 285, share_of_item_reads_in_user_span_difference 277, log_readers_30_days_before_t_second 249, log_readers_30_days_before_t_first 218, item_age_years_at_t_difference 185, log_readers_30_days_after_t_first 164, log_readers_30_days_after_t_second 152, item_first_minus_user_last_years_difference 150, log_readers_30_days_after_t_difference 123, log_read_within_5_of_user_books_difference 122, log_readers_365_days_after_t_difference 121, item_first_minus_user_first_years_difference 85, already_read_second 14, already_read_first 0
+RESULT task4 stage B 4 negatives + span + window: original pairs 0.93408 | all pairs 0.93390 (2.4 min)
+[20:58:47] stored pair_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models_task4_four_negatives\task4\pair_blender.pt
+[20:58:47] stored pair_blender -> C:\Dateien\Workspace\UCSD\Recommender_Systems\recommender-systems\assignment1_2026\trained_models\task4\pair_blender.pt
+RESULT task4: adopted stage B 4 negatives + span + window (0.93408), wrote task_4_predictions.csv
+RESULT task4 final: 0.93408 (stored before: 0.93254)

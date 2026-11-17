@@ -7,7 +7,7 @@ from lib.model_storage import load_model_result, save_model_result
 from lib.pair_choice import pair_choice_accuracy
 from lib.temporal_features import ItemTimeline, first_day_per_row
 
-# Pair blender (Tasks 2 / 4): LightGBM learns P(first item is the real one) from both items' sub-model scores + meta-features
+# Pair blender (Tasks 2 / 4 / 5): LightGBM learns P(first item is the real one) from both items' sub-model scores + meta-features
 # - trained on the validation pairs, where every sub-model scores pairs it never saw (as the rating blender of Tasks 1 / 3)
 # - every pair is used in both orders (first <-> second, label flipped) and predicted as the average of both orders
 #   -> the answer does not depend on which item the file calls item1
@@ -17,6 +17,21 @@ DAYS_PER_YEAR = 365.25
 KEY_STRIDE = np.int64(1) << 32              # > every span of days -> one sortable key per (item, day)
 READER_WINDOWS_DAYS = (7, 30, 90, 365)
 SEQUENCE_WINDOW = 5                         # "within 5 books after"
+SPAN_MARGIN_DAYS = 180                      # Task 2: the user's active span widened by half a year
+WINDOW_PAIRS_PER_CHUNK = 20_000             # Task 2 reading window: pairs per sparse product (memory)
+
+
+# per-group quantiles of values (lower quantile, NaN for groups without values): (n_groups,) array per quantile
+def group_quantiles(group_rows: np.ndarray, values: np.ndarray, n_groups: int, quantiles: tuple[float, ...]) -> list[np.ndarray]:
+    order = np.lexsort((values, group_rows))
+    sorted_values = values[order].astype(np.float64)
+    counts = np.bincount(group_rows, minlength=n_groups)
+    starts = np.concatenate([[0], np.cumsum(counts)[:-1]])
+    result = []
+    for quantile in quantiles:
+        positions = starts + np.floor(quantile * np.maximum(counts - 1, 0)).astype(np.int64)
+        result.append(np.where(counts > 0, sorted_values[np.minimum(positions, len(sorted_values) - 1)], np.nan))
+    return result
 
 
 class PairFeatureBuilder:
@@ -41,6 +56,10 @@ class PairFeatureBuilder:
             self.readers_per_item = np.bincount(reference.item_rows, minlength=n_item_rows)
         if getattr(config, "use_sequence_features", False):
             self.build_sequence_counts(reference, n_user_rows, n_item_rows)
+        if getattr(config, "use_user_span_features", False):
+            self.build_user_spans(reference, n_user_rows, n_item_rows)
+        if getattr(config, "use_reading_window_features", False):
+            self.build_reading_window(reference, n_item_rows)
 
     def item_feature_names(self) -> list[str]:
         time_feature_names = ["log_interactions_around_t", "item_age_years_at_t"] if self.config.use_time_features else []
@@ -52,7 +71,64 @@ class PairFeatureBuilder:
             time_feature_names += ["log_next_after_last_book", f"log_within_{SEQUENCE_WINDOW}_after_last_book",
                                    "share_of_last_book_followers", f"log_within_{SEQUENCE_WINDOW}_after_2nd_3rd_last",
                                    f"log_within_{SEQUENCE_WINDOW}_before_last_book"]
+        if getattr(self.config, "use_user_span_features", False):
+            time_feature_names += ["item_first_minus_user_last_years", "item_median_minus_user_median_years",
+                                   "item_10_percent_minus_user_last_years", "item_first_minus_user_first_years",
+                                   "share_of_item_reads_in_user_span", f"share_of_item_reads_in_user_span_{SPAN_MARGIN_DAYS}_days"]
+        if getattr(self.config, "use_reading_window_features", False):
+            time_feature_names += [f"log_read_within_{SEQUENCE_WINDOW}_of_user_books",
+                                   f"log_read_within_{SEQUENCE_WINDOW}_of_user_books_per_sqrt_readers"]
         return list(self.config.combined_models) + ["already_read"] + time_feature_names
+
+    # Task 2: the user's first / median / last day and the item's first / 10 % / median day of the reference interactions +
+    # every item's reads as sorted keys item * KEY_STRIDE + (day - earliest day) -> reads inside a span by binary search
+    def build_user_spans(self, reference: RatingData, n_user_rows: int, n_item_rows: int):
+        days = reference.days.astype(np.float64)
+        self.user_first_day, self.user_median_day, self.user_last_day = group_quantiles(reference.user_rows, days, n_user_rows, (0.0, 0.5, 1.0))
+        self.item_first_day, self.item_10_percent_day, self.item_median_day = group_quantiles(reference.item_rows, days, n_item_rows, (0.0, 0.1, 0.5))
+        self.span_earliest_day = int(reference.days.min())
+        self.span_keys = np.sort(reference.item_rows.astype(np.int64) * KEY_STRIDE + (reference.days.astype(np.int64) - self.span_earliest_day))
+        self.reads_per_item = np.bincount(reference.item_rows, minlength=n_item_rows)
+
+    def share_of_reads_between(self, item_rows: np.ndarray, first_days: np.ndarray, last_days: np.ndarray) -> np.ndarray:
+        to_offset = lambda day: np.clip(np.nan_to_num(day - self.span_earliest_day, nan=-1), -1, KEY_STRIDE - 1).astype(np.int64)
+        item_keys = item_rows.astype(np.int64) * KEY_STRIDE
+        reads = (np.searchsorted(self.span_keys, item_keys + to_offset(last_days), side="right")
+                 - np.searchsorted(self.span_keys, item_keys + to_offset(first_days), side="left"))
+        n_reads = self.reads_per_item[item_rows]
+        return np.where((n_reads > 0) & ~np.isnan(first_days), reads / np.maximum(n_reads, 1), np.nan)
+
+    def user_span_columns(self, user_rows: np.ndarray, item_rows: np.ndarray) -> list[np.ndarray]:
+        user_first, user_median, user_last = self.user_first_day[user_rows], self.user_median_day[user_rows], self.user_last_day[user_rows]
+        return [(self.item_first_day[item_rows] - user_last) / DAYS_PER_YEAR,
+                (self.item_median_day[item_rows] - user_median) / DAYS_PER_YEAR,
+                (self.item_10_percent_day[item_rows] - user_last) / DAYS_PER_YEAR,
+                (self.item_first_day[item_rows] - user_first) / DAYS_PER_YEAR,
+                self.share_of_reads_between(item_rows, user_first, user_last),
+                self.share_of_reads_between(item_rows, user_first - SPAN_MARGIN_DAYS, user_last + SPAN_MARGIN_DAYS)]
+
+    # Task 2: item x item counts of "read within 5 books of each other" (every user's reference interactions in time order)
+    def build_reading_window(self, reference: RatingData, n_item_rows: int):
+        order = np.lexsort((reference.days, reference.user_rows))
+        users, items = reference.user_rows[order], reference.item_rows[order]
+        rows, columns = [], []
+        for distance in range(1, SEQUENCE_WINDOW + 1):
+            same_user = users[:-distance] == users[distance:]
+            earlier, later = items[:-distance][same_user], items[distance:][same_user]
+            rows += [earlier, later]
+            columns += [later, earlier]
+        self.window_counts = sparse_matrix_from_entries(np.concatenate(rows), np.concatenate(columns), n_item_rows, n_item_rows)
+        self.has_read = self.read_matrix.copy()
+        self.has_read.data[:] = 1.0
+        self.readers_of_item = np.bincount(reference.item_rows, minlength=n_item_rows)
+
+    # sum over the user's books j of window_counts[j, item] (symmetric), in chunks of pairs
+    def reading_window_columns(self, user_rows: np.ndarray, item_rows: np.ndarray) -> list[np.ndarray]:
+        totals = np.zeros(len(user_rows))
+        for start in range(0, len(user_rows), WINDOW_PAIRS_PER_CHUNK):
+            chunk = slice(start, start + WINDOW_PAIRS_PER_CHUNK)
+            totals[chunk] = np.asarray(self.has_read[user_rows[chunk]].multiply(self.window_counts[item_rows[chunk]]).sum(axis=1)).ravel()
+        return [np.log1p(totals), np.log1p(totals / np.sqrt(np.maximum(self.readers_of_item[item_rows], 1)))]
 
     # reference rows are in reading order within each user (lib/data_loading.py) -> item x item counts of "read d books later"
     def build_sequence_counts(self, reference: RatingData, n_user_rows: int, n_item_rows: int):
@@ -109,7 +185,8 @@ class PairFeatureBuilder:
         return columns
 
     def feature_names(self) -> list[str]:
-        return [f"{name}_{part}" for part in ("difference", "first", "second") for name in self.item_feature_names()] + ["log_user_interactions"]
+        user_names = ["log_user_interactions"] + (["user_span_years"] if getattr(self.config, "use_user_span_features", False) else [])
+        return [f"{name}_{part}" for part in ("difference", "first", "second") for name in self.item_feature_names()] + user_names
 
     # (P, item features) for one item of every pair:
     #   sub-model scores | did the user already read it (the real item never is: it was held out) |
@@ -127,6 +204,10 @@ class PairFeatureBuilder:
             columns += self.reader_timing_columns(item_rows, days)
         if getattr(self.config, "use_sequence_features", False):
             columns += self.sequence_columns(user_rows, item_rows)
+        if getattr(self.config, "use_user_span_features", False):
+            columns += self.user_span_columns(user_rows, item_rows)
+        if getattr(self.config, "use_reading_window_features", False):
+            columns += self.reading_window_columns(user_rows, item_rows)
 
         return np.column_stack(columns).astype(np.float32)
 
@@ -137,6 +218,9 @@ class PairFeatureBuilder:
         second_side = self.item_side([pair_scores_by_model[name][:, 1] for name in self.config.combined_models],
                                      pairs.user_rows, pairs.second_item_rows, pairs.days)
         user_activity = np.log1p(self.interactions_per_user[pairs.user_rows])[:, None].astype(np.float32)
+        if getattr(self.config, "use_user_span_features", False):
+            span_years = (self.user_last_day[pairs.user_rows] - self.user_first_day[pairs.user_rows]) / DAYS_PER_YEAR
+            user_activity = np.column_stack([user_activity, span_years.astype(np.float32)])
 
         in_given_order = np.column_stack([first_side - second_side, first_side, second_side, user_activity])
         in_swapped_order = np.column_stack([second_side - first_side, second_side, first_side, user_activity])
